@@ -1,0 +1,9 @@
+DESTDIR=/usr/local/bin
+
+install: frameInspector.1.gz
+	install bin/Release/frameInspector $(DESTDIR)
+	install frameInspector.1.gz /usr/share/man/man1
+
+frameInspector.1.gz: frameInspector.1
+	cat frameInspector.1 | gzip - > frameInspector.1.gz
+

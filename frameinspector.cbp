@@ -1,0 +1,200 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<CodeBlocks_project_file>
+	<FileVersion major="1" minor="6" />
+	<Project>
+		<Option title="frameInspector" />
+		<Option pch_mode="2" />
+		<Option default_target="Win32 Debug" />
+		<Option compiler="gcc" />
+		<Build>
+			<Target title="Debug">
+				<Option output="bin/Debug/frameInspector" prefix_auto="1" extension_auto="1" />
+				<Option object_output="obj/Debug/" />
+				<Option type="0" />
+				<Option compiler="gcc" />
+				<Option projectLinkerOptionsRelation="2" />
+				<Compiler>
+					<Add option="-g" />
+					<Add option="`wx-config --cflags`" />
+					<Add option="-fno-strict-aliasing" />
+					<Add option="-D_ENABLE_DEBUG=1" />
+					<Add option="-DENABLE_PROFILE_LOAD=1" />
+				</Compiler>
+			</Target>
+			<Target title="Release">
+				<Option output="bin/Release/frameInspector" prefix_auto="1" extension_auto="1" />
+				<Option object_output="obj/Release/" />
+				<Option type="0" />
+				<Option compiler="gcc" />
+				<Option projectLinkerOptionsRelation="2" />
+				<Compiler>
+					<Add option="-march=pentium-m" />
+					<Add option="-fexpensive-optimizations" />
+					<Add option="-O3" />
+					<Add option="`wx-config --cflags`" />
+					<Add option="-fno-strict-aliasing" />
+				</Compiler>
+				<Linker>
+					<Add option="-s" />
+				</Linker>
+			</Target>
+			<Target title="Win32 Debug">
+				<Option output="bin/Debug/frameInspector" prefix_auto="1" extension_auto="1" />
+				<Option object_output="obj/Debug/" />
+				<Option type="0" />
+				<Option compiler="msvc8" />
+				<Option parameters="/f shit" />
+				<Option projectCompilerOptionsRelation="1" />
+				<Option projectLinkerOptionsRelation="2" />
+				<Compiler>
+					<Add option="/MDd" />
+					<Add option="/Zi" />
+					<Add option="/EHsc" />
+					<Add option="/DWIN32" />
+					<Add option="/D__WIN32__" />
+					<Add option="/D__WXMSW__" />
+					<Add option="/D_WINDOWS" />
+					<Add option="/D_CRT_SECURE_DEPRECATE" />
+					<Add option="/D_CRT_NONSTDC_NO_DEPRECATE" />
+					<Add option="/D_VC80_UPGRADE=0x0600" />
+					<Add option="/D_DEBUG" />
+					<Add option="/D__WXDEBUG__" />
+					<Add option="/D_ENABLE_DEBUG=1" />
+					<Add directory="$(#wx2_8_11.include)" />
+					<Add directory="$(#wx2_8_11.include)/msvc" />
+					<Add directory="$(#wx2_8_11)/contrib/include" />
+				</Compiler>
+				<ResourceCompiler>
+					<Add directory="$(#wx2_8_11.include)" />
+				</ResourceCompiler>
+				<Linker>
+					<Add option="/DEBUG" />
+					<Add option="/INCREMENTAL:NO" />
+					<Add option="/SUBSYSTEM:WINDOWS" />
+					<Add library="winmm.lib" />
+					<Add library="rpcrt4.lib" />
+					<Add library="kernel32.lib" />
+					<Add library="user32.lib" />
+					<Add library="gdi32.lib" />
+					<Add library="winspool.lib" />
+					<Add library="comdlg32.lib" />
+					<Add library="advapi32.lib" />
+					<Add library="shell32.lib" />
+					<Add library="ole32.lib" />
+					<Add library="oleaut32.lib" />
+					<Add library="uuid.lib" />
+					<Add library="comctl32.lib" />
+					<Add library="wsock32.lib" />
+					<Add library="odbc32.lib" />
+					<Add directory="$(#wx2_8_11)/lib/vc_lib" />
+				</Linker>
+				<ExtraCommands>
+					<Add after='mt.exe /nologo /manifest &quot;bin\Debug\frameInspector.exe.manifest&quot; /outputresource:&quot;bin\Debug\frameInspector.exe&quot;;1' />
+				</ExtraCommands>
+			</Target>
+			<Target title="Win32 Release">
+				<Option output="bin/Release/frameInspector" prefix_auto="1" extension_auto="1" />
+				<Option object_output="obj/Release/" />
+				<Option type="0" />
+				<Option compiler="msvc8" />
+				<Option projectCompilerOptionsRelation="1" />
+				<Option projectLinkerOptionsRelation="2" />
+				<Compiler>
+					<Add option="/MD" />
+					<Add option="/EHsc" />
+					<Add option="/DWIN32" />
+					<Add option="/D__WIN32__" />
+					<Add option="/D__WXMSW__" />
+					<Add option="/D_WINDOWS" />
+					<Add option="/D_CRT_SECURE_DEPRECATE" />
+					<Add option="/D_CRT_NONSTDC_NO_DEPRECATE" />
+					<Add option="/D_VC80_UPGRADE=0x0600" />
+					<Add directory="$(#wx2_8_11.include)" />
+					<Add directory="$(#wx2_8_11.include)/msvc" />
+					<Add directory="$(#wx2_8_11)/contrib/include" />
+				</Compiler>
+				<ResourceCompiler>
+					<Add directory="$(#wx2_8_11.include)" />
+				</ResourceCompiler>
+				<Linker>
+					<Add option="/INCREMENTAL:NO" />
+					<Add option="/SUBSYSTEM:WINDOWS" />
+					<Add option="/NODEFAULTLIB:libcmt.lib" />
+					<Add library="winmm.lib" />
+					<Add library="rpcrt4.lib" />
+					<Add library="kernel32.lib" />
+					<Add library="user32.lib" />
+					<Add library="gdi32.lib" />
+					<Add library="winspool.lib" />
+					<Add library="comdlg32.lib" />
+					<Add library="advapi32.lib" />
+					<Add library="shell32.lib" />
+					<Add library="ole32.lib" />
+					<Add library="oleaut32.lib" />
+					<Add library="uuid.lib" />
+					<Add library="comctl32.lib" />
+					<Add library="wsock32.lib" />
+					<Add library="odbc32.lib" />
+					<Add library="msvcrt.lib" />
+					<Add library="wxmsw28_core.lib" />
+					<Add library="wxbase28.lib" />
+					<Add library="wxpng.lib" />
+					<Add library="wxzlib.lib" />
+					<Add directory="$(#wx2_8_11)/lib/vc_lib" />
+				</Linker>
+				<ExtraCommands>
+					<Add after='mt.exe /nologo /manifest &quot;bin\Release\frameInspector.exe.manifest&quot; /outputresource:&quot;bin\Release\frameInspector.exe&quot;;1' />
+				</ExtraCommands>
+			</Target>
+		</Build>
+		<Compiler>
+			<Add option="-Wall" />
+		</Compiler>
+		<Linker>
+			<Add option="`wx-config --libs`" />
+			<Add library="gcrypt" />
+		</Linker>
+		<Unit filename="src/Dialogs.cpp" />
+		<Unit filename="src/Dialogs.h" />
+		<Unit filename="src/DumpImageBuffer.cpp" />
+		<Unit filename="src/DumpImageBuffer.h" />
+		<Unit filename="src/GridSettingsDialog.cpp" />
+		<Unit filename="src/GridSettingsDialog.h" />
+		<Unit filename="src/YUV420ImageBufferFile.cpp" />
+		<Unit filename="src/YUV420ImageBufferFile.h" />
+		<Unit filename="src/YUV420ImageBufferSplit.cpp" />
+		<Unit filename="src/YUV420ImageBufferSplit.h" />
+		<Unit filename="src/cpupack.h" />
+		<Unit filename="src/dbgutils.h" />
+		<Unit filename="src/dumpInternals.cpp" />
+		<Unit filename="src/dumpInternals.h" />
+		<Unit filename="src/frame.cpp" />
+		<Unit filename="src/frame.h" />
+		<Unit filename="src/frameinspector.rc">
+			<Option compilerVar="WINDRES" />
+			<Option target="Win32 Debug" />
+			<Option target="Win32 Release" />
+		</Unit>
+		<Unit filename="src/hashDialog.cpp" />
+		<Unit filename="src/hashDialog.h" />
+		<Unit filename="src/imageBuffer.cpp" />
+		<Unit filename="src/imageBuffer.h" />
+		<Unit filename="src/imageScroller.cpp" />
+		<Unit filename="src/imageScroller.h" />
+		<Unit filename="src/misc_utils.cpp" />
+		<Unit filename="src/misc_utils.h" />
+		<Unit filename="src/types.h" />
+		<Unit filename="src/viewApp.cpp" />
+		<Unit filename="src/viewApp.h" />
+		<Unit filename="src/wxFAM.cpp">
+			<Option target="&lt;{~None~}&gt;" />
+		</Unit>
+		<Unit filename="src/wxFAM.h" />
+		<Extensions>
+			<envvars />
+			<code_completion />
+			<lib_finder disable_auto="1" />
+			<debugger />
+		</Extensions>
+	</Project>
+</CodeBlocks_project_file>
