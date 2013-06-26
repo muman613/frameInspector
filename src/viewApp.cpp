@@ -49,7 +49,7 @@ bool viewApp::OnInit() {
     m_cmdLine.SetDesc(cmdLineDesc);
     m_cmdLine.SetCmdLine(wxGetApp().argc, wxGetApp().argv);
     wxString sLogo;
-    sLogo = wxString::Format("%s v%d.%d %s", APP_NAME, VERSION_MAJOR, VERSION_MINOR, VERSION_RELEASE);
+    sLogo = wxString::Format(wxT("%s v%d.%d %s"), APP_NAME, VERSION_MAJOR, VERSION_MINOR, VERSION_RELEASE);
     m_cmdLine.SetLogo(sLogo);
 
     debug("arg1 = %s arg2 = %s arg3 = %s", wxGetApp().argv[1], "a", "b"); //wxGetApp().argv[2], wxGetApp().argv[3]);
@@ -71,12 +71,17 @@ bool viewApp::OnInit() {
 	return true;
 };
 
+/**
+ *  Get the host CPU identification.
+ */
+
 bool viewApp::getCPUID() {
 	debug("viewApp::getCPUID()\n");
 
 	memset(&m_cpuPack, 0, sizeof(CPUPACK));
 
 #ifdef	__GNUC__
+#if (defined(__x86_64__) || defined(__i386__))
 
 	/* Determine information about CPU */
 
@@ -108,6 +113,12 @@ bool viewApp::getCPUID() {
 			: "D" (&m_cpuPack)					\
 			: "eax", "ebx", "ecx", "edx" );
 
+#else   // Not an intel 32/64bit CPU...
+
+    debug("ERROR: Unable to obtain CPUID on non-Intel platforms!\n");
+    return false;
+
+#endif  // (defined(__x86_64__) || defined(__i386__))
 
 #else
 
@@ -118,6 +129,23 @@ bool viewApp::getCPUID() {
 #endif
 
 #ifdef	_ENABLE_DEBUG
+    debug("maxcpu %ld\n", m_cpuPack.maxCPUID);
+    debug("CPUID : ");
+
+    for (int x = 0 ; x < 12 ; x++) {
+        debug("%c", m_cpuPack.CPUTag[x]);
+    }
+    debug("\n");
+
+    debug("Stepping : %d\n"
+          "Model    : %d\n"
+          "Family   : %d\n",
+          m_cpuPack.CPUSig_Mask,
+          m_cpuPack.CPUSig_Model,
+          m_cpuPack.CPUSig_Family);
+
+    debug("CPU Cnt  : %d\n", m_cpuPack.CPUSig_CPUCount);
+
 	if (m_cpuPack.CPUSig_Flag_MMX) {
 		debug("HAS MMX!\n");
 	}

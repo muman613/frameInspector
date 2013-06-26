@@ -13,10 +13,10 @@
 #ifdef	_ENABLE_DEBUG
 
 inline void debug(const char* sFmt, ...) {
-	static char	dbgBuffer[1024];
 	va_list		valist;
 	va_start(valist,sFmt);
 #ifdef	_WIN32
+	static char	dbgBuffer[1024];
 	vsnprintf(dbgBuffer, 1024, sFmt, valist);
 	OutputDebugStringA(dbgBuffer);
 #else	// _WIN32

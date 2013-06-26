@@ -1,3 +1,10 @@
+/**
+ *  @file       DumpImageBuffer.cpp
+ *  @author     Michael A. Uman
+ *  @date       February 19, 2013
+ *  @brief      Buffer class supporting the Sigma 'dump' format.
+ */
+
 #include <stdio.h>
 #include "imageBuffer.h"
 #include "DumpImageBuffer.h"
@@ -17,6 +24,10 @@ dumpImageBuffer::~dumpImageBuffer() {
     debug("dumpImageBuffer::~dumpImageBuffer()\n");
     return;
 }
+
+/**
+ *  Scan directory looking for all pic_*.rmar files.
+ */
 
 ssize_t		dumpImageBuffer::GetFrameCount() {
     debug("dumpImageBuffer::GetFrameCount()\n");
@@ -62,6 +73,10 @@ void dumpImageBuffer::GetImage(wxImage* pImage) {
 	return;
 }
 
+/**
+ *  Load frame from dump directory.
+ */
+
 bool		dumpImageBuffer::Load(size_t frame) {
     wxString    sFrameName;
     wxUint8     *pLumaBuffer = 0L,*pChromaBuffer = 0L;
@@ -91,31 +106,31 @@ bool		dumpImageBuffer::Load(size_t frame) {
                     if (dumpInternals::read_box(&m_fp, nTag, nVersion, lSize)) {
 
                         if (nTag == PICI_MAGIC) {
-                            dumpInternals::EMhwlibPictureInfoV1    picture_info;
+                            dumpInternals::EMhwlibPictureInfoV1    *picture_info;
 
+                            debug("-- found picture info [%lld] vs [%lld] !\n", lSize, sizeof(picture_info));
+                            picture_info = (dumpInternals::EMhwlibPictureInfoV1*)malloc( lSize );
 
-                            debug("-- found picture info [%lld]!\n", lSize);
-
-                            if (m_fp.Read(&picture_info, sizeof(picture_info)) != sizeof(picture_info)) {
+                            if (m_fp.Read(picture_info, lSize) != lSize) {
                                 debug("ERROR: Unable to read picture info!\n");
                                 break;
                             }
 
-                            debug("luma_total_width = %d\n", picture_info.Picture.luma_total_width);
-                            debug("chroma_total_width = %d\n", picture_info.Picture.chroma_total_width);
-                            debug("scaled_width = %d scaled_height = %d\n", picture_info.Picture.scaled_width, picture_info.Picture.scaled_height);
+                            debug("luma_total_width = %d\n", picture_info->Picture.luma_total_width);
+                            debug("chroma_total_width = %d\n", picture_info->Picture.chroma_total_width);
+                            debug("scaled_width = %d scaled_height = %d\n", picture_info->Picture.scaled_width, picture_info->Picture.scaled_height);
 
-                            lumaX = picture_info.Picture.luma_position_in_buffer.x;
-                            lumaY = picture_info.Picture.luma_position_in_buffer.y;
-                            lumaW = picture_info.Picture.luma_position_in_buffer.width;
-                            lumaH = picture_info.Picture.luma_position_in_buffer.height;
-                            lumaTotalWidth = picture_info.Picture.luma_total_width;
+                            lumaX = picture_info->Picture.luma_position_in_buffer.x;
+                            lumaY = picture_info->Picture.luma_position_in_buffer.y;
+                            lumaW = picture_info->Picture.luma_position_in_buffer.width;
+                            lumaH = picture_info->Picture.luma_position_in_buffer.height;
+                            lumaTotalWidth = picture_info->Picture.luma_total_width;
 
-                            chromaX = picture_info.Picture.chroma_position_in_buffer.x;
-                            chromaY = picture_info.Picture.chroma_position_in_buffer.y;
-                            chromaW = picture_info.Picture.chroma_position_in_buffer.width;
-                            chromaH = picture_info.Picture.chroma_position_in_buffer.height;
-                            chromaTotalWidth = picture_info.Picture.chroma_total_width;
+                            chromaX = picture_info->Picture.chroma_position_in_buffer.x;
+                            chromaY = picture_info->Picture.chroma_position_in_buffer.y;
+                            chromaW = picture_info->Picture.chroma_position_in_buffer.width;
+                            chromaH = picture_info->Picture.chroma_position_in_buffer.height;
+                            chromaTotalWidth = picture_info->Picture.chroma_total_width;
 
                             bufferW = ((lumaW + (1 << RMTILE_WIDTH_SHIFT) -1) >> RMTILE_WIDTH_SHIFT) << RMTILE_WIDTH_SHIFT;
                             bufferH = ((lumaH + (1 << RMTILE_HEIGHT_SHIFT) -1) >> RMTILE_HEIGHT_SHIFT) << RMTILE_HEIGHT_SHIFT;
@@ -137,8 +152,8 @@ bool		dumpImageBuffer::Load(size_t frame) {
 
                             wxASSERT((pLumaBuffer != 0L) && (pChromaBuffer != 0L));
 
-                            m_width  = picture_info.Picture.scaled_width;
-                            m_height = picture_info.Picture.scaled_height;
+                            m_width  = picture_info->Picture.scaled_width;
+                            m_height = picture_info->Picture.scaled_height;
 
                             debug("width %d height %d\n", m_width, m_height);
 
@@ -150,6 +165,7 @@ bool		dumpImageBuffer::Load(size_t frame) {
                             m_imageData = (UBYTE *)malloc(sizeof(PIXEL) * m_width * m_height);
                             wxASSERT(m_imageData != 0L);
 
+                            free(picture_info);
                         } else if (nTag == LUMA_MAGIC) {
                             debug("-- found luma buffer [%lld]!\n", lSize);
 
@@ -393,6 +409,10 @@ bool dumpImageBuffer::DoYUVConversion(int rows, int cols, wxUint8* pY, wxUint8* 
 
     return true;
 }
+
+/**
+ *  Get the frame size.
+ */
 
 bool dumpImageBuffer::QueryFrameSize(int& width, int& height) {
     width = m_width; height = m_height;

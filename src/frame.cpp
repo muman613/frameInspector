@@ -1097,15 +1097,21 @@ void Frame::OnFileOpenSplit(wxCommandEvent& event) {
 	return;
 }
 
+/**
+ *  Handle user request to open a YUV file.
+ */
+
 void Frame::OnFileOpenFile(wxCommandEvent& event) {
 	wxString	newFile = ::wxFileSelector(wxT("Select YUV file"),
-					m_imagePath, wxT(""), wxT(".yuv"));
+					m_imagePath, wxEmptyString, wxEmptyString,
+					wxT("YUV Files (*.yuv)|*.yuv|All Files (*.*)|*.*"));
 
 	if (!newFile.empty()) {
 	    wxFileName  fName(newFile);
 
 		m_imageFilename = newFile;
         m_sYUVFilename  = fName.GetFullName();
+        m_imagePath     = fName.GetPath();
 
         m_imageID 	= 0;	/* reset id to zero */
         m_type 		= YUV_FILE;
@@ -1120,6 +1126,10 @@ void Frame::OnFileOpenFile(wxCommandEvent& event) {
 
 	return;
 }
+
+/**
+ *  Handle user request to open a 'dump' file...
+ */
 
 void Frame::OnFileOpenDump(wxCommandEvent& event) {
 	const wxString& dir = ::wxDirSelector(wxT("Select output path"), m_imagePath);
@@ -1145,6 +1155,10 @@ void Frame::OnFileOpenDump(wxCommandEvent& event) {
 
     return;
 }
+
+/**
+ *  Refresh the display.
+ */
 
 void Frame::OnRefresh(wxCommandEvent& event) {
 	if (allocate_image_buffer()) {

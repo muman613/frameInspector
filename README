@@ -2,4 +2,9 @@
 | _ \ __| /_\ |   \|  \/  | __|
 |   / _| / _ \| |) | |\/| | _| 
 |_|_\___/_/ \_\___/|_|  |_|___|
-                               
+================================================================================
+The Versatile YUV file displayer
+
+frameInspector is a tool which reads a raw YUV file (in a variety of formats) and
+displays it in a window.
+
