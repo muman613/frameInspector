@@ -144,7 +144,8 @@ Frame::Frame()
 #endif
     m_bGrid(false),
     m_gridH(16),
-    m_gridV(16)
+    m_gridV(16),
+    m_pHashDlg(0L)
 {
 	debug("Frame::Frame()\n");
 
@@ -319,7 +320,7 @@ Frame::Frame()
 	m_heartbeat.Start(30);
 
     /* Set the windows title */
-    wxString sTmp = wxString::Format("%s V%d.%d", APP_NAME, VERSION_MAJOR, VERSION_MINOR);
+    wxString sTmp = wxString::Format(wxT("%s V%d.%d"), APP_NAME, VERSION_MAJOR, VERSION_MINOR);
     SetTitle(sTmp);
 
     /* Set the windows icon */

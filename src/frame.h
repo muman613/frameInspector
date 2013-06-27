@@ -26,6 +26,8 @@
 	#include "wxFAM.h"
 #endif
 
+class HashDialog;
+
 class Frame : public wxFrame {
 	public:
 		Frame();
@@ -233,8 +235,10 @@ class Frame : public wxFrame {
         wxString        m_sYUVFilename;
 
         bool            m_bGrid;
-        int             m_gridH;     // horizontal spacing
-        int             m_gridV;    // vertical spacing
+        int             m_gridH;        ///< horizontal spacing
+        int             m_gridV;        ///< vertical spacing
+
+        HashDialog*     m_pHashDlg;     ///< Pointer to hash dialog
 };
 
 DECLARE_EVENT_TYPE(wxEVT_LOADIMAGE, -1)
