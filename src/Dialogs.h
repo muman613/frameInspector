@@ -15,7 +15,6 @@
 #include <wx/colour.h>
 #include <wx/settings.h>
 #include <wx/sizer.h>
-#include <wx/button.h>
 #include <wx/dialog.h>
 
 ///////////////////////////////////////////////////////////////////////////
@@ -29,16 +28,14 @@ class HashDialogBase : public wxDialog
 	private:
 	
 	protected:
-		wxStaticText* m_staticText1;
+		wxStaticText* m_staticText9;
 		wxStaticText* m_lumaText;
-		wxStaticText* m_staticText3;
+		wxStaticText* m_staticText11;
 		wxStaticText* m_chromaText;
-		wxStdDialogButtonSizer* m_sdbSizer1;
-		wxButton* m_sdbSizer1Cancel;
 	
 	public:
 		
-		HashDialogBase( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = wxT("Checksum Dialog"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize, long style = wxDEFAULT_DIALOG_STYLE );
+		HashDialogBase( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = wxT("Checksum Dialog"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxCAPTION );
 		~HashDialogBase();
 	
 };

@@ -238,7 +238,9 @@ class Frame : public wxFrame {
         int             m_gridH;        ///< horizontal spacing
         int             m_gridV;        ///< vertical spacing
 
+//#ifdef  MODAL_CHECKSUM
         HashDialog*     m_pHashDlg;     ///< Pointer to hash dialog
+//#endif
 };
 
 DECLARE_EVENT_TYPE(wxEVT_LOADIMAGE, -1)

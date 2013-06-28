@@ -10,6 +10,7 @@
 //#define _ENABLE_DEBUG		1
 //#define	DEBUG_PAINT		1
 //#define	DEBUG_HB		1
+#define   MODAL_CHECKSUM  1
 
 //#ifdef HAVE_CONFIG_H
 //	#include "config.h"
@@ -172,6 +173,10 @@ Frame::Frame()
 							wxSize(300,20),
 							wxSL_HORIZONTAL|wxSL_AUTOTICKS);
 
+    wxASSERT( m_sliderCntrl != 0L );
+
+    m_sliderCntrl->SetToolTip( wxT("Frame Number") );
+
 	pToolBar->AddControl(m_sliderCntrl);
 	pToolBar->AddTool(ID_VIEW_NEXT, 	wxT("Next"), wxArtProvider::GetBitmap(wxART_GO_FORWARD, wxART_TOOLBAR), wxT("Goto Next"));
     pToolBar->Realize();
@@ -239,7 +244,11 @@ Frame::Frame()
 
     pMenu->AppendSeparator();
 
-    pMenu->Append(ID_VIEW_CHECKSUM,          wxT("Display Checksum"));
+#ifdef  MODAL_CHECKSUM
+    pMenu->AppendCheckItem(ID_VIEW_CHECKSUM,    wxT("Display Checksum"));
+#else
+    pMenu->Append(ID_VIEW_CHECKSUM,    wxT("Display Checksum"));
+#endif
 
 	pMenuBar->Append(pMenu, wxT("&View"));
 
@@ -308,6 +317,11 @@ Frame::Frame()
 	pSizer->Add( m_pScroller, 1, wxEXPAND );
 	SetSizer( pSizer );
 
+#ifdef  MODAL_CHECKSUM
+    m_pHashDlg = new HashDialog(this);
+    wxASSERT( m_pHashDlg != 0L );
+#endif
+
 	/* post event to cause 1st image to load */
 	wxCommandEvent		event(wxEVT_LOADIMAGE, GetId());
 	event.SetEventObject( this );
@@ -356,6 +370,10 @@ Frame::~Frame() {
 	free_image_buffer();
 }
 
+/**
+ *
+ */
+
 void Frame::OnClose(wxCloseEvent& event) {
 	debug("Frame::OnClose()\n");
 
@@ -369,7 +387,9 @@ void Frame::OnExit(wxCommandEvent& event) {
 	Close();
 }
 
-
+/**
+ *  Set the image width and height.
+ */
 
 void Frame::OnFileSetSize(wxCommandEvent& event) {
 	wxString		sDefault = wxString::Format(wxT("%dx%d"),
@@ -553,6 +573,16 @@ bool Frame::GetImage() {
 		UpdateStatusBar(m_imageID);
 		m_sliderCntrl->SetValue(m_imageID);
 
+#ifdef  MODAL_CHECKSUM
+        if (m_buffer->CanChecksum()) {
+            wxUint8 lumaSum[16], chromaSum[16];
+
+            if (m_buffer->GetChecksum( m_imageID, lumaSum, chromaSum )) {
+                m_pHashDlg->SetChecksums( lumaSum, chromaSum );
+            }
+        }
+#endif  // MODAL_CHECKSUM
+
 		result = true;
 	} else {
 
@@ -607,6 +637,10 @@ void Frame::UpdateStatusBar(int id) {
 	return;
 }
 
+/**
+ *
+ */
+
 void Frame::OnViewScaleToggle(wxCommandEvent& event) {
 	debug("Frame::OnViewScaleToggle()\n");
 
@@ -622,11 +656,14 @@ void Frame::OnViewScaleToggle(wxCommandEvent& event) {
 	Refresh();
 }
 
-/** Enable/Disable automatic advance on timer. */
+/**
+ *  Enable/Disable automatic advance on timer.
+ */
+
 void Frame::OnViewAutoStep(wxCommandEvent& event) {
 	if (event.IsChecked()) {
 		m_bAutoStep = true;
-		m_timer.Start(500);
+        m_timer.Start(100);
 	} else {
 		m_bAutoStep = false;
 		m_timer.Stop();
@@ -646,6 +683,7 @@ void Frame::OnTimer(wxTimerEvent& event) {
 			debug("No more frames - disabling timer...\n");
 			m_bAutoStep = false;
 			GetMenuBar()->FindItem(ID_VIEW_STEP)->Check(false);
+			m_timer.Stop();
 		}
 	}
 
@@ -884,7 +922,7 @@ void Frame::OnHelpAbout(wxCommandEvent& event) {
 	dlgInfo.SetName(wxT("frameInspector"));
 	dlgInfo.SetDescription(wxT("Display YUV frames"));
 	dlgInfo.AddDeveloper(wxT("Michael A. Uman"));
-	dlgInfo.SetCopyright(wxT("(C) 2009-2012 Sigma Designs"));
+	dlgInfo.SetCopyright(wxT("(C) 2009-2013 Sigma Designs"));
     dlgInfo.SetWebSite(wxT("ftp://revelation.soft.sdesigns.com/"));
 
     sVersion = wxString::Format(wxT("%d.%d"), VERSION_MAJOR, VERSION_MINOR);
@@ -1253,8 +1291,9 @@ bool Frame::allocate_image_buffer() {
 	return (m_buffer != 0);
 }
 
-//------------------------------------------------------------------------------
-//------------------------------------------------------------------------------
+/**
+ *
+ */
 
 void Frame::free_image_buffer() {
 	debug("Frame::free_image_buffer()\n");
@@ -1266,6 +1305,10 @@ void Frame::free_image_buffer() {
 
 	return;
 }
+
+/**
+ *
+ */
 
 void Frame::OnViewFormat(wxCommandEvent& event) {
     debug("Frame::OnViewFormat()\n");
@@ -1324,6 +1367,10 @@ void Frame::OnViewFormat(wxCommandEvent& event) {
 
 }
 
+/**
+ *
+ */
+
 void Frame::OnFileSaveAs(wxCommandEvent& event) {
 	debug("Frame::OnFileSaveAs()\n");
     wxString	fileName;
@@ -1338,11 +1385,19 @@ void Frame::OnFileSaveAs(wxCommandEvent& event) {
 	return;
 }
 
+/**
+ *
+ */
+
 void Frame::OnLoadImage(wxCommandEvent& event) {
 	debug("Frame::OnLoadImage()\n");
 
 	GetImage();
 }
+
+/**
+ *
+ */
 
 void Frame::OnSize(wxSizeEvent& event) {
 	wxFrame::OnSize(event);
@@ -1350,6 +1405,10 @@ void Frame::OnSize(wxSizeEvent& event) {
 		m_pScroller->set_image( m_pImage, m_nScale );
 	}
 }
+
+/**
+ *
+ */
 
 void Frame::OnViewScaleCustom(wxCommandEvent& event) {
 	debug("Frame::OnViewScaleCustom()\n");
@@ -1366,6 +1425,10 @@ void Frame::OnViewScaleCustom(wxCommandEvent& event) {
 	return;
 }
 
+/**
+ *
+ */
+
 void Frame::OnGridChange(wxCommandEvent& event) {
 	wxMenuBar*	pMenu = GetMenuBar();
 
@@ -1381,6 +1444,10 @@ void Frame::OnGridChange(wxCommandEvent& event) {
 
     return;
 }
+
+/**
+ *
+ */
 
 void Frame::SaveBitmap(wxString sFilename) {
 	wxMenuBar*	pMenu = GetMenuBar();
@@ -1462,6 +1529,10 @@ void Frame::OnGridSettings(wxCommandEvent& event) {
     }
 }
 
+/**
+ *
+ */
+
 void Frame::OnUpdateUI(wxUpdateUIEvent& event) {
     //debug("OnUpdateUI!\n");
 
@@ -1478,6 +1549,14 @@ void Frame::OnUpdateUI(wxUpdateUIEvent& event) {
  */
 
 void Frame::OnViewChecksum(wxCommandEvent& event) {
+
+#ifdef MODAL_CHECKSUM
+    if (event.IsChecked()) {
+        m_pHashDlg->Show(TRUE);
+    } else {
+        m_pHashDlg->Show(FALSE);
+    }
+#else
     if ( (m_buffer != 0) && (m_buffer->CanChecksum()) ) {
         wxUint8 lumaSum[16], chromaSum[16];
 
@@ -1489,6 +1568,7 @@ void Frame::OnViewChecksum(wxCommandEvent& event) {
         }
 
     }
+#endif
 }
 
 

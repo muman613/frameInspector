@@ -13,50 +13,34 @@ HashDialogBase::HashDialogBase( wxWindow* parent, wxWindowID id, const wxString&
 {
 	this->SetSizeHints( wxDefaultSize, wxDefaultSize );
 	
-	wxBoxSizer* bSizer1;
-	bSizer1 = new wxBoxSizer( wxVERTICAL );
+	wxFlexGridSizer* fgSizer1;
+	fgSizer1 = new wxFlexGridSizer( 2, 2, 0, 0 );
+	fgSizer1->SetFlexibleDirection( wxBOTH );
+	fgSizer1->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
 	
-	wxBoxSizer* bSizer2;
-	bSizer2 = new wxBoxSizer( wxHORIZONTAL );
+	m_staticText9 = new wxStaticText( this, wxID_ANY, wxT("Luma Hash :"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText9->Wrap( -1 );
+	fgSizer1->Add( m_staticText9, 0, wxALIGN_RIGHT|wxALL, 5 );
 	
-	m_staticText1 = new wxStaticText( this, wxID_ANY, wxT("Luma Hash :"), wxDefaultPosition, wxSize( 120,-1 ), wxALIGN_RIGHT );
-	m_staticText1->Wrap( -1 );
-	bSizer2->Add( m_staticText1, 0, wxALL|wxEXPAND, 5 );
-	
-	m_lumaText = new wxStaticText( this, wxID_ANY, wxT("0xDEAD BEEF"), wxDefaultPosition, wxSize( 260,-1 ), 0 );
+	m_lumaText = new wxStaticText( this, wxID_ANY, wxT("DEADBEEFDEADBEEFDEADBEEFDEADBEEF"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_lumaText->Wrap( -1 );
 	m_lumaText->SetFont( wxFont( wxNORMAL_FONT->GetPointSize(), 76, 90, 90, false, wxEmptyString ) );
 	
-	bSizer2->Add( m_lumaText, 0, wxALL, 5 );
+	fgSizer1->Add( m_lumaText, 0, wxALL|wxEXPAND, 5 );
 	
-	bSizer1->Add( bSizer2, 0, 0, 0 );
+	m_staticText11 = new wxStaticText( this, wxID_ANY, wxT("Chroma Hash :"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText11->Wrap( -1 );
+	fgSizer1->Add( m_staticText11, 0, wxALIGN_RIGHT|wxALL, 5 );
 	
-	wxBoxSizer* bSizer3;
-	bSizer3 = new wxBoxSizer( wxHORIZONTAL );
-	
-	m_staticText3 = new wxStaticText( this, wxID_ANY, wxT("Chroma Hash :"), wxDefaultPosition, wxSize( 120,-1 ), wxALIGN_RIGHT );
-	m_staticText3->Wrap( -1 );
-	m_staticText3->SetFont( wxFont( wxNORMAL_FONT->GetPointSize(), 70, 90, 90, false, wxEmptyString ) );
-	
-	bSizer3->Add( m_staticText3, 0, wxALL, 5 );
-	
-	m_chromaText = new wxStaticText( this, wxID_ANY, wxT("0xDEAD BEEF"), wxDefaultPosition, wxSize( 260,-1 ), 0 );
+	m_chromaText = new wxStaticText( this, wxID_ANY, wxT("DEADBEEFDEADBEEFDEADBEEFDEADBEEF"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_chromaText->Wrap( -1 );
 	m_chromaText->SetFont( wxFont( wxNORMAL_FONT->GetPointSize(), 76, 90, 90, false, wxEmptyString ) );
 	
-	bSizer3->Add( m_chromaText, 0, wxALL, 5 );
+	fgSizer1->Add( m_chromaText, 0, wxALL|wxEXPAND, 5 );
 	
-	bSizer1->Add( bSizer3, 0, wxEXPAND, 0 );
-	
-	m_sdbSizer1 = new wxStdDialogButtonSizer();
-	m_sdbSizer1Cancel = new wxButton( this, wxID_CANCEL );
-	m_sdbSizer1->AddButton( m_sdbSizer1Cancel );
-	m_sdbSizer1->Realize();
-	bSizer1->Add( m_sdbSizer1, 1, wxALL|wxEXPAND, 5 );
-	
-	this->SetSizer( bSizer1 );
+	this->SetSizer( fgSizer1 );
 	this->Layout();
-	bSizer1->Fit( this );
+	fgSizer1->Fit( this );
 }
 
 HashDialogBase::~HashDialogBase()
