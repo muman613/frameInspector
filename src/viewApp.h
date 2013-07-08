@@ -5,25 +5,26 @@
 #include "cpupack.h"
 
 
-class viewApp : public wxApp {
+class viewApp : public wxApp
+{
 public:
 
-	virtual bool OnInit();
+    virtual bool OnInit();
 
-	/**
-	  * Return a pointer to CPUPACK.
-	  */
-	const CPUPACK*	get_cpu_info() const {
-		return (const CPUPACK*)&m_cpuPack;
-	}
+    /**
+      * Return a pointer to CPUPACK.
+      */
+    const CPUPACK*	get_cpu_info() const {
+        return (const CPUPACK*)&m_cpuPack;
+    }
 
     wxCmdLineParser	    m_cmdLine;
 
 private:
 
-	bool	getCPUID();
+    bool	getCPUID();
 
-	CPUPACK	            m_cpuPack;
+    CPUPACK	            m_cpuPack;
 };
 
 DECLARE_APP(viewApp)

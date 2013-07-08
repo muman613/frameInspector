@@ -26,23 +26,23 @@
 ///////////////////////////////////////////////////////////////////////////////
 /// Class GridSettingsDialog
 ///////////////////////////////////////////////////////////////////////////////
-class GridSettingsDialog : public wxDialog 
+class GridSettingsDialog : public wxDialog
 {
-	private:
-	
-	protected:
-		wxStaticText* m_staticText1;
-		wxStaticText* m_staticText2;
-		wxStdDialogButtonSizer* m_sdbSizer1;
-		wxButton* m_sdbSizer1OK;
-		wxButton* m_sdbSizer1Cancel;
-	
-	public:
-		wxSpinCtrl* m_spinH;
-		wxSpinCtrl* m_spinV;
-		GridSettingsDialog( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = wxT("Grid Settings"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize, long style = wxDEFAULT_DIALOG_STYLE );
-		~GridSettingsDialog();
-	
+private:
+
+protected:
+    wxStaticText* m_staticText1;
+    wxStaticText* m_staticText2;
+    wxStdDialogButtonSizer* m_sdbSizer1;
+    wxButton* m_sdbSizer1OK;
+    wxButton* m_sdbSizer1Cancel;
+
+public:
+    wxSpinCtrl* m_spinH;
+    wxSpinCtrl* m_spinV;
+    GridSettingsDialog( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = wxT("Grid Settings"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize, long style = wxDEFAULT_DIALOG_STYLE );
+    ~GridSettingsDialog();
+
 };
 
 #endif //__GridSettingsDialog__

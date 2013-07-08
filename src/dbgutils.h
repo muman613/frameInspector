@@ -7,21 +7,22 @@
 //#define _ENABLE_DEBUG		1
 
 #ifdef	_WIN32
-	#include <windows.h>
+#include <windows.h>
 #endif
 
 #ifdef	_ENABLE_DEBUG
 
-inline void debug(const char* sFmt, ...) {
-	va_list		valist;
-	va_start(valist,sFmt);
+inline void debug(const char* sFmt, ...)
+{
+    va_list		valist;
+    va_start(valist,sFmt);
 #ifdef	_WIN32
-	static char	dbgBuffer[1024];
-	vsnprintf(dbgBuffer, 1024, sFmt, valist);
-	OutputDebugStringA(dbgBuffer);
+    static char	dbgBuffer[1024];
+    vsnprintf(dbgBuffer, 1024, sFmt, valist);
+    OutputDebugStringA(dbgBuffer);
 #else	// _WIN32
-	vfprintf(stderr, sFmt, valist);
-	fflush(stderr);
+    vfprintf(stderr, sFmt, valist);
+    fflush(stderr);
 #endif	// _WIN32
 }
 
@@ -29,7 +30,8 @@ inline void debug(const char* sFmt, ...) {
 
 #else	//	_ENABLE_DEBUG
 
-inline void debug(const char* sFmt, ...) {
+inline void debug(const char* sFmt, ...)
+{
 }
 
 #define debug_function(x)

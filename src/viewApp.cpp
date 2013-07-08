@@ -14,35 +14,36 @@ IMPLEMENT_APP(viewApp)
 
 static const wxCmdLineEntryDesc cmdLineDesc[] = {
     { wxCMD_LINE_SWITCH,    wxT("h"), wxT("help"),      wxT("Display help message"), wxCMD_LINE_VAL_NONE, wxCMD_LINE_OPTION_HELP },
-	{ wxCMD_LINE_OPTION,	wxT("f"), wxT("file"),      wxT("Set YUV File"),	    wxCMD_LINE_VAL_STRING, },
-	{ wxCMD_LINE_OPTION,	wxT("p"), wxT("path"),      wxT("Set YUV path"),	    wxCMD_LINE_VAL_STRING, },
-	{ wxCMD_LINE_OPTION, 	wxT("s"), wxT("size"),      wxT("Set image size"),      wxCMD_LINE_VAL_STRING, },
-	{ wxCMD_LINE_OPTION,	wxT("c"), wxT("frame"),     wxT("Set frame #"), 	    wxCMD_LINE_VAL_NUMBER, },
-	{ wxCMD_LINE_OPTION,	wxT("r"), wxT("prefix"),    wxT("Set prefix"),          wxCMD_LINE_VAL_STRING, },
+    { wxCMD_LINE_OPTION,	wxT("f"), wxT("file"),      wxT("Set YUV File"),	    wxCMD_LINE_VAL_STRING, },
+    { wxCMD_LINE_OPTION,	wxT("p"), wxT("path"),      wxT("Set YUV path"),	    wxCMD_LINE_VAL_STRING, },
+    { wxCMD_LINE_OPTION, 	wxT("s"), wxT("size"),      wxT("Set image size"),      wxCMD_LINE_VAL_STRING, },
+    { wxCMD_LINE_OPTION,	wxT("c"), wxT("frame"),     wxT("Set frame #"), 	    wxCMD_LINE_VAL_NUMBER, },
+    { wxCMD_LINE_OPTION,	wxT("r"), wxT("prefix"),    wxT("Set prefix"),          wxCMD_LINE_VAL_STRING, },
 
 #ifdef  HAVE_FAM
-	{ wxCMD_LINE_OPTION,	wxT("m"), wxT("monitor"),   wxT("Enable/Disable FAM"),  wxCMD_LINE_VAL_NUMBER, },
+    { wxCMD_LINE_OPTION,	wxT("m"), wxT("monitor"),   wxT("Enable/Disable FAM"),  wxCMD_LINE_VAL_NUMBER, },
 #endif
 
-	{ wxCMD_LINE_NONE },
+    { wxCMD_LINE_NONE },
 };
 
 
-bool viewApp::OnInit() {
-	debug("viewApp::OnInit()\n");
+bool viewApp::OnInit()
+{
+    debug("viewApp::OnInit()\n");
 
-	int	depth = ::wxDisplayDepth();
+    int	depth = ::wxDisplayDepth();
 
-	debug("Screen depth = %d\n", depth);
+    debug("Screen depth = %d\n", depth);
 
-	/* if running on a low color density screen, tell the user to prepare for the worst */
+    /* if running on a low color density screen, tell the user to prepare for the worst */
 
-	if (depth < 16) {
-		::wxMessageBox(_T("frameInspector should be run on hicolor or truecolor screen.\n" \
-			"Detected 256 color screen!"), _T("Message"), wxICON_EXCLAMATION);
-	}
+    if (depth < 16) {
+        ::wxMessageBox(_T("frameInspector should be run on hicolor or truecolor screen.\n" \
+                          "Detected 256 color screen!"), _T("Message"), wxICON_EXCLAMATION);
+    }
 
-	getCPUID();	/* determine which CPU application is running on */
+    getCPUID();	/* determine which CPU application is running on */
 
     ::wxInitAllImageHandlers();
 
@@ -52,40 +53,36 @@ bool viewApp::OnInit() {
     sLogo = wxString::Format(wxT("%s v%d.%d %s"), APP_NAME, VERSION_MAJOR, VERSION_MINOR, VERSION_RELEASE);
     m_cmdLine.SetLogo(sLogo);
 
-    debug("arg1 = %s arg2 = %s arg3 = %s", wxGetApp().argv[1], "a", "b"); //wxGetApp().argv[2], wxGetApp().argv[3]);
+    debug("arg1 = %s arg2 = %s arg3 = %s\n", wxGetApp().argv[1], "a", "b");
 
     if (m_cmdLine.Parse() != 0) {
 //        debug("-- user help!\n");
         return false;
     }
+    Frame*	myFrame = new Frame();
 
-//    if (m_cmdLine.Found(wxT("f"))) {
-//        debug("Found f switch!\n");
-//    }
+    myFrame->Show( true );
+    SetTopWindow(myFrame);
 
-	Frame*	myFrame = new Frame();
-
-	myFrame->Show( true );
-	SetTopWindow(myFrame);
-
-	return true;
+    return true;
 };
 
 /**
  *  Get the host CPU identification.
  */
 
-bool viewApp::getCPUID() {
-	debug("viewApp::getCPUID()\n");
+bool viewApp::getCPUID()
+{
+    debug("viewApp::getCPUID()\n");
 
-	memset(&m_cpuPack, 0, sizeof(CPUPACK));
+    memset(&m_cpuPack, 0, sizeof(CPUPACK));
 
 #ifdef	__GNUC__
 #if (defined(__x86_64__) || defined(__i386__))
 
-	/* Determine information about CPU */
+    /* Determine information about CPU */
 
-	asm ( " movl $0, %%eax 				;	\
+    asm ( " movl $0, %%eax 				;	\
 			cpuid 						;	\
 			movl %%eax, (%0)			;	\
 			movl %%ebx, 4(%0)			;	\
@@ -109,9 +106,9 @@ bool viewApp::getCPUID() {
 			jz	0f                      ;	\
 			movl $1, 28(%0)				;	\
 			0:" 							\
-			: /* No output */ 				\
-			: "D" (&m_cpuPack)					\
-			: "eax", "ebx", "ecx", "edx" );
+          : /* No output */ 				\
+          : "D" (&m_cpuPack)					\
+          : "eax", "ebx", "ecx", "edx" );
 
 #else   // Not an intel 32/64bit CPU...
 
@@ -123,8 +120,8 @@ bool viewApp::getCPUID() {
 #else
 
     /* Get CPUID from Windows intrinsic function */
-	__cpuid((int *)&m_cpuPack, 0);
-	__cpuid((int *)&m_cpuPack + 4, 1);
+    __cpuid((int *)&m_cpuPack, 0);
+    __cpuid((int *)&m_cpuPack + 4, 1);
 
 #endif
 
@@ -146,18 +143,18 @@ bool viewApp::getCPUID() {
 
     debug("CPU Cnt  : %d\n", m_cpuPack.CPUSig_CPUCount);
 
-	if (m_cpuPack.CPUSig_Flag_MMX) {
-		debug("HAS MMX!\n");
-	}
-	if (m_cpuPack.CPUSig_Flag_SSE2) {
-		debug("HAS SSE2!\n");
-	}
-	if (m_cpuPack.CPUSig_Flag_3DNOW) {
-    	debug("HAS 3DNOW!\n");
-	}
+    if (m_cpuPack.CPUSig_Flag_MMX) {
+        debug("HAS MMX!\n");
+    }
+    if (m_cpuPack.CPUSig_Flag_SSE2) {
+        debug("HAS SSE2!\n");
+    }
+    if (m_cpuPack.CPUSig_Flag_3DNOW) {
+        debug("HAS 3DNOW!\n");
+    }
 #endif	// _ENABLE_DEBUG
 
 
-	return true;
+    return true;
 }
 

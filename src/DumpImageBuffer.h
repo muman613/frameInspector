@@ -4,7 +4,8 @@
 #include "imageBuffer.h"
 #include "dbgutils.h"
 
-class dumpImageBuffer : public ImageBuffer {
+class dumpImageBuffer : public ImageBuffer
+{
 public:
     dumpImageBuffer(int width, int height);
     virtual ~dumpImageBuffer();

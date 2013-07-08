@@ -4,7 +4,7 @@
 #include "misc_utils.h"
 
 HashDialog::HashDialog(wxWindow* pParent)
-:   HashDialogBase(pParent)
+    :   HashDialogBase(pParent)
 {
 
 }
@@ -13,7 +13,8 @@ HashDialog::~HashDialog()
 {
 }
 
-void HashDialog::SetChecksums(wxUint8* lumaSum, wxUint8* chromaSum) {
+void HashDialog::SetChecksums(wxUint8* lumaSum, wxUint8* chromaSum)
+{
     std::string sTmp;
 
     utils::digest_to_string( lumaSum, sTmp );

@@ -18,91 +18,93 @@
 #include "YUV420ImageBufferSplit.h"
 
 YUV420ImageBufferSplit::YUV420ImageBufferSplit(int x, int y)
-:	ImageBuffer(ImageBuffer::DATA_YUV420, x, y)
+    :	ImageBuffer(ImageBuffer::DATA_YUV420, x, y)
 {
-	debug("YUV420ImageBufferSplit::YUVImageBuffer(%d, %d)\n", x, y);
+    debug("YUV420ImageBufferSplit::YUVImageBuffer(%d, %d)\n", x, y);
 
 #ifdef	OLDWAY
-	m_imageData = (UBYTE *)malloc(sizeof(PIXEL) * x * y);
-	assert(m_imageData != 0L);
+    m_imageData = (UBYTE *)malloc(sizeof(PIXEL) * x * y);
+    assert(m_imageData != 0L);
 
-	debug("Image data @ 0x%08lx\n", m_imageData);
+    debug("Image data @ 0x%08lx\n", m_imageData);
 #endif
 
 
-	return;
+    return;
 }
 
 YUV420ImageBufferSplit::~YUV420ImageBufferSplit()
 {
-	debug("YUV420ImageBufferSplit::~YUV420ImageBufferSplit()\n");
+    debug("YUV420ImageBufferSplit::~YUV420ImageBufferSplit()\n");
 
-	if (m_imageData) {
-		free(m_imageData);
-		m_imageData = 0L;
-	}
+    if (m_imageData) {
+        free(m_imageData);
+        m_imageData = 0L;
+    }
 
-	return;
+    return;
 }
 
-bool YUV420ImageBufferSplit::Load(size_t frame) {
-	/* create the image filename from the path and frame #. */
-	wxString	imageFilename = wxString::Format(_T("%s/%s_%ld"),
-					m_imagePath.c_str(),
-					m_prefix.c_str(),
-					frame);
+bool YUV420ImageBufferSplit::Load(size_t frame)
+{
+    /* create the image filename from the path and frame #. */
+    wxString	imageFilename = wxString::Format(_T("%s/%s_%ld"),
+                                m_imagePath.c_str(),
+                                m_prefix.c_str(),
+                                frame);
 
-	return Load((const char *)imageFilename.c_str());
+    return Load((const char *)imageFilename.c_str());
 }
 
-bool YUV420ImageBufferSplit::Load(const char* filename) {
-	bool			result = false;
-	char*			fullName = 0L;
-	FILE			*yfp = 0L, *ufp = 0L, *vfp = 0L;
-	long int  		u,v,y0,y1,y2,y3,u0,u1,u2,u3,v0,v1,v2,v3;
+bool YUV420ImageBufferSplit::Load(const char* filename)
+{
+    bool			result = false;
+    char*			fullName = 0L;
+    FILE			*yfp = 0L, *ufp = 0L, *vfp = 0L;
+    long int  		u,v,y0,y1,y2,y3,u0,u1,u2,u3,v0,v1,v2,v3;
     unsigned char  	*y1buf = 0L,*y2buf = 0L,*ubuf = 0L,*vbuf = 0L;
     register PIXEL  *pP1 = 0L,*pP2 = 0L;
     int             rows, cols, row, col;
 
-	debug("YUV420ImageBufferSplit::Load(%s)\n", filename);
+    debug("YUV420ImageBufferSplit::Load(%s)\n", filename);
 
-	/* If image data already exists, free it */
-	if (m_imageData != 0L) {
-		debug("-- freeing old image data (0x%08lx)\n", m_imageData);
+    /* If image data already exists, free it */
+    if (m_imageData != 0L) {
+        debug("-- freeing old image data (0x%08lx)\n", m_imageData);
 
-		free(m_imageData);
-		m_imageData = 0L;
-	}
+        free(m_imageData);
+        m_imageData = 0L;
+    }
 
-	/* Allocate new image data */
-	m_imageData = (UBYTE *)malloc(sizeof(PIXEL) * m_width * m_height);
-	assert(m_imageData != 0L);
+    /* Allocate new image data */
+    m_imageData = (UBYTE *)malloc(sizeof(PIXEL) * m_width * m_height);
+    assert(m_imageData != 0L);
 
-	debug("Image data @ 0x%08lx\n", m_imageData);
+    debug("Image data @ 0x%08lx\n", m_imageData);
 
-	fullName = (char *)malloc(strlen(filename) + 3);
+    fullName = (char *)malloc(strlen(filename) + 3);
 
-	/* open Y, U, & V files */
-	strcpy(fullName, filename);
-	strcat(fullName, ".Y");
-	debug("Y File = %s\n", fullName);
-	yfp = fopen(fullName, "rb");
+    /* open Y, U, & V files */
+    strcpy(fullName, filename);
+    strcat(fullName, ".Y");
+    debug("Y File = %s\n", fullName);
+    yfp = fopen(fullName, "rb");
 
-	strcpy(fullName, filename);
-	strcat(fullName, ".U");
-	debug("U File = %s\n", fullName);
-	ufp = fopen(fullName, "rb");
+    strcpy(fullName, filename);
+    strcat(fullName, ".U");
+    debug("U File = %s\n", fullName);
+    ufp = fopen(fullName, "rb");
 
-	strcpy(fullName, filename);
-	strcat(fullName, ".V");
-	debug("V File = %s\n", fullName);
-	vfp = fopen(fullName, "rb");
+    strcpy(fullName, filename);
+    strcat(fullName, ".V");
+    debug("V File = %s\n", fullName);
+    vfp = fopen(fullName, "rb");
 
-	/* make sure the file is opened! */
-	if ((yfp == 0L) || (ufp == 0L) || (vfp == 0L)) {
-		debug("ERROR: Unable to open file [Y = %ld U = %ld V = %ld]\n", yfp, ufp, vfp);
-		return false;
-	}
+    /* make sure the file is opened! */
+    if ((yfp == 0L) || (ufp == 0L) || (vfp == 0L)) {
+        debug("ERROR: Unable to open file [Y = %ld U = %ld V = %ld]\n", yfp, ufp, vfp);
+        return false;
+    }
 
     if (m_bufType == DATA_YUV444) {
         /* implement yuv444 here */
@@ -134,7 +136,9 @@ bool YUV420ImageBufferSplit::Load(const char* filename) {
                 goto exitLoadYUV420;
             }
 
-            y1ptr = y1buf; vptr = vbuf; uptr = ubuf;
+            y1ptr = y1buf;
+            vptr = vbuf;
+            uptr = ubuf;
 
             pP1 = (PIXEL *)((unsigned long)m_imageData + (row * m_width * sizeof(PIXEL)));
 
@@ -208,7 +212,10 @@ exitLoadYUV444:
                 wxASSERT(bRead != 0L);
             }
 
-            y1ptr = y1buf; y2ptr = y2buf; vptr = vbuf; uptr = ubuf;
+            y1ptr = y1buf;
+            y2ptr = y2buf;
+            vptr = vbuf;
+            uptr = ubuf;
 
             pP1 = (PIXEL *)((unsigned long)m_imageData + (row * m_width * sizeof(PIXEL)));
             pP2 = (PIXEL *)((unsigned long)m_imageData + ((row + 1) * m_width * sizeof(PIXEL)));
@@ -225,7 +232,8 @@ exitLoadYUV444:
                 v = (long int) ((*vptr++) - 128);
 
                 if (m_bufType == DATA_YUV422) {
-                    uptr++; vptr++;
+                    uptr++;
+                    vptr++;
                 }
 
                 if (m_ccir601) {
@@ -243,13 +251,13 @@ exitLoadYUV444:
                 u0=u1=u2=u3=u;
                 v0=v1=v2=v3=v;
 
-    /* The inverse of the JFIF RGB to YUV Matrix for $00010000 = 1.0
+                /* The inverse of the JFIF RGB to YUV Matrix for $00010000 = 1.0
 
-    [Y]   [65496        0   91880][R]
-    [U] = [65533   -22580  -46799[G]
-    [V]   [65537   116128      -8][B]
+                [Y]   [65496        0   91880][R]
+                [U] = [65533   -22580  -46799[G]
+                [V]   [65537   116128      -8][B]
 
-    */
+                */
 
                 r0 = 65536 * y0               + 91880 * v0;
                 g0 = 65536 * y0 -  22580 * u0 - 46799 * v0;
@@ -280,12 +288,12 @@ exitLoadYUV444:
                 b2 = limit(b2);
                 b3 = limit(b3);
 
-    #ifdef	DUMP_RGB
+#ifdef	DUMP_RGB
                 debug("r0 = 0x%02x g0 = 0x%02x b0 = 0x%02x\n", r0, g0, b0);
                 debug("r1 = 0x%02x g1 = 0x%02x b1 = 0x%02x\n", r1, g1, b1);
                 debug("r2 = 0x%02x g2 = 0x%02x b2 = 0x%02x\n", r2, g2, b2);
                 debug("r3 = 0x%02x g3 = 0x%02x b3 = 0x%02x\n", r3, g3, b3);
-    #endif	// DUMP_RGB
+#endif	// DUMP_RGB
 
                 /* first pixel */
                 PPM_ASSIGN(*pP1, r0, g0, b0);
@@ -317,13 +325,13 @@ exitLoadYUV420:
             free(vbuf);
     }
 
-	/* close all files */
-	fclose(vfp);
-	fclose(ufp);
-	fclose(yfp);
+    /* close all files */
+    fclose(vfp);
+    fclose(ufp);
+    fclose(yfp);
 
-	if (fullName)
-		free(fullName);
+    if (fullName)
+        free(fullName);
 
     if (result == false) {
         debug("-- freeing image data!\n");
@@ -331,79 +339,82 @@ exitLoadYUV420:
         m_imageData = 0L;
     }
 
-	return result;
+    return result;
 }
 
-PIXEL* YUV420ImageBufferSplit::getPixel(int x, int y) {
-	size_t	offset = ((y * sizeof(PIXEL) * m_width) + (x * sizeof(PIXEL)));
+PIXEL* YUV420ImageBufferSplit::getPixel(int x, int y)
+{
+    size_t	offset = ((y * sizeof(PIXEL) * m_width) + (x * sizeof(PIXEL)));
 
-	return (PIXEL *)&m_imageData[offset];
+    return (PIXEL *)&m_imageData[offset];
 }
 
-void YUV420ImageBufferSplit::GetImage(wxImage* pImage) {
-	debug("YUV420ImageBufferSplit::GetImage(0x%08lx)\n", pImage);
-	assert(pImage != 0L);
+void YUV420ImageBufferSplit::GetImage(wxImage* pImage)
+{
+    debug("YUV420ImageBufferSplit::GetImage(0x%08lx)\n", pImage);
+    assert(pImage != 0L);
 
-	pImage->Destroy();
-	pImage->Create(m_width, m_height);
-	pImage->SetData(copy_data()); //m_imageData);
+    pImage->Destroy();
+    pImage->Create(m_width, m_height);
+    pImage->SetData(copy_data()); //m_imageData);
 
-	return;
+    return;
 }
 
-ssize_t YUV420ImageBufferSplit::GetFrameCount() {
-	size_t	 		frameID = 0L;
-	wxFileName		framePath;
-	bool			bDone = false;
+ssize_t YUV420ImageBufferSplit::GetFrameCount()
+{
+    size_t	 		frameID = 0L;
+    wxFileName		framePath;
+    bool			bDone = false;
 
-	debug("GetFrameCount()\n");
+    debug("GetFrameCount()\n");
 
-	while (!bDone) {
-		wxString	name;
-		int			count = 0;
+    while (!bDone) {
+        wxString	name;
+        int			count = 0;
 
-		name = wxString::Format( _T("%s/%s_%ld.Y"),
-				m_imagePath.c_str(),
-				m_prefix.c_str(),
-				frameID );
+        name = wxString::Format( _T("%s/%s_%ld.Y"),
+                                 m_imagePath.c_str(),
+                                 m_prefix.c_str(),
+                                 frameID );
 
-		framePath.Assign(name);
+        framePath.Assign(name);
 
-		if (framePath.FileExists()) {
-			count++;
-		}
+        if (framePath.FileExists()) {
+            count++;
+        }
 
-		name = wxString::Format( _T("%s/%s_%ld.U"),
-				m_imagePath.c_str(),
-				m_prefix.c_str(),
-				frameID );
+        name = wxString::Format( _T("%s/%s_%ld.U"),
+                                 m_imagePath.c_str(),
+                                 m_prefix.c_str(),
+                                 frameID );
 
-		framePath.Assign(name);
+        framePath.Assign(name);
 
-		if (framePath.FileExists()) {
-			count++;
-		}
+        if (framePath.FileExists()) {
+            count++;
+        }
 
-		name = wxString::Format( _T("%s/%s_%ld.V"),
-				m_imagePath.c_str(),
-				m_prefix.c_str(),
-				frameID );
+        name = wxString::Format( _T("%s/%s_%ld.V"),
+                                 m_imagePath.c_str(),
+                                 m_prefix.c_str(),
+                                 frameID );
 
-		framePath.Assign(name);
+        framePath.Assign(name);
 
-		if (framePath.FileExists()) {
-			count++;
-		}
+        if (framePath.FileExists()) {
+            count++;
+        }
 
 //		debug("%d %d\n", frameID, count);
 
-		if (count == 3) {
-			frameID++;
-		} else {
-			bDone = true;
-			frameID--;
-		}
-	}
+        if (count == 3) {
+            frameID++;
+        } else {
+            bDone = true;
+            frameID--;
+        }
+    }
 
-	return frameID;
+    return frameID;
 }

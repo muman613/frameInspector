@@ -23,21 +23,21 @@
 ///////////////////////////////////////////////////////////////////////////////
 /// Class HashDialogBase
 ///////////////////////////////////////////////////////////////////////////////
-class HashDialogBase : public wxDialog 
+class HashDialogBase : public wxDialog
 {
-	private:
-	
-	protected:
-		wxStaticText* m_staticText9;
-		wxStaticText* m_lumaText;
-		wxStaticText* m_staticText11;
-		wxStaticText* m_chromaText;
-	
-	public:
-		
-		HashDialogBase( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = wxT("Checksum Dialog"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxCAPTION );
-		~HashDialogBase();
-	
+private:
+
+protected:
+    wxStaticText* m_staticText9;
+    wxStaticText* m_lumaText;
+    wxStaticText* m_staticText11;
+    wxStaticText* m_chromaText;
+
+public:
+
+    HashDialogBase( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = wxT("Checksum Dialog"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxCAPTION );
+    ~HashDialogBase();
+
 };
 
 #endif //__Dialogs__

@@ -4,7 +4,8 @@
 #include "Dialogs.h"
 
 
-class HashDialog : public HashDialogBase {
+class HashDialog : public HashDialogBase
+{
 public:
     HashDialog(wxWindow* pParent);
     ~HashDialog();

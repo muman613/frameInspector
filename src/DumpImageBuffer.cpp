@@ -12,14 +12,15 @@
 #include "dbgutils.h"
 
 dumpImageBuffer::dumpImageBuffer(int width, int height)
-:   ImageBuffer(ImageBuffer::DATA_YUV420, width, height)
+    :   ImageBuffer(ImageBuffer::DATA_YUV420, width, height)
 {
 //constructor
     debug("dumpImageBuffer::dumpImageBuffer(%d, %d)\n", width, height);
     return;
 }
 
-dumpImageBuffer::~dumpImageBuffer() {
+dumpImageBuffer::~dumpImageBuffer()
+{
 //destructor
     debug("dumpImageBuffer::~dumpImageBuffer()\n");
     return;
@@ -29,7 +30,8 @@ dumpImageBuffer::~dumpImageBuffer() {
  *  Scan directory looking for all pic_*.rmar files.
  */
 
-ssize_t		dumpImageBuffer::GetFrameCount() {
+ssize_t		dumpImageBuffer::GetFrameCount()
+{
     debug("dumpImageBuffer::GetFrameCount()\n");
     ssize_t count = 0;
 
@@ -60,9 +62,10 @@ ssize_t		dumpImageBuffer::GetFrameCount() {
     return count;
 }
 
-void dumpImageBuffer::GetImage(wxImage* pImage) {
-	debug("dumpImageBuffer::GetImage(0x%08lx)\n", pImage);
-	assert(pImage != 0L);
+void dumpImageBuffer::GetImage(wxImage* pImage)
+{
+    debug("dumpImageBuffer::GetImage(0x%08lx)\n", pImage);
+    assert(pImage != 0L);
 
     if (m_imageData != 0L) {
         pImage->Destroy();
@@ -70,14 +73,15 @@ void dumpImageBuffer::GetImage(wxImage* pImage) {
         pImage->SetData(copy_data()); //m_imageData);
     }
 
-	return;
+    return;
 }
 
 /**
  *  Load frame from dump directory.
  */
 
-bool		dumpImageBuffer::Load(size_t frame) {
+bool		dumpImageBuffer::Load(size_t frame)
+{
     wxString    sFrameName;
     wxUint8     *pLumaBuffer = 0L,*pChromaBuffer = 0L;
     wxUint32    lumaX = 0 , lumaY = 0, lumaW = 0, lumaH = 0;
@@ -190,10 +194,10 @@ bool		dumpImageBuffer::Load(size_t frame) {
                             }
                         } else {
                             debug("-- found unknown tag [%c%c%c%c]!\n",
-                                ((nTag & 0xff000000) >> 24),
-                                ((nTag & 0x00ff0000) >> 16),
-                                ((nTag & 0x0000ff00) >> 8),
-                                ((nTag & 0x000000ff)));
+                                  ((nTag & 0xff000000) >> 24),
+                                  ((nTag & 0x00ff0000) >> 16),
+                                  ((nTag & 0x0000ff00) >> 8),
+                                  ((nTag & 0x000000ff)));
                             m_fp.Seek(lSize, wxFromCurrent);
                         }
                     }
@@ -207,14 +211,16 @@ bool		dumpImageBuffer::Load(size_t frame) {
 
                 debug("luma w X h = %d X %d\n", lumaW, lumaH);
 
-                pDesty = pY; pDestu = pU; pDestv = pV;
+                pDesty = pY;
+                pDestu = pU;
+                pDestv = pV;
 
                 /* save the luma buffer */
                 for (wxUint32 y = 0 ; y < lumaH ; y++)
                     for (wxUint32 x = 0 ; x < lumaW ; x++) {
                         wxUint8* pixel = (pLumaBuffer +\
-                                (x/pvc_tw) * pvc_ts + (y/pvc_th) * lumaTotalWidth * pvc_th +
-                                (x % pvc_tw) + (y % pvc_th)*pvc_tw);
+                                          (x/pvc_tw) * pvc_ts + (y/pvc_th) * lumaTotalWidth * pvc_th +
+                                          (x % pvc_tw) + (y % pvc_th)*pvc_tw);
 
                         *(pDesty++) = *pixel;
                     }
@@ -223,8 +229,8 @@ bool		dumpImageBuffer::Load(size_t frame) {
                 for (wxUint32 y = 0 ; y < chromaH ; y++)
                     for (wxUint32 x = 0 ; x < chromaW*2 ; x += 2) {
                         wxUint8* pixel = (pChromaBuffer +\
-                                (x/pvc_tw) * pvc_ts + (y/pvc_th) * chromaTotalWidth * pvc_th +
-                                (x % pvc_tw) + (y % pvc_th)*pvc_tw);
+                                          (x/pvc_tw) * pvc_ts + (y/pvc_th) * chromaTotalWidth * pvc_th +
+                                          (x % pvc_tw) + (y % pvc_th)*pvc_tw);
 
                         *(pDestu++) = *pixel;
                         *(pDestv++) = *(pixel + 1);
@@ -283,13 +289,15 @@ bool		dumpImageBuffer::Load(size_t frame) {
     return true;
 }
 
-PIXEL*		dumpImageBuffer::getPixel(int x, int y) {
+PIXEL*		dumpImageBuffer::getPixel(int x, int y)
+{
     return (PIXEL*)0L;
 }
 
 
-bool dumpImageBuffer::DoYUVConversion(int rows, int cols, wxUint8* pY, wxUint8* pU, wxUint8* pV) {
-	long int  		u,v,y0,y1,y2,y3,u0,u1,u2,u3,v0,v1,v2,v3;
+bool dumpImageBuffer::DoYUVConversion(int rows, int cols, wxUint8* pY, wxUint8* pU, wxUint8* pV)
+{
+    long int  		u,v,y0,y1,y2,y3,u0,u1,u2,u3,v0,v1,v2,v3;
     register unsigned char  	*y1buf,*y2buf,*ubuf,*vbuf;
     register PIXEL  *pP1,*pP2;
     int             row, col;
@@ -308,7 +316,10 @@ bool dumpImageBuffer::DoYUVConversion(int rows, int cols, wxUint8* pY, wxUint8* 
     for (row = 0; row < (rows & ~1); row += 2) {
         unsigned char *y1ptr,*y2ptr,*uptr,*vptr;
 
-        y1ptr = y1buf; y2ptr = y2buf; vptr = vbuf; uptr = ubuf;
+        y1ptr = y1buf;
+        y2ptr = y2buf;
+        vptr = vbuf;
+        uptr = ubuf;
 
         pP1 = (PIXEL *)((unsigned long)m_imageData + (row * m_width * sizeof(PIXEL)));
         pP2 = (PIXEL *)((unsigned long)m_imageData + ((row + 1) * m_width * sizeof(PIXEL)));
@@ -325,7 +336,8 @@ bool dumpImageBuffer::DoYUVConversion(int rows, int cols, wxUint8* pY, wxUint8* 
             v = (long int) ((*vptr++) - 128);
 
             if (m_bufType == DATA_YUV422) {
-                uptr++; vptr++;
+                uptr++;
+                vptr++;
             }
 
             if (m_ccir601) {
@@ -343,13 +355,13 @@ bool dumpImageBuffer::DoYUVConversion(int rows, int cols, wxUint8* pY, wxUint8* 
             u0=u1=u2=u3=u;
             v0=v1=v2=v3=v;
 
-/* The inverse of the JFIF RGB to YUV Matrix for $00010000 = 1.0
+            /* The inverse of the JFIF RGB to YUV Matrix for $00010000 = 1.0
 
-[Y]   [65496        0   91880][R]
-[U] = [65533   -22580  -46799[G]
-[V]   [65537   116128      -8][B]
+            [Y]   [65496        0   91880][R]
+            [U] = [65533   -22580  -46799[G]
+            [V]   [65537   116128      -8][B]
 
-*/
+            */
 
             r0 = 65536 * y0               + 91880 * v0;
             g0 = 65536 * y0 -  22580 * u0 - 46799 * v0;
@@ -414,8 +426,10 @@ bool dumpImageBuffer::DoYUVConversion(int rows, int cols, wxUint8* pY, wxUint8* 
  *  Get the frame size.
  */
 
-bool dumpImageBuffer::QueryFrameSize(int& width, int& height) {
-    width = m_width; height = m_height;
+bool dumpImageBuffer::QueryFrameSize(int& width, int& height)
+{
+    width = m_width;
+    height = m_height;
     return true;
 }
 

@@ -13,49 +13,51 @@ typedef std::vector<FAMRequest>				FAMRequest_Vector;
 typedef std::vector<FAMRequest>::iterator	FAMRequest_Iter;
 
 BEGIN_DECLARE_EVENT_TYPES()
-	DECLARE_EVENT_TYPE(EVT_FAMEVENT, 3000)
+DECLARE_EVENT_TYPE(EVT_FAMEVENT, 3000)
 END_DECLARE_EVENT_TYPES()
 
 /**
   * FAM event class.
   */
 
-class wxFAMEvent : public wxEvent {
+class wxFAMEvent : public wxEvent
+{
 
-	DECLARE_DYNAMIC_CLASS(wxFAMEvent)
+    DECLARE_DYNAMIC_CLASS(wxFAMEvent)
 
 public:
-	wxFAMEvent() {
-		m_eventType = EVT_FAMEVENT;
-	}
+    wxFAMEvent() {
+        m_eventType = EVT_FAMEVENT;
+    }
 
-	wxFAMEvent(const char* filename, int famEvt)
-	:	m_filename(filename),
-		m_event(famEvt)
-	{
-		m_eventType = EVT_FAMEVENT;
-	}
-	wxFAMEvent(const wxFAMEvent& copy) {
-		m_eventType = EVT_FAMEVENT;
-		m_filename	= copy.m_filename;
-		m_event		= copy.m_event;
-	}
+    wxFAMEvent(const char* filename, int famEvt)
+        :	m_filename(filename),
+            m_event(famEvt) {
+        m_eventType = EVT_FAMEVENT;
+    }
+    wxFAMEvent(const wxFAMEvent& copy) {
+        m_eventType = EVT_FAMEVENT;
+        m_filename	= copy.m_filename;
+        m_event		= copy.m_event;
+    }
 
 #ifdef	WXWINDOWS24
-	virtual wxEvent* Clone() const { return new wxFAMEvent(*this); }
+    virtual wxEvent* Clone() const {
+        return new wxFAMEvent(*this);
+    }
 #endif
 
-	const wxString& name() const {
-		return m_filename;
-	}
-	int famEvent() const {
-		return m_event;
-	}
+    const wxString& name() const {
+        return m_filename;
+    }
+    int famEvent() const {
+        return m_event;
+    }
 
 private:
 
-	wxString		m_filename;
-	int				m_event;
+    wxString		m_filename;
+    int				m_event;
 };
 
 typedef void (wxEvtHandler::*wxFAMEventFunction)(wxFAMEvent&);
@@ -69,30 +71,31 @@ typedef void (wxEvtHandler::*wxFAMEventFunction)(wxFAMEvent&);
   * API in a C++ class.
   */
 
-class wxFAM : public wxThread {
-	public:
-		wxFAM(wxWindow* parent);
-		virtual ~wxFAM();
+class wxFAM : public wxThread
+{
+public:
+    wxFAM(wxWindow* parent);
+    virtual ~wxFAM();
 
-		bool		MonitorFile(const wxString& fname);
-		bool		MonitorDir(const wxString& dname);
+    bool		MonitorFile(const wxString& fname);
+    bool		MonitorDir(const wxString& dname);
 
-		void		Reset();
+    void		Reset();
 
-/*	wxThread */
+    /*	wxThread */
 
-		virtual void* Entry();
+    virtual void* Entry();
 
 //	protected:
-		void				start();
-		void				stop();
+    void				start();
+    void				stop();
 
-	private:
+private:
 
-		FAMConnection		m_conn;
-		FAMRequest_Vector	m_request;
-		void				handle_fam_event();
-		wxWindow*			m_parent;
+    FAMConnection		m_conn;
+    FAMRequest_Vector	m_request;
+    void				handle_fam_event();
+    wxWindow*			m_parent;
 };
 
 
