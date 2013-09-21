@@ -46,6 +46,7 @@
 #include "cpupack.h"
 #include "misc_utils.h"
 #include "hashDialog.h"
+#include "SizeDialog.h"
 
 #include "../bitmaps/mag_small.xpm"
 
@@ -395,8 +396,16 @@ void Frame::OnExit(wxCommandEvent& event)
  *  Set the image width and height.
  */
 
-void Frame::OnFileSetSize(wxCommandEvent& event)
-{
+void Frame::OnFileSetSize(wxCommandEvent& event) {
+#if 1
+    SizeDialog      dialog(this, m_imageSize.GetWidth(),  m_imageSize.GetHeight());
+
+//    dialog.m_WidthCtl->SetValue( wxString::Format(wxT("%d"), m_imageSize.GetWidth()) );
+//    dialog.m_heightCtl->SetValue( wxString::Format(wxT("%d"), m_imageSize.GetHeight()) );
+
+    if (dialog.ShowModal() == wxID_OK) {
+    }
+#else
     wxString		sDefault = wxString::Format(wxT("%dx%d"),
                                m_imageSize.GetWidth(),
                                m_imageSize.GetHeight());
@@ -455,6 +464,7 @@ void Frame::OnFileSetSize(wxCommandEvent& event)
             }
         }
     }
+#endif
 
     return;
 }

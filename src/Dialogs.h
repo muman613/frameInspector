@@ -16,6 +16,10 @@
 #include <wx/settings.h>
 #include <wx/sizer.h>
 #include <wx/dialog.h>
+#include <wx/choice.h>
+#include <wx/textctrl.h>
+#include <wx/statbox.h>
+#include <wx/button.h>
 
 ///////////////////////////////////////////////////////////////////////////
 
@@ -23,21 +27,46 @@
 ///////////////////////////////////////////////////////////////////////////////
 /// Class HashDialogBase
 ///////////////////////////////////////////////////////////////////////////////
-class HashDialogBase : public wxDialog
+class HashDialogBase : public wxDialog 
 {
-private:
+	private:
+	
+	protected:
+		wxStaticText* m_staticText9;
+		wxStaticText* m_lumaText;
+		wxStaticText* m_staticText11;
+		wxStaticText* m_chromaText;
+	
+	public:
+		
+		HashDialogBase( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = wxT("Checksum Dialog"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxCAPTION );
+		~HashDialogBase();
+	
+};
 
-protected:
-    wxStaticText* m_staticText9;
-    wxStaticText* m_lumaText;
-    wxStaticText* m_staticText11;
-    wxStaticText* m_chromaText;
-
-public:
-
-    HashDialogBase( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = wxT("Checksum Dialog"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxCAPTION );
-    ~HashDialogBase();
-
+///////////////////////////////////////////////////////////////////////////////
+/// Class SizeDialogBase
+///////////////////////////////////////////////////////////////////////////////
+class SizeDialogBase : public wxDialog 
+{
+	private:
+	
+	protected:
+		wxStaticText* m_staticText44;
+		wxChoice* m_stdChoice;
+		wxStaticText* m_staticText7;
+		wxTextCtrl* m_WidthCtl;
+		wxStaticText* m_staticText8;
+		wxTextCtrl* m_heightCtl;
+		wxStdDialogButtonSizer* m_sdbSizer1;
+		wxButton* m_sdbSizer1OK;
+		wxButton* m_sdbSizer1Cancel;
+	
+	public:
+		
+		SizeDialogBase( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = wxT("Set Image Size"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize, long style = wxDEFAULT_DIALOG_STYLE );
+		~SizeDialogBase();
+	
 };
 
 #endif //__Dialogs__
