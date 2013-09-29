@@ -12,10 +12,24 @@
 
 IMPLEMENT_APP(viewApp)
 
+#if wxCHECK_VERSION(2,9,0)
+static const wxCmdLineEntryDesc cmdLineDesc[] = {
+    { wxCMD_LINE_SWITCH,    "h", "help",      "Display help message",   wxCMD_LINE_VAL_NONE, wxCMD_LINE_OPTION_HELP },
+	{ wxCMD_LINE_OPTION,	"f", "file",      "Set YUV File",	        wxCMD_LINE_VAL_STRING, },
+	{ wxCMD_LINE_OPTION,	"p", "path",      "Set YUV path",	        wxCMD_LINE_VAL_STRING, },
+	{ wxCMD_LINE_OPTION,	"d", "dump",      "Set dump path",	        wxCMD_LINE_VAL_STRING, },
+	{ wxCMD_LINE_OPTION, 	"s", "size",      "Set image size",         wxCMD_LINE_VAL_STRING, },
+	{ wxCMD_LINE_OPTION,	"c", "frame",     "Set frame #", 	        wxCMD_LINE_VAL_NUMBER, },
+	{ wxCMD_LINE_OPTION,	"r", "prefix",    "Set prefix",             wxCMD_LINE_VAL_STRING, },
+	{ wxCMD_LINE_NONE },
+};
+
+#else
 static const wxCmdLineEntryDesc cmdLineDesc[] = {
     { wxCMD_LINE_SWITCH,    wxT("h"), wxT("help"),      wxT("Display help message"), wxCMD_LINE_VAL_NONE, wxCMD_LINE_OPTION_HELP },
     { wxCMD_LINE_OPTION,	wxT("f"), wxT("file"),      wxT("Set YUV File"),	    wxCMD_LINE_VAL_STRING, },
     { wxCMD_LINE_OPTION,	wxT("p"), wxT("path"),      wxT("Set YUV path"),	    wxCMD_LINE_VAL_STRING, },
+	{ wxCMD_LINE_OPTION,	wxT("d"), wxT("dump"),      wxT("Set dump path"),	    wxCMD_LINE_VAL_STRING, },
     { wxCMD_LINE_OPTION, 	wxT("s"), wxT("size"),      wxT("Set image size"),      wxCMD_LINE_VAL_STRING, },
     { wxCMD_LINE_OPTION,	wxT("c"), wxT("frame"),     wxT("Set frame #"), 	    wxCMD_LINE_VAL_NUMBER, },
     { wxCMD_LINE_OPTION,	wxT("r"), wxT("prefix"),    wxT("Set prefix"),          wxCMD_LINE_VAL_STRING, },
@@ -26,6 +40,7 @@ static const wxCmdLineEntryDesc cmdLineDesc[] = {
 
     { wxCMD_LINE_NONE },
 };
+#endif
 
 
 bool viewApp::OnInit()
@@ -53,7 +68,7 @@ bool viewApp::OnInit()
     sLogo = wxString::Format(wxT("%s v%d.%d %s"), APP_NAME, VERSION_MAJOR, VERSION_MINOR, VERSION_RELEASE);
     m_cmdLine.SetLogo(sLogo);
 
-    debug("arg1 = %s arg2 = %s arg3 = %s\n", wxGetApp().argv[1], "a", "b");
+//    debug("arg1 = %s arg2 = %s arg3 = %s", wxGetApp().argv[1], "a", "b"); //wxGetApp().argv[2], wxGetApp().argv[3]);
 
     if (m_cmdLine.Parse() != 0) {
 //        debug("-- user help!\n");

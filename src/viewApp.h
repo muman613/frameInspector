@@ -33,8 +33,8 @@ DECLARE_APP(viewApp)
 
 #define     APP_NAME            "frameInspector"
 #define 	VERSION_MAJOR		1
-#define		VERSION_MINOR		30
-#define 	VERSION_RELEASE		"Jun 27, 2013"
+#define		VERSION_MINOR		31
+#define 	VERSION_RELEASE		"Sep 23, 2013"
 
 #endif
 

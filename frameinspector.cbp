@@ -28,7 +28,7 @@
 				<Option compiler="gcc" />
 				<Option projectLinkerOptionsRelation="2" />
 				<Compiler>
-					<Add option="-march=pentium-m" />
+					<Add option="-march=core2" />
 					<Add option="-fexpensive-optimizations" />
 					<Add option="-O3" />
 					<Add option="`wx-config --cflags`" />
@@ -160,11 +160,15 @@
 		<Unit filename="src/DumpImageBuffer.h" />
 		<Unit filename="src/GridSettingsDialog.cpp" />
 		<Unit filename="src/GridSettingsDialog.h" />
+		<Unit filename="src/SizeDialog.cpp" />
+		<Unit filename="src/SizeDialog.h" />
 		<Unit filename="src/YUV420ImageBufferFile.cpp" />
 		<Unit filename="src/YUV420ImageBufferFile.h" />
 		<Unit filename="src/YUV420ImageBufferSplit.cpp" />
 		<Unit filename="src/YUV420ImageBufferSplit.h" />
 		<Unit filename="src/cpupack.h" />
+		<Unit filename="src/crc32.cpp" />
+		<Unit filename="src/crc32.h" />
 		<Unit filename="src/dbgutils.h" />
 		<Unit filename="src/dumpInternals.cpp" />
 		<Unit filename="src/dumpInternals.h" />

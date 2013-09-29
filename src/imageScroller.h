@@ -35,9 +35,8 @@ public:
         return m_bEnableGrid;
     }
 
-    void        set_grid_dimensions(int hor, int ver) {
-        m_gridH = hor;
-        m_gridV = ver;
+    void        set_grid_dimensions(int hor, int ver, wxColor color) {
+        m_gridH = hor; m_gridV = ver; m_gridColor = color;
         Refresh();
     }
 
@@ -60,6 +59,7 @@ protected:
     bool        m_bEnableGrid;
     int         m_gridH;
     int         m_gridV;
+	wxColor     m_gridColor;
 };
 
 #endif

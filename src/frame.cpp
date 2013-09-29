@@ -10,7 +10,7 @@
 //#define _ENABLE_DEBUG		1
 //#define	DEBUG_PAINT		1
 //#define	DEBUG_HB		1
-#define   MODAL_CHECKSUM  1
+//#define   MODAL_CHECKSUM  1
 
 //#ifdef HAVE_CONFIG_H
 //	#include "config.h"
@@ -33,6 +33,7 @@
 #include <wx/regex.h>
 #include <wx/filedlg.h>
 #include <wx/aboutdlg.h>
+#include <wx/tglbtn.h>
 #ifdef	ALPHA_BLENDING
 #include <xmmintrin.h>
 #endif
@@ -47,8 +48,10 @@
 #include "misc_utils.h"
 #include "hashDialog.h"
 #include "SizeDialog.h"
+#include "crc32.h"
 
 #include "../bitmaps/mag_small.xpm"
+#include "../bitmaps/grid-small.xpm"
 
 /* size of info box */
 #define	INFO_WIDTH		128
@@ -64,7 +67,14 @@ BEGIN_EVENT_TABLE(Frame, wxFrame)
     EVT_MENU(Frame::ID_FILE_OPEN_DUMP,      Frame::OnFileOpenDump)
     EVT_MENU(Frame::ID_FILE_REFRESH,        Frame::OnRefresh)
     EVT_MENU(Frame::ID_FILE_SETSIZE, 		Frame::OnFileSetSize)
+#ifdef  OLD_SAVE
     EVT_MENU(Frame::ID_FILE_SAVE_AS,		Frame::OnFileSaveAs)
+#else
+	EVT_MENU(Frame::ID_FILE_SAVE_IMAGE,		Frame::OnFileSaveAs)
+	EVT_MENU(Frame::ID_FILE_SAVE_YUV_SPLIT, Frame::OnFileSaveYUVSplit)
+	EVT_MENU(Frame::ID_FILE_SAVE_YUV_COMP,  Frame::OnFileSaveYUVComp)
+
+#endif
     EVT_MENU(Frame::ID_FILE_GRID_SETTINGS,  Frame::OnGridSettings)
     EVT_MENU(Frame::ID_FILE_EXIT, 			Frame::OnExit)
 
@@ -106,8 +116,10 @@ BEGIN_EVENT_TABLE(Frame, wxFrame)
     EVT_FAM(Frame::OnFAMEvent)
 #endif
 
+    EVT_UPDATE_UI(Frame::ID_VIEW_GRID,      Frame::OnUpdateGridUI)
     EVT_UPDATE_UI(Frame::ID_VIEW_CHECKSUM, Frame::OnUpdateUI)
-
+    EVT_UPDATE_UI(Frame::ID_FILE_SETSIZE,   Frame::OnUpdateUI)
+    EVT_UPDATE_UI_RANGE(Frame::ID_FILE_SAVE_IMAGE, Frame::ID_FILE_SAVE_YUV_COMP, Frame::OnUpdateUI)
 //	EVT_MENU(Frame::ID_FILE_SETPATH, 		Frame::OnFileSetPath)
 //	EVT_MENU(Frame::ID_FILE_SETPREFIX,		Frame::OnFileSetPrefix)
 END_EVENT_TABLE()
@@ -148,6 +160,7 @@ Frame::Frame()
         m_bGrid(false),
         m_gridH(16),
         m_gridV(16),
+    	m_gridColor("BLUE"),
         m_pHashDlg(0L)
 {
     debug("Frame::Frame()\n");
@@ -156,17 +169,49 @@ Frame::Frame()
     m_fam.start();
 #endif
 
+#if 1
+    crc32_be_init();
+#endif
+
+    wxBitmap*   pToolBM  = 0L;
     wxToolBar*	pToolBar = 0L;
     wxMenuBar*	pMenuBar = 0L;
     wxMenu*		pMenu    = 0L;
     wxMenu*		subMenu	 = 0L;
 
     /* create tool bar */
-    pToolBar = CreateToolBar();
+	pToolBar = CreateToolBar(wxTB_DEFAULT_STYLE);
 //	pToolBar->AddTool(ID_FILE_SETPATH,	 wxT("Open"), wxArtProvider::GetBitmap(wxART_FILE_OPEN, wxART_TOOLBAR), wxT("Set Path"));
-    pToolBar->AddTool(ID_VIEW_GO_HOME, 	wxT("Home"), wxArtProvider::GetBitmap(wxART_GO_HOME, wxART_TOOLBAR),      wxT("Go to frame 0"));
-    pToolBar->AddTool(ID_FILE_SAVE_AS,	wxT("Save"), wxArtProvider::GetBitmap(wxART_FILE_SAVE_AS, wxART_TOOLBAR), wxT("Save image"));
-    pToolBar->AddTool(ID_VIEW_PREV, 	wxT("Prev"), wxArtProvider::GetBitmap(wxART_GO_BACK, wxART_TOOLBAR),      wxT("Goto Previous"));
+	pToolBar->AddTool(ID_FILE_SAVE_IMAGE, wxT("Save"),
+                      wxArtProvider::GetBitmap(wxART_FILE_SAVE_AS, wxART_TOOLBAR),
+                      wxT("Save image"));
+    pToolBar->AddTool(ID_VIEW_GOTO, wxT("Goto Frame"),
+                      wxArtProvider::GetBitmap(wxART_FIND, wxART_TOOLBAR),
+                      wxT("Goto frame"));
+
+    pToolBM = new wxBitmap( grid_small );
+#if 1
+    pToolBar->AddCheckTool(ID_VIEW_GRID, "Toggle Grid", *pToolBM , wxNullBitmap, "Enable/Disable Grid" );
+#else
+    wxBitmapToggleButton* pNewButton = new wxBitmapToggleButton(pToolBar, ID_VIEW_GRID, *pToolBM );
+    pNewButton->Connect( ID_VIEW_GRID, wxEVT_MENU, wxCommandEventHandler(Frame::OnGridChange));
+    pToolBar->AddControl(pNewButton, "toggle grid");
+#endif
+    delete pToolBM;
+    pToolBar->AddSeparator();
+
+#if wxCHECK_VERSION(2,9,5)
+	pToolBar->AddTool(ID_VIEW_GO_HOME, 	wxT("Goto First Frame"),
+                      wxArtProvider::GetBitmap(wxART_GOTO_FIRST, wxART_TOOLBAR),
+                      wxT("Go to frame 0"));
+#else
+	pToolBar->AddTool(ID_VIEW_GO_HOME, 	wxT("Goto First Frame"),
+                      wxArtProvider::GetBitmap(wxART_GO_HOME, wxART_TOOLBAR),
+                      wxT("Go to frame 0"));
+#endif
+	pToolBar->AddTool(ID_VIEW_PREV, 	wxT("Prev"),
+                      wxArtProvider::GetBitmap(wxART_GO_BACK, wxART_TOOLBAR),
+                      wxT("Goto Previous"));
 
     /* create slider control */
     m_sliderCntrl = new wxSlider(pToolBar, ID_FRAME_SLIDER,
@@ -181,6 +226,9 @@ Frame::Frame()
 
     pToolBar->AddControl(m_sliderCntrl);
     pToolBar->AddTool(ID_VIEW_NEXT, 	wxT("Next"), wxArtProvider::GetBitmap(wxART_GO_FORWARD, wxART_TOOLBAR), wxT("Goto Next"));
+#if wxCHECK_VERSION(2,9,5)
+	pToolBar->AddTool(ID_VIEW_GO_LAST,  wxT("Goto Last Frame"), wxArtProvider::GetBitmap(wxART_GOTO_LAST, wxART_TOOLBAR), wxT("Goto Last"));
+#endif
     pToolBar->Realize();
 
     SetToolBar(pToolBar);
@@ -188,6 +236,7 @@ Frame::Frame()
     /* create pull-down menus */
     pMenuBar = new wxMenuBar;
 
+    /* File Menu */
     pMenu = new wxMenu;
 
     subMenu = new wxMenu;
@@ -199,17 +248,28 @@ Frame::Frame()
     pMenu->Append(ID_FILE_OPEN,			wxT("Open"), subMenu);
     pMenu->Append(ID_FILE_REFRESH,      wxT("&Refresh\tCtrl-R"), wxT("Reload current frame"));
 
-    pMenu->AppendSeparator();
-    pMenu->Append(ID_FILE_SETSIZE, 		wxT("Set &size...\tAlt-S"), 	wxT("Set image dimensions"));
+
+
+#ifdef  OLD_SAVE
     pMenu->Append(ID_FILE_SAVE_AS,		wxT("Save as..."),			wxT("Save image to file"));
+#else
+    subMenu = new wxMenu;
+    subMenu->Append(ID_FILE_SAVE_IMAGE,     wxT("Save frame as bitmap image..."));
+    subMenu->Append(ID_FILE_SAVE_YUV_SPLIT, wxT("Save frame as YUV split..."));
+    subMenu->Append(ID_FILE_SAVE_YUV_COMP,  wxT("Save frame as YUV composite..."));
 
+    pMenu->Append(ID_FILE_SAVE,             wxT("Save"), subMenu);
+#endif
+
+	pMenu->AppendSeparator();
+	pMenu->Append(ID_FILE_SETSIZE, 		wxT("Set &size...\tAlt-S"), 	wxT("Set image dimensions"));
     pMenu->Append(ID_FILE_GRID_SETTINGS, wxT("Grid Settings..."),    wxT("Adjust the grid spacing"));
-
     pMenu->AppendSeparator();
     pMenu->Append(ID_FILE_EXIT, 		wxT("E&xit Application\tCtrl-X"));
 
     pMenuBar->Append(pMenu, wxT("&File"));
 
+    /* View Menu */
     pMenu = new wxMenu;
 
     pMenu->Append(ID_VIEW_NEXT, 			wxT("View &next image\tCtrl-N"));
@@ -243,17 +303,12 @@ Frame::Frame()
     subMenu->AppendCheckItem(ID_VIEW_444,           wxT("4:4:4"));
 
     pMenu->Append(ID_VIEW_TYPE, wxT("YUV Format"), subMenu);
-
     pMenu->AppendSeparator();
-
-#ifdef  MODAL_CHECKSUM
     pMenu->AppendCheckItem(ID_VIEW_CHECKSUM,    wxT("Display Checksum"));
-#else
-    pMenu->Append(ID_VIEW_CHECKSUM,    wxT("Display Checksum"));
-#endif
 
     pMenuBar->Append(pMenu, wxT("&View"));
 
+    /* About Menu */
     pMenu = new wxMenu;
 
     pMenu->Append(ID_HELP_ABOUT,			wxT("About"));
@@ -280,6 +335,7 @@ Frame::Frame()
 
     pMenuBar->FindItem(ID_VIEW_GRID)->Check(m_bGrid);
 
+#if 0
     /* determine screen depth for color-keying in alpha-blending */
     m_depth = ::wxDisplayDepth();
 
@@ -295,6 +351,7 @@ Frame::Frame()
         m_maskMask = 0xff;
         break;
     }
+#endif
 
     allocate_image_buffer();
     GetFrameRange();	// Get the range of frames
@@ -319,10 +376,8 @@ Frame::Frame()
     pSizer->Add( m_pScroller, 1, wxEXPAND );
     SetSizer( pSizer );
 
-#ifdef  MODAL_CHECKSUM
     m_pHashDlg = new HashDialog(this);
     wxASSERT( m_pHashDlg != 0L );
-#endif
 
     /* post event to cause 1st image to load */
     wxCommandEvent		event(wxEVT_LOADIMAGE, GetId());
@@ -340,15 +395,20 @@ Frame::Frame()
     SetTitle(sTmp);
 
     /* Set the windows icon */
-    wxIcon* pWindowIcon = new wxIcon( mag_small, 32, 32);
+    wxIcon* pWindowIcon = new wxIcon( mag_small ) ;//, 32, 32);
     SetIcon(*pWindowIcon);
     delete pWindowIcon;
 
+    SetFocus();
 //    printf("state = %d\n", m_pScroller->get_grid_state());
 
 //    pMenuBar->Check(ID_VIEW_GRID, m_pScroller->get_grid_state());
 
 }
+
+/**
+ *
+ */
 
 Frame::~Frame()
 {
@@ -397,74 +457,24 @@ void Frame::OnExit(wxCommandEvent& event)
  */
 
 void Frame::OnFileSetSize(wxCommandEvent& event) {
-#if 1
+	debug("Frame::OnFileSetSize()\n");
+
     SizeDialog      dialog(this, m_imageSize.GetWidth(),  m_imageSize.GetHeight());
 
-//    dialog.m_WidthCtl->SetValue( wxString::Format(wxT("%d"), m_imageSize.GetWidth()) );
-//    dialog.m_heightCtl->SetValue( wxString::Format(wxT("%d"), m_imageSize.GetHeight()) );
-
     if (dialog.ShowModal() == wxID_OK) {
-    }
-#else
-    wxString		sDefault = wxString::Format(wxT("%dx%d"),
-                               m_imageSize.GetWidth(),
-                               m_imageSize.GetHeight());
-    wxString		dimensions = ::wxGetTextFromUser(wxT("Enter WidthxHeight"),
-                                 wxT("Set Image size"),
-                                 sDefault);
+        long w, h;
 
-    debug("Frame::OnFileSetSize()\n");
+        dialog.GetFrameDimensions( w, h );
 
-    if (!dimensions.empty()) {
-        long w,h;
+        if ((w > 0) && (h > 0)) {
+            m_imageSize.Set(w,h);
 
-        w = h = 0;
-
-        wxRegEx		exp(wxT("([0123456789]*[w]?)x([0123456789]*[h]?)"));
-
-        if (exp.Matches(dimensions)) {
-            wxString	wStr, hStr;
-
-            debug("Found pattern [%s x %s]!\n",
-                  exp.GetMatch(dimensions, 1).c_str(),
-                  exp.GetMatch(dimensions, 2).c_str());
-
-            wStr = exp.GetMatch(dimensions, 1);
-            hStr = exp.GetMatch(dimensions, 2);
-
-            wStr.ToLong(&w);
-            hStr.ToLong(&h);
-
-            /* if user entered w (unknown width) or h (unknown height)
-             * get file size and determine unknown value
-             */
-
-            if ((wStr == wxT("w")) || (hStr == wxT("h"))) {
-                size_t		ysize;
-
-                if (GetImageYSize(&ysize)) {
-                    debug("Image Y size = %ld\n", ysize);
-
-                    if (wStr == wxT("w")) {
-                        w = ysize / h;
-                    }
-                    if (hStr == wxT("h")) {
-                        h = ysize / w;
-                    }
-                }
-            }
-
-            if ((w > 0) && (h > 0)) {
-                m_imageSize.Set(w,h);
-
-                if (allocate_image_buffer()) {
-                    GetImage();
-                    Refresh();
-                }
+            if (allocate_image_buffer()) {
+                GetImage();
+                Refresh();
             }
         }
     }
-#endif
 
     return;
 }
@@ -581,7 +591,7 @@ bool Frame::GetImage()
 
         if (m_bGrid) {
             //printf("enabling grid!\n");
-            m_pScroller->set_grid_dimensions( m_gridH, m_gridV );
+            m_pScroller->set_grid_dimensions( m_gridH, m_gridV, m_gridColor );
             m_pScroller->enable_grid();
         } else {
             //printf("disabling grid!\n");
@@ -635,7 +645,7 @@ void Frame::UpdateStatusBar(int id)
         sMsg = wxString::Format(wxT("File : %s"), fname.GetFullName().c_str() /* m_imageFilename.c_str() */);
         SetStatusText(sMsg, 0);
     } else if (m_type == YUV_DUMP) {
-        sMsg = wxString::Format(wxT("Dump : %s"), fname.GetFullName().c_str() /* m_imageFilename.c_str() */ );
+		sMsg = wxString::Format(wxT("Dump : %s"), m_imagePath.c_str() /* m_imageFilename.c_str() */ );
         SetStatusText(sMsg, 0);
     }
     sMsg = wxString::Format(wxT("Frame # %d of %d "), id, m_lastID);
@@ -753,26 +763,32 @@ void Frame::LoadOptions()
     /* get YUV image path */
     if (!parser.Found(wxT("p"), &sTmp)) {
         config->Read(wxT("path"),	&m_imagePath);
-        debug("Path = %s\n", m_imagePath.c_str());
+		debug("Path = %s\n", (const char *)m_imagePath.c_str());
     } else {
         m_imagePath = sTmp;
         m_type = YUV_SPLIT;
-        debug("Path = %s\n", m_imagePath.c_str());
+		debug("Path = %s\n", (const char*)m_imagePath.c_str());
         GetSizeFromPath();
+    }
+
+    /* Get dump file path */
+    if (parser.Found(wxT("d"), &sTmp)) {
+        m_imagePath = sTmp;
+        m_type = YUV_DUMP;
     }
 
 //	if (!parser.Found(wxT("f"), &sTmp)) {
     if (!parser.Found(wxT("f"), &sTmp)) {
         config->Read(wxT("filename"), &m_imageFilename);
-        debug("Filename = %s\n", m_imageFilename.c_str());
+		debug("Filename = %s\n", (const char*)m_imageFilename.c_str());
     } else {
         wxFileName sFilename = sTmp;
 
-        debug("--- FOUND FILENAME %s ---\n", sTmp.c_str());
+        debug("--- FOUND FILENAME %s ---\n", (const char*)sTmp.c_str());
 
         if (sFilename.Normalize()) {
             m_imageFilename = sFilename.GetFullPath();
-            debug("m_imageFilename = %s\n", m_imageFilename.c_str());
+            debug("m_imageFilename = %s\n", (const char*)m_imageFilename.c_str());
         }
 
         m_type = YUV_FILE;
@@ -780,10 +796,10 @@ void Frame::LoadOptions()
 
     if (!parser.Found(wxT("r"), &sTmp)) {
         config->Read(wxT("prefix"), &m_prefix);
-        debug("Prefix = %s\n", m_prefix.c_str());
+		debug("Prefix = %s\n", (const char*)m_prefix.c_str());
     } else {
         m_prefix = sTmp;
-        debug("Prefix = %s\n", m_prefix.c_str());
+		debug("Prefix = %s\n", (const char*)m_prefix.c_str());
     }
 
     /* get image id to display */
@@ -960,8 +976,8 @@ void Frame::OnHelpAbout(wxCommandEvent& event)
     wxAboutBox( dlgInfo );
 }
 
-void Frame::post_process(wxBitmap& bmp)
-{
+#if 0
+void Frame::post_process(wxBitmap& bmp) {
 
     wxImage		imgA = bmp.ConvertToImage();
 
@@ -1066,6 +1082,7 @@ void Frame::post_process(wxBitmap& bmp)
         }
     }
 }
+#endif
 
 //------------------------------------------------------------------------------
 //------------------------------------------------------------------------------
@@ -1087,7 +1104,7 @@ bool Frame::GetImageYSize(size_t* filesize)
         *filesize = file.Tell();
         result = true;
     } else {
-        debug("ERROR: Unable to open file [%s]\n", imageFilename.c_str());
+		debug("ERROR: Unable to open file [%s]\n", (const char*)imageFilename.c_str());
     }
 
     return result;
@@ -1164,6 +1181,7 @@ void Frame::OnFileOpenSplit(wxCommandEvent& event)
         GetFrameRange();
         GetImage();
         Refresh();
+        ShowHideChecksumDlg();
     }
 
     return;
@@ -1194,6 +1212,9 @@ void Frame::OnFileOpenFile(wxCommandEvent& event)
             GetFrameRange();
             GetImage();
             Refresh();
+            ShowHideChecksumDlg();
+        } else {
+            wxMessageBox(wxT("Unable to allocate image"));
         }
     }
 
@@ -1206,28 +1227,35 @@ void Frame::OnFileOpenFile(wxCommandEvent& event)
 
 void Frame::OnFileOpenDump(wxCommandEvent& event)
 {
-    const wxString& dir = ::wxDirSelector(wxT("Select output path"), m_imagePath);
+	const wxString& dir = ::wxDirSelector(wxT("Select dump output path"), m_imagePath);
 
     debug("Frame::OnFileOpenDump()\n");
 
     if (!dir.empty()) {
         m_imagePath = dir;
         m_imageFilename.Clear();
-    } else {
-        return;
-    }
 
-    m_imageID 	= 0;	/* reset id to zero */
-    m_type 		= YUV_DUMP;
+		m_imageID 	= 0;	/* reset id to zero */
+		m_type 		= YUV_DUMP;
 
-    if (allocate_image_buffer()) {
-        m_alpha = 1.0;
-        GetFrameRange();
-        GetImage();
-        Refresh();
+		if (allocate_image_buffer()) {
+		    m_alpha = 1.0;
+		    GetFrameRange();
+		    GetImage();
+        	Refresh();
+            ShowHideChecksumDlg();
+        } else {
+            wxMessageBox(wxT("Unable to allocate image"));
+        }
     }
 
     return;
+}
+
+void Frame::ShowHideChecksumDlg() {
+    if (m_pHashDlg->IsShown()) {
+        m_pHashDlg->Show(m_buffer->CanChecksum());
+    }
 }
 
 /**
@@ -1415,7 +1443,7 @@ void Frame::OnFileSaveAs(wxCommandEvent& event)
     fileName = ::wxFileSelector(wxT("File to save"));
 
     if (!fileName.IsEmpty()) {
-        debug("-- saving file %s...\n", fileName.c_str());
+		debug("-- saving file %s...\n", (const char*)fileName.c_str());
         SaveBitmap(fileName);
     }
 
@@ -1426,8 +1454,45 @@ void Frame::OnFileSaveAs(wxCommandEvent& event)
  *
  */
 
-void Frame::OnLoadImage(wxCommandEvent& event)
-{
+void Frame::OnFileSaveYUVSplit(wxCommandEvent& event) {
+    debug("Frame::OnFileSaveYUVSplit()\n");
+    wxString        sFilename;
+
+    sFilename = ::wxFileSelector(wxT("File to save"));
+
+    if (!sFilename.IsEmpty()) {
+        debug("-- saving YUV split file %s...\n", (const char*)sFilename.c_str());
+        m_buffer->SaveYUV( sFilename, ImageBuffer::SAVE_YUV_SPLIT );
+    }
+
+    return;
+}
+
+/**
+ *
+ */
+
+void Frame::OnFileSaveYUVComp(wxCommandEvent& event) {
+    debug("Frame::OnFileSaveYUVComp()\n");
+    wxString        sFilename;
+
+    sFilename = ::wxFileSelector(wxT("File to save"), wxEmptyString, wxEmptyString,
+                                 wxEmptyString, wxT("YUV Files (*.yuv)|*.yuv"),
+                                 wxFD_SAVE|wxFD_OVERWRITE_PROMPT);
+
+    if (!sFilename.IsEmpty()) {
+        debug("-- saving YUV composite file %s...\n", (const char*)sFilename.c_str());
+        m_buffer->SaveYUV( sFilename, ImageBuffer::SAVE_YUV_COMP );
+    }
+
+    return;
+}
+
+/**
+ *
+ */
+
+void Frame::OnLoadImage(wxCommandEvent& event) {
     debug("Frame::OnLoadImage()\n");
 
     GetImage();
@@ -1471,16 +1536,15 @@ void Frame::OnViewScaleCustom(wxCommandEvent& event)
 
 void Frame::OnGridChange(wxCommandEvent& event)
 {
-    wxMenuBar*	pMenu = GetMenuBar();
-
     debug("Frame::OnGridChange()\n");
 
-    if (pMenu->IsChecked(ID_VIEW_GRID)) {
+    m_bGrid = !m_bGrid;
+
+    if (m_bGrid) {
+        m_pScroller->set_grid_dimensions( m_gridH, m_gridV, m_gridColor );
         m_pScroller->enable_grid();
-        m_bGrid = true;
     } else {
         m_pScroller->disable_grid();
-        m_bGrid = false;
     }
 
     return;
@@ -1495,7 +1559,7 @@ void Frame::SaveBitmap(wxString sFilename)
     wxMenuBar*	pMenu = GetMenuBar();
     bool        bEnableGrid = pMenu->IsChecked(ID_VIEW_GRID);
 
-    debug("Frame::SaveBitmap(%s)\n", sFilename.c_str());
+    debug("Frame::SaveBitmap(%s)\n", (const char*)sFilename.c_str());
 
     if (m_pImage != 0) {
 
@@ -1558,7 +1622,7 @@ void Frame::OnGridSettings(wxCommandEvent& event)
     debug("Frame::OnGridSettings()\n");
 
     if (m_pScroller) {
-        GridSettingsDialog  gridDlg(this, wxID_ANY);
+        GridSettingsDialog  gridDlg(this) ;//, wxID_ANY);
 
         gridDlg.m_spinH->SetValue(m_gridH);
         gridDlg.m_spinV->SetValue(m_gridV);
@@ -1567,7 +1631,7 @@ void Frame::OnGridSettings(wxCommandEvent& event)
         if (gridDlg.ShowModal() == wxID_OK) {
             m_gridH = gridDlg.m_spinH->GetValue();
             m_gridV = gridDlg.m_spinV->GetValue();
-            m_pScroller->set_grid_dimensions( m_gridH, m_gridV );
+            m_pScroller->set_grid_dimensions( m_gridH, m_gridV, m_gridColor );
         }
 
     }
@@ -1580,41 +1644,69 @@ void Frame::OnGridSettings(wxCommandEvent& event)
 void Frame::OnUpdateUI(wxUpdateUIEvent& event)
 {
     //debug("OnUpdateUI!\n");
+    int eventID = event.GetId();
 
-    if (m_buffer != 0L) {
-        event.Enable(m_buffer->CanChecksum());
-    } else {
-        event.Enable(false);
+    if (eventID == ID_VIEW_CHECKSUM) {
+		if (m_buffer != 0L) {
+		    event.Enable(m_buffer->CanChecksum());
+		} else {
+		    event.Enable(false);
+		}
+    } else if (eventID == ID_FILE_SETSIZE) {
+        if (m_buffer != 0L) {
+            if (m_buffer->CanQueryFrameSize()) {
+                event.Enable(false);
+            } else {
+                event.Enable(true);
+            }
+        } else {
+            event.Enable(true);
+        }
+    } else if ((eventID >= ID_FILE_SAVE_IMAGE) && (eventID <= ID_FILE_SAVE_YUV_COMP)) {
+        if (m_buffer != 0L) {
+            if (eventID == ID_FILE_SAVE_IMAGE) {
+                event.Enable(true);
+            } else {
+                if (m_buffer->CanSave()) {
+                    event.Enable(true);
+                } else {
+                    event.Enable(false);
+                }
+            }
+        } else {
+            event.Enable(false);
+        }
     }
     return;
 }
 
 /**
+ *
+ */
+
+void Frame::OnUpdateGridUI(wxUpdateUIEvent& event) {
+    debug("Frame::OnUpdateGridUI()\n");
+
+    event.Check(m_bGrid);
+
+    return;
+}
+
+
+/**
     Display the checksum/hash dialog.
  */
 
-void Frame::OnViewChecksum(wxCommandEvent& event)
+void Frame::OnViewChecksum(wxCommandEvent& event) 
 {
+    debug("Frame::OnViewChecksum()\n");
 
-#ifdef MODAL_CHECKSUM
     if (event.IsChecked()) {
         m_pHashDlg->Show(TRUE);
     } else {
         m_pHashDlg->Show(FALSE);
     }
-#else
-    if ( (m_buffer != 0) && (m_buffer->CanChecksum()) ) {
-        wxUint8 lumaSum[16], chromaSum[16];
 
-        if (m_buffer->GetChecksum( m_imageID, lumaSum, chromaSum )) {
-            HashDialog checkSumDlg(this);
-
-            checkSumDlg.SetChecksums( lumaSum, chromaSum );
-            checkSumDlg.ShowModal();
-        }
-
-    }
-#endif
 }
 
 

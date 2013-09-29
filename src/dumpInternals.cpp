@@ -22,6 +22,12 @@ bool read_box(wxFile* fp, wxUint32& tag, wxUint32& version, wxInt64& size)
     version = wxUINT32_SWAP_ALWAYS(bs.Version);
     size    = wxINT64_SWAP_ALWAYS(bs.Size);
 
+#ifdef  _ENABLE_DEBUG
+        char *sTag = (char *)&tag;
+
+        debug("tag %04x [%c%c%c%c] version %04x %lld\n", tag, sTag[3], sTag[2], sTag[1], sTag[0], version, size);
+#endif
+
     return true;
 }
 

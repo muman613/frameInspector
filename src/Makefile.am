@@ -5,7 +5,8 @@ frameInspector_SOURCES=cpupack.h dbgutils.h frame.cpp frame.h imageBuffer.cpp im
 					YUV420ImageBufferFile.cpp YUV420ImageBufferSplit.cpp					\
 					misc_utils.cpp Dialogs.cpp hashDialog.cpp GridSettingsDialog.cpp		\
 					YUV420ImageBufferFile.h YUV420ImageBufferSplit.h						\
-					DumpImageBuffer.cpp DumpImageBuffer.h dumpInternals.cpp dumpInternals.h 
+					DumpImageBuffer.cpp DumpImageBuffer.h dumpInternals.cpp dumpInternals.h \
+					SizeDialog.cpp SizeDialog.h crc32.cpp crc32.h
 
 if INCLUDE_FAM
 frameInspector_SOURCES+=wxFAM.cpp wxFAM.h

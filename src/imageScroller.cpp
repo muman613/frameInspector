@@ -69,10 +69,10 @@ void ImageScroller::OnPaint(wxPaintEvent& event)
                 inc = (int)(m_scale * m_gridH);
             }
 
-            dc.SetPen(*wxBLACK_PEN);
+            dc.SetPen(m_gridColor);
             for (int x = xoff ; x < (xoff + bmp.GetWidth()) ; x += inc) {
                 dc.DrawLine(x, yoff, x, yoff + bmp.GetHeight());
-                debug("x=%d\n", x);
+//              debug("x=%d\n", x);
             }
 
             if (m_scale == 0.0) {
@@ -83,7 +83,7 @@ void ImageScroller::OnPaint(wxPaintEvent& event)
 
             for (int y = yoff ; y < (yoff + bmp.GetHeight()) ; y += inc) {
                 dc.DrawLine(xoff, y, xoff + bmp.GetWidth(), y);
-                debug("y=%d\n", y);
+//              debug("y=%d\n", y);
             }
         }
     }

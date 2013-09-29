@@ -41,6 +41,11 @@ public:
         ERROR_NOT_OPEN,
     };
 
+        enum eSaveType {
+            SAVE_YUV_SPLIT,
+            SAVE_YUV_COMP,
+        };
+
     ImageBuffer()
         :	m_bufType(DATA_UNKNOWN),
             m_width(0L),
@@ -107,6 +112,14 @@ public:
 
         return false;
     }
+
+        virtual bool        CanSave() const {
+            return false;
+        }
+
+        virtual bool        SaveYUV(wxString sFilename, eSaveType type) {
+            return false;
+        }
 
     /* Pure virtual functions must be implemented in derived classes */
 

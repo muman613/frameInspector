@@ -6,13 +6,21 @@
  */
 
 #include <stdio.h>
+#include <gcrypt.h>
 #include "imageBuffer.h"
 #include "DumpImageBuffer.h"
 #include "dumpInternals.h"
+#include "crc32.h"
 #include "dbgutils.h"
 
 dumpImageBuffer::dumpImageBuffer(int width, int height)
-    :   ImageBuffer(ImageBuffer::DATA_YUV420, width, height)
+:   ImageBuffer(ImageBuffer::DATA_YUV420, width, height),
+    m_frameNo(-1),
+    m_lumaSize(0),
+    m_chromaSize(0),
+    m_pY(0),
+    m_pU(0),
+    m_pV(0)
 {
 //constructor
     debug("dumpImageBuffer::dumpImageBuffer(%d, %d)\n", width, height);
@@ -23,6 +31,27 @@ dumpImageBuffer::~dumpImageBuffer()
 {
 //destructor
     debug("dumpImageBuffer::~dumpImageBuffer()\n");
+
+    if (m_pY) {
+        free(m_pY);
+        m_pY = 0;
+    }
+
+    if (m_pU) {
+        free(m_pU);
+        m_pU = 0;
+    }
+
+    if (m_pV) {
+        free(m_pV);
+        m_pV = 0;
+    }
+
+    if (m_imageData) {
+        free(m_imageData);
+        m_imageData = 0L;
+    }
+
     return;
 }
 
@@ -55,7 +84,7 @@ ssize_t		dumpImageBuffer::GetFrameCount()
 #ifdef  _ENABLE_DEBUG
     debug("found %d frames:\n", count);
     for (size_t n = 0 ; n < m_frameList.GetCount() ; n++) {
-        debug("\t%s\n", m_frameList[n].c_str());
+        debug("\t%s\n", (const char*)m_frameList[n].c_str());
     }
 #endif  // _ENABLE_DEBUG
 
@@ -89,7 +118,16 @@ bool		dumpImageBuffer::Load(size_t frame)
     wxInt32     lumaTabSize = 0, chromaTabSize = 0;
     wxUint32    lumaTotalWidth = 0, chromaTotalWidth = 0;
     wxUint32    bufferW = 0, bufferH = 0;
+#if 1
+#else
     wxUint8     *pY = 0, *pU = 0, *pV = 0;  /* YUV buffers */
+#endif
+    enum {
+        FOUND_PICI = (1L << 0),
+        FOUND_LUMA = (1L << 1),
+        FOUND_CHRM = (1L << 2),
+    };
+    int flags = 0;
 
     debug("dumpImageBuffer::Load(%ld)\n", frame);
 
@@ -97,7 +135,7 @@ bool		dumpImageBuffer::Load(size_t frame)
 
     if (frame < m_frameList.GetCount()) {
         sFrameName = m_frameList[frame];
-        debug("-- loading frame [%s]\n", sFrameName.c_str());
+        debug("-- loading frame [%s]\n", (const char*)sFrameName.c_str());
 
         if (m_fp.Open( sFrameName )) {
             wxUint32 nTag, nVersion;
@@ -106,13 +144,13 @@ bool		dumpImageBuffer::Load(size_t frame)
             if (dumpInternals::read_box(&m_fp, nTag, nVersion, lSize) && (nTag == RMAR_MAGIC)) {
                 debug("Found RMAR tag!\n");
 
-                while (!m_fp.Eof()) {
+                while (!m_fp.Eof() && (flags  != (FOUND_PICI|FOUND_LUMA|FOUND_CHRM))) {
                     if (dumpInternals::read_box(&m_fp, nTag, nVersion, lSize)) {
 
                         if (nTag == PICI_MAGIC) {
                             dumpInternals::EMhwlibPictureInfoV1    *picture_info;
 
-                            debug("-- found picture info [%lld] vs [%lld] !\n", lSize, sizeof(picture_info));
+                            debug("-- found picture info [%lld] vs [%lld] !\n", lSize, sizeof(*picture_info));
                             picture_info = (dumpInternals::EMhwlibPictureInfoV1*)malloc( lSize );
 
                             if (m_fp.Read(picture_info, lSize) != lSize) {
@@ -161,15 +199,22 @@ bool		dumpImageBuffer::Load(size_t frame)
 
                             debug("width %d height %d\n", m_width, m_height);
 
+#if 1
+                            m_pY = (wxUint8*)realloc((void*)m_pY, (m_width * m_height));
+                            m_pU = (wxUint8*)realloc((void*)m_pU, (m_width * m_height) >> 2);
+                            m_pV = (wxUint8*)realloc((void*)m_pV, (m_width * m_height) >> 2);
+#else
                             pY = (wxUint8*)malloc( (m_width) * (m_height) );
-                            pU = (wxUint8*)malloc( (m_width * m_height) >> 1 );
-                            pV = (wxUint8*)malloc( (m_width * m_height) >> 1 );
+                            pU = (wxUint8*)malloc( (m_width * m_height) /* >> 1 */ );
+                            pV = (wxUint8*)malloc( (m_width * m_height) /* >> 1 */ );
+#endif
 
                             /* Allocate new image data */
-                            m_imageData = (UBYTE *)malloc(sizeof(PIXEL) * m_width * m_height);
+                            m_imageData = (UBYTE *)realloc(m_imageData, (sizeof(PIXEL) * m_width * m_height));
                             wxASSERT(m_imageData != 0L);
 
                             free(picture_info);
+                            flags |= FOUND_PICI;
                         } else if (nTag == LUMA_MAGIC) {
                             debug("-- found luma buffer [%lld]!\n", lSize);
 
@@ -181,6 +226,7 @@ bool		dumpImageBuffer::Load(size_t frame)
                                 debug("WARNING: Incomplete buffer read! aborting...\n");
                                 break;
                             }
+                            flags |= FOUND_LUMA;
                         } else if (nTag == CHROMA_MAGIC) {
                             debug("-- found chroma buffer [%lld]!\n", lSize);
 
@@ -192,6 +238,7 @@ bool		dumpImageBuffer::Load(size_t frame)
                                 debug("WARNING: Incomplete buffer read! aborting...\n");
                                 break;
                             }
+                            flags |= FOUND_CHRM;
                         } else {
                             debug("-- found unknown tag [%c%c%c%c]!\n",
                                   ((nTag & 0xff000000) >> 24),
@@ -211,9 +258,15 @@ bool		dumpImageBuffer::Load(size_t frame)
 
                 debug("luma w X h = %d X %d\n", lumaW, lumaH);
 
-                pDesty = pY;
-                pDestu = pU;
-                pDestv = pV;
+#if 1
+                pDesty = m_pY; pDestu = m_pU; pDestv = m_pV;
+                m_lumaSize = (m_width * m_height);
+                m_chromaSize = (m_width * m_height) >> 2;
+
+                debug("-- m_lumaSize %d m_chromaSize %d\n", m_lumaSize, m_chromaSize);
+#else
+                pDesty = pY; pDestu = pU; pDestv = pV;
+#endif
 
                 /* save the luma buffer */
                 for (wxUint32 y = 0 ; y < lumaH ; y++)
@@ -251,8 +304,14 @@ bool		dumpImageBuffer::Load(size_t frame)
                 fwrite(pV, 1, (m_width * m_height) >> 1, fp);
                 fclose(fp);
 #endif
+
+#if 1
+                if (DoYUVConversion(m_width, m_height, m_pY, m_pU, m_pV)) {
+                    debug("OK!\n");
+#else
                 if (DoYUVConversion(m_width, m_height, pY, pU, pV)) {
                     debug("OK!\n");
+#endif
                 }
             } else {
                 debug("ERROR: Invalid file!\n");
@@ -265,8 +324,24 @@ bool		dumpImageBuffer::Load(size_t frame)
             }
             if (pChromaBuffer) {
                 free( pChromaBuffer );
-                pLumaBuffer = 0L;
+                pChromaBuffer = 0L;
             }
+
+#if 1
+//            if (m_pY) {
+//                free( m_pY );
+//                m_pY = 0L;
+//            }
+//            if (m_pU) {
+//                free( m_pU );
+//                m_pU = 0L;
+//            }
+//            if (m_pV) {
+//                free( m_pV );
+//                m_pV = 0L;
+//            }
+
+#else
             if (pY) {
                 free( pY );
                 pY = 0L;
@@ -279,8 +354,11 @@ bool		dumpImageBuffer::Load(size_t frame)
                 free( pV );
                 pV = 0L;
             }
+#endif
 
             m_fp.Close();
+
+            m_frameNo = frame;
         } else {
             debug("ERROR: Unable to open file!\n");
         }
@@ -433,3 +511,116 @@ bool dumpImageBuffer::QueryFrameSize(int& width, int& height)
     return true;
 }
 
+/**
+ *  Calculate the MD5 checksum for the buffer.
+ */
+
+bool dumpImageBuffer::GetChecksum(size_t frame, wxUint8* lumaSum, wxUint8* chromaSum) {
+    debug("dumpImageBuffer::GetChecksum(%d, %p, %p)\n", frame, lumaSum, chromaSum);
+
+    //debug("m_pY %p m_pU %p m_pV %p\n", m_pY, m_pU, m_pV);
+
+    memset(lumaSum, 0xff, 16);
+    memset(chromaSum, 0xff, 16);
+
+    if (frame != m_frameNo) {
+        debug("-- loading frame %d\n", frame);
+        Load(frame);
+    }
+
+    if ((m_pY != 0) && (m_pU != 0) && (m_pV != 0)) {
+        gcry_md_hd_t    con;
+
+        gcry_md_open(&con, GCRY_MD_MD5, 0);
+
+        gcry_md_write(con, m_pY, m_lumaSize);
+        gcry_md_final(con);
+
+        memcpy(lumaSum, gcry_md_read(con, GCRY_MD_MD5), 16);
+
+        gcry_md_reset(con);
+
+        for (wxUint32 i = 0 ; i < m_chromaSize ; i++) {
+            gcry_md_putc(con, m_pU[i]);
+            gcry_md_putc(con, m_pV[i]);
+        }
+
+        gcry_md_final(con);
+        memcpy(chromaSum, gcry_md_read(con, GCRY_MD_MD5), 16);
+
+        gcry_md_close(con);
+    } else {
+        memset(lumaSum, 0xff, 16);
+        memset(chromaSum, 0xff, 16);
+    }
+
+#if 1
+    wxUint32 crcLuma = crc32_be(m_pY, m_lumaSize);
+    wxUint32 crcChroma = crc32_be(m_pU, m_chromaSize, m_pV, m_chromaSize);
+
+    printf("sigma crc32:\n");
+    printf("crcLuma  = %08x\n", crcLuma);
+    printf("crcChoma = %08x\n", crcChroma);
+
+#endif
+
+    return true;
+}
+
+bool dumpImageBuffer::SaveYUV(wxString sFilename, eSaveType type) {
+    bool bRes = false;
+    debug("dumpImageBuffer::SaveYUV(%s, %d)\n", (const char*)sFilename.c_str(), (int)type);
+
+    wxASSERT( (m_pY != 0) && (m_pU != 0) && (m_pV != 0) );
+
+    if (type == SAVE_YUV_COMP) {
+        wxFile      fp;
+
+        if (fp.Open( sFilename, wxFile::write )) {
+            fp.Write( m_pY, m_lumaSize );
+            fp.Write( m_pU, m_chromaSize );
+            fp.Write( m_pV, m_chromaSize );
+        }
+    } else if (type == SAVE_YUV_SPLIT) {
+
+    } else {
+        debug("ERROR: Invalid save type!\n");
+    }
+
+    return bRes;
+}
+
+/*
+
+
+#if 0
+    {
+        gcry_md_hd_t    con;
+        wxUint32        gc_lumaCRC, gc_chromaCRC;
+
+        gcry_md_open(&con, GCRY_MD_CRC32_RFC1510, 0);
+        gcry_md_write(con, m_pY, m_lumaSize);
+        gcry_md_final(con);
+
+        memcpy(&gc_lumaCRC, gcry_md_read(con, GCRY_MD_CRC32_RFC1510), 4);
+
+        gcry_md_reset(con);
+
+        for (wxUint32 i = 0 ; i < m_chromaSize ; i++) {
+            gcry_md_putc(con, m_pU[i]);
+            gcry_md_putc(con, m_pV[i]);
+        }
+
+        gcry_md_final(con);
+
+        memcpy(&gc_chromaCRC, gcry_md_read(con, GCRY_MD_CRC32_RFC1510), 4);
+
+        gcry_md_close(con);
+
+        printf("gcrypt crc32:\n");
+        printf("gc_lumaCRC   = %08x\n", gc_lumaCRC);
+        printf("gc_chromaCRC = %08x\n", gc_chromaCRC);
+    }
+#endif
+
+*/

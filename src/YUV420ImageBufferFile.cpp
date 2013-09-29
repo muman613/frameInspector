@@ -274,9 +274,12 @@ void YUV420ImageBufferFile::GetImage(wxImage* pImage)
     debug("YUV420ImageBufferFile::GetImage(0x%08lx)\n", pImage);
     assert(pImage != 0L);
 
-    pImage->Destroy();
-    pImage->Create(m_width, m_height);
-    pImage->SetData(copy_data()); //m_imageData);
+    if (m_imageData != 0L) {
+		pImage->Destroy();
+		pImage->Create(m_width, m_height);
+		pImage->SetData(copy_data()); //m_imageData);
+    }
+
     return;
 }
 
@@ -286,7 +289,7 @@ void YUV420ImageBufferFile::GetImage(wxImage* pImage)
 
 ssize_t YUV420ImageBufferFile::GetFrameCount()
 {
-    debug("YUV420ImageBufferFile::GetFrameCount(%s)\n", m_imageFilename.c_str());
+	debug("YUV420ImageBufferFile::GetFrameCount(%s)\n", (const char*)m_imageFilename.c_str());
     int	         ySize, uSize, vSize;
     int	         frameSize = 0;
     wxFileOffset off;
@@ -377,16 +380,10 @@ bool YUV420ImageBufferFile::GetChecksum(size_t frame, wxUint8* lumaSum, wxUint8*
     m_file.Seek( offV );
     m_file.Read( vBuf, vSize );
 
-    FILE* oFp = fopen("/tmp/chroma.bin", "w");
-
     for (int i = 0 ; i < uSize ; i++) {
         gcry_md_putc(con, uBuf[i]);
-        fputc(uBuf[i], oFp);
         gcry_md_putc(con, vBuf[i]);
-        fputc(vBuf[i], oFp);
     }
-
-    fclose(oFp);
 
     gcry_md_final(con);
     memcpy(chromaSum, gcry_md_read(con, GCRY_MD_MD5), 16);

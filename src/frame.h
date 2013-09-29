@@ -43,6 +43,10 @@ public:
         ID_FILE_OPEN_DUMP,
         ID_FILE_REFRESH,
         ID_FILE_SAVE_AS,
+		ID_FILE_SAVE,
+		ID_FILE_SAVE_IMAGE,
+		ID_FILE_SAVE_YUV_SPLIT,
+		ID_FILE_SAVE_YUV_COMP,
         ID_FILE_SETSIZE,
         ID_FILE_GRID_SETTINGS,
 
@@ -120,6 +124,8 @@ public:
     void 	OnExit(wxCommandEvent& event);
     void	OnFileSetSize(wxCommandEvent& event);
     void	OnFileSaveAs(wxCommandEvent& event);
+	void    OnFileSaveYUVSplit(wxCommandEvent& event);
+	void    OnFileSaveYUVComp(wxCommandEvent& event);
 //		void	OnFileSetPrefix(wxCommandEvent& event);
 //		void	OnFileSetPath(wxCommandEvent& event);
 
@@ -150,6 +156,7 @@ public:
     void    OnGridSettings(wxCommandEvent& event);
 
     void    OnUpdateUI(wxUpdateUIEvent& event);
+    void    OnUpdateGridUI(wxUpdateUIEvent& event);
 
     /// Load options from config file.
     void	LoadOptions();
@@ -183,6 +190,8 @@ private:
     bool			allocate_image_buffer();
     void			free_image_buffer();
     void			GetSizeFromPath();
+
+    void            ShowHideChecksumDlg();
 
 #ifdef  HAVE_FAM
     /// Is File Alteration Monitor enabled
@@ -220,8 +229,8 @@ private:
     /// Last frame id in sequence
     int				m_lastID;
     float			m_alpha;
-    int				m_depth;
-    int				m_maskMask;
+//		int				m_depth;
+//		int				m_maskMask;
 
     yuvType			m_type;
     ImageBuffer*	m_buffer;
@@ -238,10 +247,9 @@ private:
     bool            m_bGrid;
     int             m_gridH;        ///< horizontal spacing
     int             m_gridV;        ///< vertical spacing
+    wxColour        m_gridColor;    ///< Color of the grid
 
-//#ifdef  MODAL_CHECKSUM
     HashDialog*     m_pHashDlg;     ///< Pointer to hash dialog
-//#endif
 };
 
 DECLARE_EVENT_TYPE(wxEVT_LOADIMAGE, -1)
