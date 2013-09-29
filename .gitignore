@@ -1,0 +1,6 @@
+*.orig
+*~
+*.o
+nohup.out
+*.yuv
+
