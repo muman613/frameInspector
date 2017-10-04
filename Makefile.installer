@@ -1,8 +1,10 @@
 DESTDIR=/usr/local/bin
 
 install: frameInspector.1.gz
-	install bin/Release/frameInspector $(DESTDIR)
+	install bin/Release/wx30/frameInspector $(DESTDIR)
 	install frameInspector.1.gz /usr/share/man/man1
+	install bitmaps/frameInspector.png /usr/share/icons/gnome/scalable/apps/
+	install frameInspector.desktop /usr/share/applications/
 
 frameInspector.1.gz: frameInspector.1
 	cat frameInspector.1 | gzip - > frameInspector.1.gz

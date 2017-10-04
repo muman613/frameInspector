@@ -1,0 +1,9 @@
+[Desktop Entry]
+Encoding=UTF-8
+Name=frameInspector v2.9
+Exec=/usr/local/bin/frameInspector
+Type=Application
+Terminal=false
+Icon=/usr/share/icons/gnome/scalable/apps/frameInspector.png
+Categories=GNOME;Graphics
+

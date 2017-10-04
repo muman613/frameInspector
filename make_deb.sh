@@ -1,7 +1,10 @@
+VERSION="2.6"
+RELEASE="1"
+
 sudo checkinstall 	--nodoc \
 					--pkgname 'frameinspector' \
-					--pkgversion 1.24 \
-					--pkgrelease 1 \
+					--pkgversion ${VERSION} \
+					--pkgrelease ${RELEASE} \
 					--pkggroup development \
 					--maintainer "Michael Uman" \
 					--strip \

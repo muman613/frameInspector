@@ -1,9 +1,17 @@
+//==============================================================================
+//  MODULE      :   viewApp.cpp
+//  PROJECT     :   frameInspector
+//  PROGRAMMER  :   Michael A. Uman
+//  DATE        :   October 4, 2013
+//  COPYRIGHT   :   (C) 2006-2013 Sigma Designs
+//==============================================================================
+
 #include <wx/wx.h>
 #include <wx/gdicmn.h>
 #include <wx/cmdline.h>
 #include "viewApp.h"
 #include "frame.h"
-#include "dbgutils.h"
+//#include "dbgutils.h"
 #include "imageBuffer.h"
 
 #ifdef  __WXMSW__
@@ -12,35 +20,44 @@
 
 IMPLEMENT_APP(viewApp)
 
-static const wxCmdLineEntryDesc cmdLineDesc[] = {
-    { wxCMD_LINE_SWITCH,    wxT("h"), wxT("help"),      wxT("Display help message"), wxCMD_LINE_VAL_NONE, wxCMD_LINE_OPTION_HELP },
-    { wxCMD_LINE_OPTION,	wxT("f"), wxT("file"),      wxT("Set YUV File"),	    wxCMD_LINE_VAL_STRING, },
-    { wxCMD_LINE_OPTION,	wxT("p"), wxT("path"),      wxT("Set YUV path"),	    wxCMD_LINE_VAL_STRING, },
-    { wxCMD_LINE_OPTION, 	wxT("s"), wxT("size"),      wxT("Set image size"),      wxCMD_LINE_VAL_STRING, },
-    { wxCMD_LINE_OPTION,	wxT("c"), wxT("frame"),     wxT("Set frame #"), 	    wxCMD_LINE_VAL_NUMBER, },
-    { wxCMD_LINE_OPTION,	wxT("r"), wxT("prefix"),    wxT("Set prefix"),          wxCMD_LINE_VAL_STRING, },
+/**
+ *  Commandline arguments for parser.
+ */
 
-#ifdef  HAVE_FAM
-    { wxCMD_LINE_OPTION,	wxT("m"), wxT("monitor"),   wxT("Enable/Disable FAM"),  wxCMD_LINE_VAL_NUMBER, },
-#endif
+static const wxCmdLineEntryDesc cmdLineDesc[] = {
+    { wxCMD_LINE_SWITCH,    wxT_2("h"), wxT_2("help"),      wxT_2("Display help message"),  wxCMD_LINE_VAL_NONE, wxCMD_LINE_OPTION_HELP },
+    { wxCMD_LINE_OPTION,    wxT_2("f"), wxT_2("file"),      wxT_2("Set YUV File"),          wxCMD_LINE_VAL_STRING, },
+    { wxCMD_LINE_OPTION,    wxT_2("p"), wxT_2("path"),      wxT_2("Set YUV path"),          wxCMD_LINE_VAL_STRING, },
+    { wxCMD_LINE_OPTION,    wxT_2("d"), wxT_2("dump"),      wxT_2("Set dump path"),         wxCMD_LINE_VAL_STRING, },
+    { wxCMD_LINE_OPTION,    wxT_2("s"), wxT_2("size"),      wxT_2("Set image size"),        wxCMD_LINE_VAL_STRING, },
+    { wxCMD_LINE_OPTION,    wxT_2("c"), wxT_2("frame"),     wxT_2("Set frame #"),           wxCMD_LINE_VAL_NUMBER, },
+    { wxCMD_LINE_OPTION,    wxT_2("r"), wxT_2("prefix"),    wxT_2("Set prefix"),            wxCMD_LINE_VAL_STRING, },
+    { wxCMD_LINE_OPTION,    wxT_2("b"), wxT_2("bits"),      wxT_2("Bits Per Component"),    wxCMD_LINE_VAL_NUMBER, },
 
     { wxCMD_LINE_NONE },
 };
 
+/**
+ *  Handle application initialization.
+ */
 
-bool viewApp::OnInit()
-{
-    debug("viewApp::OnInit()\n");
+bool viewApp::OnInit() {
+#if defined(__WXDEBUG__) && defined(USE_WXLOGWINDOW)
+//    m_pLogWindow = new wxLogWindow(NULL, "frameInspector Log Output", true, false);
+//    wxLog::SetActiveTarget(m_pLogWindow);
+#endif  // USE_WXLOGWINDOW
 
-    int	depth = ::wxDisplayDepth();
+    wxLogDebug("viewApp::OnInit()");
 
-    debug("Screen depth = %d\n", depth);
+    int depth = ::wxDisplayDepth();
+
+    wxLogDebug("Screen depth = %d", depth);
 
     /* if running on a low color density screen, tell the user to prepare for the worst */
 
     if (depth < 16) {
-        ::wxMessageBox(_T("frameInspector should be run on hicolor or truecolor screen.\n" \
-                          "Detected 256 color screen!"), _T("Message"), wxICON_EXCLAMATION);
+        ::wxMessageBox(wxT_2("frameInspector should be run on hicolor or truecolor screen.\nDetected 256 color screen!"),
+                       wxT_2("Message"), wxICON_EXCLAMATION);
     }
 
     getCPUID();	/* determine which CPU application is running on */
@@ -53,12 +70,13 @@ bool viewApp::OnInit()
     sLogo = wxString::Format(wxT("%s v%d.%d %s"), APP_NAME, VERSION_MAJOR, VERSION_MINOR, VERSION_RELEASE);
     m_cmdLine.SetLogo(sLogo);
 
-    debug("arg1 = %s arg2 = %s arg3 = %s\n", wxGetApp().argv[1], "a", "b");
+//    wxLogDebug("arg1 = %s arg2 = %s arg3 = %s", wxGetApp().argv[1], "a", "b"); //wxGetApp().argv[2], wxGetApp().argv[3]);
 
     if (m_cmdLine.Parse() != 0) {
-//        debug("-- user help!\n");
+//       wxLogDebug("-- user help!\n");
         return false;
     }
+
     Frame*	myFrame = new Frame();
 
     myFrame->Show( true );
@@ -68,12 +86,24 @@ bool viewApp::OnInit()
 };
 
 /**
+ *  On exit destroy the debug log window.
+ */
+
+int viewApp::OnExit() {
+#if defined(__WXDEBUG__) && defined(USE_WXLOGWINDOW)
+    delete m_pLogWindow;
+    m_pLogWindow = 0L;
+#endif
+
+    return 0;
+}
+
+/**
  *  Get the host CPU identification.
  */
 
-bool viewApp::getCPUID()
-{
-    debug("viewApp::getCPUID()\n");
+bool viewApp::getCPUID() {
+    wxLogDebug("viewApp::getCPUID()");
 
     memset(&m_cpuPack, 0, sizeof(CPUPACK));
 
@@ -83,36 +113,36 @@ bool viewApp::getCPUID()
     /* Determine information about CPU */
 
     asm ( " movl $0, %%eax 				;	\
-			cpuid 						;	\
-			movl %%eax, (%0)			;	\
-			movl %%ebx, 4(%0)			;	\
-			movl %%ecx, 12(%0)			;	\
-			movl %%edx, 8(%0)			;	\
-										;	\
-			mov $1, %%eax				;	\
-			cpuid						;	\
-			movl %%eax, 16(%0)			;	\
-			movl %%ebx, 20(%0)			;	\
-			movl %%edx, 24(%0)			;	\
-										;	\
-			/* test for 3DNOW */		;	\
-			movl $0x80000000, %%eax		;	\
-			cpuid						;	\
-			cmpl $0x80000000, %%eax		;	\
-			jl 0f						;	\
-			movl $0x80000001, %%eax		;	\
-			cpuid						;	\
-			test $0x80000000, %%edx		;	\
-			jz	0f                      ;	\
-			movl $1, 28(%0)				;	\
-			0:" 							\
-          : /* No output */ 				\
-          : "D" (&m_cpuPack)					\
-          : "eax", "ebx", "ecx", "edx" );
+            cpuid 						;	\
+            movl %%eax, (%0)			;	\
+            movl %%ebx, 4(%0)			;	\
+            movl %%ecx, 12(%0)			;	\
+            movl %%edx, 8(%0)			;	\
+                                        ;	\
+            mov $1, %%eax				;	\
+            cpuid						;	\
+            movl %%eax, 16(%0)			;	\
+            movl %%ebx, 20(%0)			;	\
+            movl %%edx, 24(%0)			;	\
+                                        ;	\
+            /* test for 3DNOW */		;	\
+            movl $0x80000000, %%eax		;	\
+            cpuid						;	\
+            cmpl $0x80000000, %%eax		;	\
+            jl 0f						;	\
+            movl $0x80000001, %%eax		;	\
+            cpuid						;	\
+            test $0x80000000, %%edx		;	\
+            jz	0f                      ;	\
+            movl $1, 28(%0)				;	\
+            0:" 							\
+            : /* No output */ 				\
+            : "D" (&m_cpuPack)					\
+            : "eax", "ebx", "ecx", "edx" );
 
 #else   // Not an intel 32/64bit CPU...
 
-    debug("ERROR: Unable to obtain CPUID on non-Intel platforms!\n");
+    wxLogDebug("ERROR: Unable to obtain CPUID on non-Intel platforms!\n");
     return false;
 
 #endif  // (defined(__x86_64__) || defined(__i386__))
@@ -125,35 +155,32 @@ bool viewApp::getCPUID()
 
 #endif
 
-#ifdef	_ENABLE_DEBUG
-    debug("maxcpu %ld\n", m_cpuPack.maxCPUID);
-    debug("CPUID : ");
+#ifdef	__WXDEBUG__
+    wxString sTmp;
+
+    wxLogDebug("maxcpu %d", m_cpuPack.maxCPUID);
 
     for (int x = 0 ; x < 12 ; x++) {
-        debug("%c", m_cpuPack.CPUTag[x]);
+        sTmp += m_cpuPack.CPUTag[x];
     }
-    debug("\n");
 
-    debug("Stepping : %d\n"
-          "Model    : %d\n"
-          "Family   : %d\n",
-          m_cpuPack.CPUSig_Mask,
-          m_cpuPack.CPUSig_Model,
-          m_cpuPack.CPUSig_Family);
+    wxLogDebug("CPUID : %s", sTmp);
 
-    debug("CPU Cnt  : %d\n", m_cpuPack.CPUSig_CPUCount);
+    wxLogDebug("Stepping : %d", m_cpuPack.CPUSig_Mask);
+    wxLogDebug("Model    : %d", m_cpuPack.CPUSig_Model);
+    wxLogDebug("Family   : %d", m_cpuPack.CPUSig_Family);
+    wxLogDebug("CPU Cnt  : %d", m_cpuPack.CPUSig_CPUCount);
 
     if (m_cpuPack.CPUSig_Flag_MMX) {
-        debug("HAS MMX!\n");
+        wxLogDebug("HAS MMX!");
     }
     if (m_cpuPack.CPUSig_Flag_SSE2) {
-        debug("HAS SSE2!\n");
+        wxLogDebug("HAS SSE2!");
     }
     if (m_cpuPack.CPUSig_Flag_3DNOW) {
-        debug("HAS 3DNOW!\n");
+        wxLogDebug("HAS 3DNOW!");
     }
-#endif	// _ENABLE_DEBUG
-
+#endif	// __WXDEBUG__
 
     return true;
 }

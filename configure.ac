@@ -2,7 +2,7 @@
 # Process this file with autoconf to produce a configure script.
 
 AC_PREREQ(2.5)
-AC_INIT(frameInspector, 1.25, Michael_Uman@sdesigns.com)
+AC_INIT(frameInspector, 1.32, Michael_Uman@sdesigns.com)
 AM_INIT_AUTOMAKE()
 AC_CONFIG_SRCDIR([src/viewApp.cpp])
 AM_CONFIG_HEADER([config.h])
@@ -11,11 +11,11 @@ AC_PROG_CXX
 AC_PROG_CC
 
 AM_OPTIONS_WXCONFIG()
-AM_PATH_WXCONFIG(2.8.11, wxWin=1)
+AM_PATH_WXCONFIG(2.7.0, wxWin=1, wxWin=0, std)
 
 if test "$wxWin" != 1; then
 	AC_MSG_ERROR([
-		wxWindows version >= 2.8.11 must be installed on the system
+		wxWindows version >= 2.7.0 must be installed on the system
 		but wx-config script could not be found.
 	])
 fi
@@ -57,6 +57,8 @@ AC_ARG_ENABLE([debug],
 
 if test "$opt_debug_build" = yes; then
 	DEBUGFLAGS="-D_ENABLE_DEBUG"
+else
+	DEBUGFLAGS="-DNDEBUG"
 fi
 
 if test "$opt_enable_fam" = yes; then
@@ -72,10 +74,9 @@ if test "$opt_optimize" = yes; then
 fi
 
 
-CPPFLAGS="$OPTIMIZE $DEBUGFLAGS $WX_CXXFLAGS"
-LIBS="$WX_LIBS $LIBS -lpopt"
+CPPFLAGS="$OPTIMIZE $DEBUGFLAGS $WX_CXXFLAGS -DHAS_GCRYPT=1 -std=c++11"
+LIBS="$WX_LIBS $LIBS -lpopt -lX11"
 
 AC_CONFIG_FILES([Makefile
-                 src/Makefile
-				 deinterlace/Makefile])
+                 src/Makefile])
 AC_OUTPUT
