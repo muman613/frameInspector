@@ -11,7 +11,7 @@ AC_PROG_CXX
 AC_PROG_CC
 
 AM_OPTIONS_WXCONFIG()
-AM_PATH_WXCONFIG(2.7.0, wxWin=1, wxWin=0, std)
+AM_PATH_WXCONFIG(3.0.0, wxWin=1, wxWin=0, std)
 
 if test "$wxWin" != 1; then
 	AC_MSG_ERROR([
@@ -29,7 +29,7 @@ AC_HEADER_STDBOOL
 AC_C_CONST
 AC_C_INLINE
 AC_TYPE_SIZE_T
-AC_CHECK_LIB([gcrypt], [gcry_md_open], 
+AC_CHECK_LIB([gcrypt], [gcry_md_open],
 	[opt_gcrypt_installed=1],
 	[opt_gcrypt_installed=0])
 
