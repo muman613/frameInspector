@@ -1,0 +1,287 @@
+Initialize EditColourSet .....
+Initialize EditColourSet: done.
+Loading menubar...
+AStylePlugin: loaded
+ToDoList: loaded
+BrowseTracker: loaded
+ThreadSearch: loaded
+EditorConfig: loaded
+wxSmithAui: loaded
+ScriptedWizard: loaded
+ProjectsImporter: loaded
+lib_finder: loaded
+Valgrind: loaded
+Exporter: loaded
+SpellChecker: loaded
+SmartIndentLua: loaded
+FilesExtensionHandler: loaded
+CodeSnippets: loaded
+SmartIndentHDL: loaded
+CB_Koders: loaded
+Debugger: loaded
+SmartIndentFortran: loaded
+cbDragScroll: loaded
+SmartIndentPascal: loaded
+OccurrencesHighlighting: loaded
+CodeStat: loaded
+EditorTweaks: loaded
+SymTab: loaded
+Compiler: loaded
+MouseSap: loaded
+Profiler: loaded
+SmartIndentCpp: loaded
+wxSmith: loaded
+wxSmithMime: loaded
+OpenFilesList: loaded
+copystrings: loaded
+BYOGames: loaded
+HelpPlugin: loaded
+FileManager: loaded
+ReopenEditor: loaded
+cbKeyBinder: loaded
+CppCheck: loaded
+EnvVars: loaded
+NassiShneidermanPlugin: loaded
+CodeCompletion: loaded
+Abbreviations: loaded
+IncrementalSearch: loaded
+HeaderFixup: loaded
+SmartIndentPython: loaded
+HexEditor: loaded
+RegExTestbed: loaded
+DoxyBlocks: loaded
+ClassWizard: loaded
+wxSmithContribItems: loaded
+Autosave: loaded
+Cscope: loaded
+Cccc: loaded
+SmartIndentXML: loaded
+AutoVersioning: loaded
+ToolsPlus: loaded
+Source code formatter (AStyle) plugin activated
+Todo List plugin activated
+BrowseTracker plugin activated
+ThreadSearch plugin activated
+EditorConfig plugin for Code::Blocks plugin activated
+wxSmith - Aui plugin activated
+Project wizard added for 'Empty project'
+Project wizard added for 'Fortran application'
+Project wizard added for 'Fortran library'
+Project wizard added for 'Fortran DLL'
+Project wizard added for 'Console application'
+Project wizard added for 'D application'
+Project wizard added for 'FLTK project'
+Project wizard added for 'GLFW project'
+Project wizard added for 'GLUT project'
+Project wizard added for 'GTK+ project'
+Project wizard added for 'Irrlicht project'
+Project wizard added for 'Lightfeather project'
+Project wizard added for 'Matlab project'
+Project wizard added for 'OpenCV project'
+Project wizard added for 'OpenGL project'
+Project wizard added for 'Ogre project'
+Project wizard added for 'Code::Blocks plugin'
+Project wizard added for 'QT4 project'
+Project wizard added for 'SDL project'
+Project wizard added for 'SFML project'
+Project wizard added for 'Static library'
+Project wizard added for 'Shared library'
+Project wizard added for 'wxWidgets project'
+Build-target wizard added for 'Console'
+Build-target wizard added for 'Static library'
+Build-target wizard added for 'wxWidgets'
+Project wizard added for 'ARM Project'
+Project wizard added for 'AVR Project'
+Project wizard added for 'TriCore Project'
+Project wizard added for 'PowerPC Project'
+Project wizard added for 'MCS51 Project'
+File(s) wizard added for 'Empty file'
+File(s) wizard added for 'C/C++ source'
+File(s) wizard added for 'C/C++ header'
+File(s) wizard added for 'Fortran source'
+Scripted wizard plugin activated
+Foreign projects importer plugin activated
+Library finder plugin activated
+Valgrind plugin activated
+Source Exporter plugin activated
+SpellChecker plugin activated
+SmartIndentLua plugin activated
+Files extension handler plugin activated
+Code snippets plugin activated
+SmartIndentHDL plugin activated
+Koders query plugin activated
+Debugger plugin activated
+SmartIndentFortran plugin activated
+DragScroll plugin activated
+SmartIndentPascal plugin activated
+OccurrencesHighlighting plugin activated
+Code statistics plugin activated
+Editor Tweaks plugin: Building menu
+Editor Tweaks plugin: making the menu 15
+Editor Tweaks plugin: Folding menu
+EditorTweaks plugin activated
+Symbol Table Plugin plugin activated
+Added compiler "GNU GCC Compiler"
+Added compiler "Intel C/C++ Compiler"
+Added compiler "GDC D Compiler"
+Added compiler "GNU Fortran Compiler"
+Added compiler "G95 Fortran Compiler"
+Added compiler "GNU GCC Compiler for ARM"
+Added compiler "Tiny C Compiler"
+Added compiler "GNU GCC Compiler for PowerPC"
+Added compiler "Digital Mars D Compiler"
+Added compiler "GNU GCC Compiler for TriCore"
+Added compiler "GNU GCC Compiler for AVR"
+Added compiler "*No Compiler*"
+Added compiler "Small Device C Compiler"
+Added compiler "GNU GCC Compiler for MSP430"
+Added compiler "LLVM D Compiler"
+Added compiler "PGI Fortran Compiler"
+Added compiler "LLVM Clang Compiler"
+Master path of compiler ID "gcc" is empty -> triggers auto-detection.
+Master path of compiler ID "icc" is empty -> triggers auto-detection.
+Master path of compiler ID "sdcc" is empty -> triggers auto-detection.
+Master path of compiler ID "tcc" is empty -> triggers auto-detection.
+Master path of compiler ID "clang" is empty -> triggers auto-detection.
+Master path of compiler ID "arm-elf-gcc" is empty -> triggers auto-detection.
+Master path of compiler ID "avr-gcc" is empty -> triggers auto-detection.
+Master path of compiler ID "msp430-gcc" is empty -> triggers auto-detection.
+Master path of compiler ID "ppc-gcc" is empty -> triggers auto-detection.
+Master path of compiler ID "tricore-gcc" is empty -> triggers auto-detection.
+Master path of compiler ID "gdc" is empty -> triggers auto-detection.
+Master path of compiler ID "ldc" is empty -> triggers auto-detection.
+Master path of compiler ID "dmd" is empty -> triggers auto-detection.
+Master path of compiler ID "gfortran" is empty -> triggers auto-detection.
+Master path of compiler ID "g95" is empty -> triggers auto-detection.
+Master path of compiler ID "pgifortran" is empty -> triggers auto-detection.
+Master path of compiler ID "null" is empty -> triggers auto-detection.
+Compiler plugin activated
+MouseSap plugin activated
+Code profiler plugin activated
+SmartIndentCpp plugin activated
+wxSmith plugin activated
+wxSmith - MIME plugin plugin activated
+Open files list plugin activated
+Copy Strings to clipboard plugin activated
+BYO Games plugin activated
+Help plugin plugin activated
+FileManager plugin activated
+ReopenEditor plugin activated
+Keyboard shortcuts plugin activated
+CppCheck plugin activated
+Environment variables plugin activated
+NassiShneidermanPlugin plugin activated
+Code completion plugin activated
+Abbreviations plugin activated
+IncrementalSearch plugin activated
+Header Fixup plugin activated
+SmartIndentPython plugin activated
+HexEditor plugin activated
+Regular expressions testbed plugin activated
+DoxyBlocks plugin activated
+Class wizard plugin activated
+wxSmith - Contrib Items plugin activated
+Autosave plugin activated
+Cscope plugin activated
+Cccc plugin activated
+SmartIndentXML plugin activated
+AutoVersioning plugin activated
+ToolsPlus plugin activated
+Loading toolbar...
+ClassBrowser::UpdateClassBrowserView(): No active project available.
+ClassBrowser::OnThreadEvent(): Updating class browser...
+ClassBrowser::OnThreadEvent(): Class browser updated.
+Initializing plugins...
+Opening file /home/michael/github/frameInspector/frameinspector.cbp
+Loading project file...
+Parsing project file...
+Loading target Debug
+Loading target Release
+Loading target wx3_0_0 Debug
+Loading target wx3_0_0 Release
+Loading project files...
+46 files loaded
+Done loading project in 2ms
+Project's base path: /home/michael/github/frameInspector/
+Project's common toplevel path: /home/michael/github/frameInspector/
+Caching result of `/opt/wxWidgets/2.8.12/bin/wx-config --unicode=no --debug=yes --cflags`
+Cached
+Caching result of `/opt/wxWidgets/2.8.12/bin/wx-config --unicode=no --debug=yes --libs`
+Cached
+Caching result of `/opt/wxWidgets/2.8.12/bin/wx-config --unicode=no --debug=no --cflags`
+Cached
+Caching result of `/opt/wxWidgets/2.8.12/bin/wx-config --unicode=no --debug=no --libs`
+Cached
+Caching result of `/usr/bin/wx-config --cflags`
+Cached
+Caching result of `/usr/bin/wx-config /wx-config --libs`
+Cached
+Caching result of `/usr/bin/wx-config  --libs`
+Cached
+NativeParser::GetGCCCompilerDirs(): Caching GCC default include dir: /usr/include/c++/5
+NativeParser::GetGCCCompilerDirs(): Caching GCC default include dir: /usr/include/x86_64-linux-gnu/c++/5
+NativeParser::GetGCCCompilerDirs(): Caching GCC default include dir: /usr/include/c++/5/backward
+NativeParser::GetGCCCompilerDirs(): Caching GCC default include dir: /usr/lib/gcc/x86_64-linux-gnu/5/include
+NativeParse
+(codeblocks:799): Gdk-CRITICAL **: IA__gdk_window_thaw_updates: assertion 'impl_window->update_freeze_count > 0' failed
+
+(codeblocks:799): Gdk-CRITICAL **: IA__gdk_window_thaw_updates: assertion 'impl_window->update_freeze_count > 0' failed
+
+(codeblocks:799): Gdk-CRITICAL **: IA__gdk_window_thaw_updates: assertion 'impl_window->update_freeze_count > 0' failed
+
+(codeblocks:799): Gdk-CRITICAL **: IA__gdk_window_thaw_updates: assertion 'impl_window->update_freeze_count > 0' failed
+r::GetGCCCompilerDirs(): Caching GCC default include dir: /usr/local/include
+NativeParser::GetGCCCompilerDirs(): Caching GCC default include dir: /usr/lib/gcc/x86_64-linux-gnu/5/include-fixed
+NativeParser::GetGCCCompilerDirs(): Caching GCC default include dir: /usr/include/x86_64-linux-gnu
+NativeParser::GetGCCCompilerDirs(): Caching GCC default include dir: /usr/include
+NativeParser::DoFullParsing(): AddCompilerPredefinedMacros failed!
+NativeParser::DoFullParsing(): Adding three kind of files to batch-parser
+NativeParser::DoFullParsing(): Add priority header file: '/usr/include/c++/5/cstddef'
+NativeParser::DoFullParsing(): Add priority header file: '/usr/include/wx-3.0/wx/defs.h'
+NativeParser::DoFullParsing(): Add priority header file: '/usr/include/wx-3.0/wx/dlimpexp.h'
+NativeParser::DoFullParsing(): Add priority header file: '/usr/include/wx-3.0/wx/toplevel.h'
+NativeParser::DoFullParsing(): Add priority header file: '/usr/include/boost/config.hpp'
+NativeParser::DoFullParsing(): Add priority header file: '/usr/include/boost/filesystem/config.hpp'
+NativeParser::DoFullParsing(): Add 6 priority file(s) for project 'frameInspector'...
+NativeParser::DoFullParsing(): Added 45 header&source file(s) for project 'frameInspector' to batch-parser...
+ClassBrowser::UpdateClassBrowserView(): No active project available.
+NativeParser::CreateParser(): Finish creating a new parser for project 'frameInspector'
+ClassBrowser::OnThreadEvent(): Updating class browser...
+ClassBrowser::OnThreadEvent(): Class browser updated.
+NativeParser::OnParserStart(): Starting batch parsing for project 'frameInspector'...
+ReadVarNames() : Unexpected token '((__unused__))' for 'union184___qnan_union', file '/usr/include/x86_64-linux-gnu/bits/nan.h', line 49.
+NativeParser::OnParserEnd(): Project 'frameInspector' parsing stage done!
+Project 'frameInspector' parsing stage done (454 total parsed files, 29227 tokens in 0 minute(s), 0.565 seconds).
+SystemHeadersThread: /usr/lib/x86_64-linux-gnu/wx/include/gtk2-unicode-3.0/ , 1
+ClassBrowser::OnThreadEvent(): Updating class browser...
+ClassBrowser::OnThreadEvent(): Class browser updated.
+SystemHeadersThread: /usr/include/wx-3.0/ , 707
+SystemHeadersThread: /usr/include/c++/5/ , 643
+SystemHeadersThread: /usr/include/x86_64-linux-gnu/c++/5/ , 69
+SystemHeadersThread: /usr/include/c++/5/backward/ , 8
+SystemHeadersThread: /usr/lib/gcc/x86_64-linux-gnu/5/include/ , 111
+SystemHeadersThread: /usr/local/include/ , 0
+SystemHeadersThread: /usr/lib/gcc/x86_64-linux-gnu/5/include-fixed/ , 4
+SystemHeadersThread: /usr/include/x86_64-linux-gnu/ , 546
+SystemHeadersThread: /usr/include/ , 16716
+SystemHeadersThread: Total number of paths: 10
+Mozilla universal detection engine detected 'Pure *ASCII*'.
+Final encoding detected: Unicode 8 bit (UTF-8) (ID: 43)
+Editor Open
+NativeParser::GetAllPathsByFilename(): Traversing '/home/michael/github/frameInspector/src' for: YUV420ImageBufferFile.*
+NativeParser::GetAllPathsByFilename(): Found 2 files:
+- /home/michael/github/frameInspector/src/YUV420ImageBufferFile.cpp
+- /home/michael/github/frameInspector/src/YUV420ImageBufferFile.h
+ClassBrowser::OnThreadEvent(): Updating class browser...
+ClassBrowser::OnThreadEvent(): Class browser updated.
+Mozilla universal detection engine detected 'Pure *ASCII*'.
+Final encoding detected: Unicode 8 bit (UTF-8) (ID: 43)
+Editor Open
+NativeParser::GetAllPathsByFilename(): Traversing '/home/michael/github/frameInspector/src' for: imageBuffer.*
+NativeParser::GetAllPathsByFilename(): Found 2 files:
+- /home/michael/github/frameInspector/src/imageBuffer.h
+- /home/michael/github/frameInspector/src/imageBuffer.cpp
+ClassBrowser::OnThreadEvent(): Updating class browser...
+ClassBrowser::OnThreadEvent(): Class browser updated.
+Removed frameInspector from all deps
+Deinitializing plugins...

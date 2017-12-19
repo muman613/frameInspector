@@ -1,0 +1,7 @@
+*.o
+*.Po
+GTAGS
+GSYMS
+GPATH
+GRTAGS
+config.*
