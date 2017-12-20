@@ -15,22 +15,22 @@
 WX_DEFINE_OBJARRAY(CRCENTRY_ARRAY);
 
 crcEntry::crcEntry()
-:   m_luma(0),
-    m_chroma(0)
+    :   m_luma(0),
+        m_chroma(0)
 {
     // ctor
 }
 
 crcEntry::crcEntry(wxUint32 luma, wxUint32 chroma)
-:   m_luma(luma),
-    m_chroma(chroma)
+    :   m_luma(luma),
+        m_chroma(chroma)
 {
     // ctor
 }
 
 crcEntry::crcEntry(const crcEntry& copy)
-:   m_luma(copy.m_luma),
-    m_chroma(copy.m_chroma)
+    :   m_luma(copy.m_luma),
+        m_chroma(copy.m_chroma)
 {
     // copy ctor
 }
@@ -67,7 +67,7 @@ bool crcEntry::operator !=(const crcEntry& compare) {
 /*----------------------------------------------------------------------------*/
 
 crcVector::crcVector()
-:   m_bIsLoaded(false)
+    :   m_bIsLoaded(false)
 {
     //ctor
 }
@@ -86,7 +86,7 @@ void crcVector::clear() {
     m_bIsLoaded = false;
 }
 
-size_t crcVector::size() const{
+size_t crcVector::size() const {
     return m_crcArray.size();
 }
 

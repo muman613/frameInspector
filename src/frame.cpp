@@ -3,14 +3,13 @@
 //  PROJECT     :   frameInspector
 //  PROGRAMMER  :   Michael A. Uman
 //  DATE        :   April 9, 2014
-//  COPYRIGHT   :   (C) 2006-2014 Sigma Designs
 //==============================================================================
 
 //#define     DEBUG_UPDATE_UI     1
 #define     USE_YUVCOMPDIALOG
-//#ifdef HAVE_CONFIG_H
-//	#include "config.h"
-//#endif
+#ifdef HAVE_CONFIG_H
+#include "config.h"
+#endif
 
 #include <typeinfo>
 #include <limits.h>
@@ -136,19 +135,19 @@ END_EVENT_TABLE()
  */
 
 Frame::Frame()
-:   wxFrame(NULL, -1, wxT(APP_NAME), wxDefaultPosition, wxSize(640, 540)),
-    m_imagePath(wxT(".")),
-    m_prefix(wxT("pic")),
-    m_imageSize(wxSize(640,480)),
-    m_bits(8),
-    m_endianness(endian_little),
-    m_nFirst(0),
-    m_nLast(1000),
-    m_yuvFmt(DATA_YUV420),
-    m_statBar(0L),
-    m_bAutoStep(false),
-    m_pChksumDlg(0L),
-    m_chksumAlgo(0L)
+    :   wxFrame(NULL, -1, wxT(APP_NAME), wxDefaultPosition, wxSize(640, 540)),
+        m_imagePath(wxT(".")),
+        m_prefix(wxT("pic")),
+        m_imageSize(wxSize(640,480)),
+        m_bits(8),
+        m_endianness(endian_little),
+        m_nFirst(0),
+        m_nLast(1000),
+        m_yuvFmt(DATA_YUV420),
+        m_statBar(0L),
+        m_bAutoStep(false),
+        m_pChksumDlg(0L),
+        m_chksumAlgo(0L)
 {
     wxToolBar*  pToolBar = 0L;
 //    wxMenuBar*  pMenuBar = 0L;
@@ -189,8 +188,8 @@ Frame::Frame()
 
 #ifdef  __WXGTK__
     pToolBar->AddCheckTool(ID_VIEW_STEP, wxT("Auto-Step"),
-                      wxArtProvider::GetBitmap(wxT("media-playback-start"), wxART_TOOLBAR), wxNullBitmap,
-                      wxT("Auto-Step"));
+                           wxArtProvider::GetBitmap(wxT("media-playback-start"), wxART_TOOLBAR), wxNullBitmap,
+                           wxT("Auto-Step"));
 #endif
 
     pToolBar->AddSeparator();
@@ -211,10 +210,10 @@ Frame::Frame()
 
     /* create slider control */
     m_sliderCntrl = new wxSlider(pToolBar, ID_FRAME_SLIDER,
-                            0, 0, 100,
-                            wxDefaultPosition,
-                            wxSize(300,20),
-                            wxSL_HORIZONTAL|wxSL_AUTOTICKS);
+                                 0, 0, 100,
+                                 wxDefaultPosition,
+                                 wxSize(300,20),
+                                 wxSL_HORIZONTAL|wxSL_AUTOTICKS);
 
     wxASSERT( m_sliderCntrl != 0L );
 
@@ -331,7 +330,7 @@ void Frame::OnExit(wxCommandEvent& event) {
 
 void Frame::OnFormatSetSize(wxCommandEvent& event) {
     SizeDialog      dialog(this, m_imageSize.GetWidth(),
-                                 m_imageSize.GetHeight());
+                           m_imageSize.GetHeight());
 
     wxLogDebug("Frame::OnFormatSetSize()");
 
@@ -439,18 +438,18 @@ void Frame::UpdateStatusBar() {
         imageSize = m_imageControl->GetImageSize();
 
         if (m_imageControl->GetImageBits() > 8) {
-        sMsg = wxString::Format(wxT("Frame Dimensions : %dx%d - %d bit (%s) %s"),
-                imageSize.GetWidth(),
-                imageSize.GetHeight(),
-                m_imageControl->GetImageBits(),
-                (m_imageControl->GetEndianness() == endian_little)?"LE":"BE",
-                m_imageControl->GetYUVFormatString());
+            sMsg = wxString::Format(wxT("Frame Dimensions : %dx%d - %d bit (%s) %s"),
+                                    imageSize.GetWidth(),
+                                    imageSize.GetHeight(),
+                                    m_imageControl->GetImageBits(),
+                                    (m_imageControl->GetEndianness() == endian_little)?"LE":"BE",
+                                    m_imageControl->GetYUVFormatString());
         } else {
             sMsg = wxString::Format(wxT("Frame Dimensions : %dx%d - %d bit %s"),
-                    imageSize.GetWidth(),
-                    imageSize.GetHeight(),
-                    m_imageControl->GetImageBits(),
-                    m_imageControl->GetYUVFormatString());
+                                    imageSize.GetWidth(),
+                                    imageSize.GetHeight(),
+                                    m_imageControl->GetImageBits(),
+                                    m_imageControl->GetYUVFormatString());
         }
         SetStatusText(sMsg,2);
     } else {
@@ -591,7 +590,7 @@ void Frame::SaveOptions() {
     wxASSERT( conf != 0L );
 
     sTmp = wxString::Format(wxT("%d,%d,%d,%d"),
-            screenPos.x, screenPos.y, screenPos.width, screenPos.height);
+                            screenPos.x, screenPos.y, screenPos.width, screenPos.height);
     conf->Write(wxT("screenpos"),   sTmp);
 //    conf->Write(wxT("path"),        m_imagePath);
 
@@ -648,8 +647,8 @@ void Frame::OnSlider(wxScrollEvent& event) {
     wxLogDebug("Frame::OnSlider() [Event = %08x]", (int)evtType);
 
     if ((evtType == wxEVT_SCROLL_THUMBRELEASE) ||
-        (evtType == wxEVT_SCROLL_THUMBTRACK) ||
-        (evtType == wxEVT_SCROLL_CHANGED))
+            (evtType == wxEVT_SCROLL_THUMBTRACK) ||
+            (evtType == wxEVT_SCROLL_CHANGED))
     {
         size_t frame = event.GetPosition();
 
@@ -741,7 +740,7 @@ void Frame::OnFileOpenFile(wxCommandEvent& event) {
 
     wxLogDebug("Frame::OnFileOpenFile()");
 
-/** NOTE: This code does not work due to a bug in the wxFilePickerCntl class */
+    /** NOTE: This code does not work due to a bug in the wxFilePickerCntl class */
 
     YUVCompDialog           openDlg(this);
 
@@ -999,76 +998,76 @@ void Frame::OnUpdateUI(wxUpdateUIEvent& event) {
     //wxLogDebug("OnUpdateUI id %d!", eventID);
 
     switch (eventID) {
-        case ID_FILE_CLOSE:
-        case ID_FILE_REFRESH:
-        case ID_FILE_SAVE_IMAGE:
-        case ID_FILE_SAVE_YUV_SPLIT:
-        case ID_FILE_SAVE_YUV_COMP:
-            event.Enable(m_imageControl->IsValid());
-            break;
+    case ID_FILE_CLOSE:
+    case ID_FILE_REFRESH:
+    case ID_FILE_SAVE_IMAGE:
+    case ID_FILE_SAVE_YUV_SPLIT:
+    case ID_FILE_SAVE_YUV_COMP:
+        event.Enable(m_imageControl->IsValid());
+        break;
 
 #ifdef  ENABLE_CONVERT
-        case ID_FILE_CONVERT:
-            event.Enable(m_imageControl->IsValid());
-            break;
+    case ID_FILE_CONVERT:
+        event.Enable(m_imageControl->IsValid());
+        break;
 
-        case ID_FILE_CONV_TO_COMPOSITE:
-            event.Enable(m_imageControl->GetBufferType() != YUV_FILE_COMP);
-            break;
+    case ID_FILE_CONV_TO_COMPOSITE:
+        event.Enable(m_imageControl->GetBufferType() != YUV_FILE_COMP);
+        break;
 
-        case ID_FILE_CONV_TO_SPLIT:
-            event.Enable(m_imageControl->GetBufferType() != YUV_FILE_SPLIT);
-            break;
+    case ID_FILE_CONV_TO_SPLIT:
+        event.Enable(m_imageControl->GetBufferType() != YUV_FILE_SPLIT);
+        break;
 #endif  // ENABLE_CONVERT
 
-        case ID_FORMAT_SETSIZE:
-            event.Enable(m_imageControl->CanSetSize());
-            break;
+    case ID_FORMAT_SETSIZE:
+        event.Enable(m_imageControl->CanSetSize());
+        break;
 
-        case ID_FORMAT_YUV:
-            event.Enable(m_imageControl->IsValid());
-            break;
+    case ID_FORMAT_YUV:
+        event.Enable(m_imageControl->IsValid());
+        break;
 
-        case ID_FORMAT_MASK_Y:
-        case ID_FORMAT_MASK_U:
-        case ID_FORMAT_MASK_V:
-            updateFormatMask(event);
-            break;
+    case ID_FORMAT_MASK_Y:
+    case ID_FORMAT_MASK_U:
+    case ID_FORMAT_MASK_V:
+        updateFormatMask(event);
+        break;
 
-        case ID_VIEW_STEP:
+    case ID_VIEW_STEP:
+        if (m_imageControl->IsValid()) {
+            event.Enable(true);
+            event.Check(m_bAutoStep);
+        } else {
+            event.Enable(false);
+        }
+        break;
+
+    default:
+        if ((eventID >= ID_CHECKSUM_NONE) &&
+                (eventID <= ID_CHECKSUM_SHA1))
+        {
+            wxLogDebug("OnUpdateUI checksum ID %d", eventID);
+
             if (m_imageControl->IsValid()) {
+                eChecksumAlgo eAlgo = CHECKSUM_UNDEFINED;
+
+                eAlgo = (eChecksumAlgo)((int)eAlgo + (eventID - ID_CHECKSUM_NONE));
+
+                if (m_chksumAlgo) {
+                    eChecksumAlgo curAlgo = m_chksumAlgo->checksum_type();
+
+                    event.Check(eAlgo == curAlgo);
+
+                } else {
+                    event.Check(eventID == ID_CHECKSUM_NONE);
+                }
                 event.Enable(true);
-                event.Check(m_bAutoStep);
             } else {
                 event.Enable(false);
             }
-            break;
-
-        default:
-            if ((eventID >= ID_CHECKSUM_NONE) &&
-                (eventID <= ID_CHECKSUM_SHA1))
-            {
-                wxLogDebug("OnUpdateUI checksum ID %d", eventID);
-
-                if (m_imageControl->IsValid()) {
-                    eChecksumAlgo eAlgo = CHECKSUM_UNDEFINED;
-
-                    eAlgo = (eChecksumAlgo)((int)eAlgo + (eventID - ID_CHECKSUM_NONE));
-
-                    if (m_chksumAlgo) {
-                        eChecksumAlgo curAlgo = m_chksumAlgo->checksum_type();
-
-                        event.Check(eAlgo == curAlgo);
-
-                    } else {
-                        event.Check(eventID == ID_CHECKSUM_NONE);
-                    }
-                    event.Enable(true);
-                } else {
-                    event.Enable(false);
-                }
-            }
-            break;
+        }
+        break;
     }
 
     return;
@@ -1384,9 +1383,9 @@ void Frame::OnConvertTo(wxCommandEvent& event) {
     wxLogDebug("Frame::OnConvertTo()");
 
     switch (id) {
-        case ID_FILE_CONV_TO_SPLIT:
-        case ID_FILE_CONV_TO_COMPOSITE:
-            break;
+    case ID_FILE_CONV_TO_SPLIT:
+    case ID_FILE_CONV_TO_COMPOSITE:
+        break;
     }
 
     return;

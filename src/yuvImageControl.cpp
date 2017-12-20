@@ -13,7 +13,7 @@
 IMPLEMENT_DYNAMIC_CLASS( yuvImageControl, wxScrolledWindow )
 
 BEGIN_EVENT_TABLE( yuvImageControl, wxScrolledWindow )
-	EVT_PAINT( yuvImageControl::OnPaint )
+    EVT_PAINT( yuvImageControl::OnPaint )
     EVT_SIZE( yuvImageControl::OnSize )
 END_EVENT_TABLE()
 
@@ -22,31 +22,31 @@ END_EVENT_TABLE()
  */
 
 yuvImageControl::yuvImageControl(wxWindow* parent, wxWindowID id, const wxPoint& pos, const wxSize& size)
-:   wxScrolledWindow(parent, id, pos, size, wxSUNKEN_BORDER, _T("canvas")),
-    m_bValid(false),
-	m_pImage(0L),
-	m_pScaledImage(0L),
-	m_buffer(0L),
-	m_bEnableGrid(false),
-	m_gridColor(*wxBLUE),
-	m_gridH(16),
-	m_gridV(16),
-	m_imageSize(-1, -1),
-	m_flags(0),
-	m_scale(IS_IMAGE_DEFAULT),
-	m_yuvType(DATA_YUV420),
-	m_bufType(YUV_FILE_UNKNOWN),
-	m_bits(8),
-	m_endianness(endian_little),
-	m_lastFrame(0),
-	m_curFrame(0)
+    :   wxScrolledWindow(parent, id, pos, size, wxSUNKEN_BORDER, _T("canvas")),
+        m_bValid(false),
+        m_pImage(0L),
+        m_pScaledImage(0L),
+        m_buffer(0L),
+        m_bEnableGrid(false),
+        m_gridColor(*wxBLUE),
+        m_gridH(16),
+        m_gridV(16),
+        m_imageSize(-1, -1),
+        m_flags(0),
+        m_scale(IS_IMAGE_DEFAULT),
+        m_yuvType(DATA_YUV420),
+        m_bufType(YUV_FILE_UNKNOWN),
+        m_bits(8),
+        m_endianness(endian_little),
+        m_lastFrame(0),
+        m_curFrame(0)
 {
     //ctor
     wxLogDebug("yuvImageControl::yuvImageControl()");
-	SetScrollRate(1, 1);
-	SetBackgroundColour( wxT("LIGHT STEEL BLUE") );
+    SetScrollRate(1, 1);
+    SetBackgroundColour( wxT("LIGHT STEEL BLUE") );
 
-	m_mask.bMaskY = m_mask.bMaskU = m_mask.bMaskV = true;
+    m_mask.bMaskY = m_mask.bMaskU = m_mask.bMaskV = true;
 }
 
 /**
@@ -201,7 +201,9 @@ bool yuvImageControl::get_grid_state()  {
  */
 
 void yuvImageControl::set_grid_dimensions(int hor, int ver, const wxColor& color) {
-    m_gridH = hor; m_gridV = ver; m_gridColor = color;
+    m_gridH = hor;
+    m_gridV = ver;
+    m_gridColor = color;
     Refresh();
 }
 
@@ -216,7 +218,7 @@ bool yuvImageControl::allocate_image_buffer() {
 
     if (m_bufType == YUV_FILE_SPLIT) {
         YUV420ImageBufferSplit*	newBuf = new YUV420ImageBufferSplit(m_imageSize.GetWidth(),
-                                            m_imageSize.GetHeight(), m_bits, m_endianness);
+                m_imageSize.GetHeight(), m_bits, m_endianness);
 
         wxASSERT(newBuf != 0L);
 
@@ -228,7 +230,7 @@ bool yuvImageControl::allocate_image_buffer() {
         m_buffer = dynamic_cast<ImageBuffer*>(newBuf);
     } else if (m_bufType == YUV_FILE_COMP) {
         YUV420ImageBufferFile* newBuf = new YUV420ImageBufferFile(m_imageSize.GetWidth(),
-                                            m_imageSize.GetHeight(), m_bits, m_endianness);
+                m_imageSize.GetHeight(), m_bits, m_endianness);
         wxASSERT(newBuf != 0L);
 
         newBuf->SetFilename(m_imageFilename);
@@ -307,7 +309,7 @@ void yuvImageControl::OnSize(wxSizeEvent& event) {
  */
 
 void yuvImageControl::OnPaint(wxPaintEvent& event) {
-	wxPaintDC dc( this );
+    wxPaintDC dc( this );
 
 #if (wxDEBUG_LEVEL == 2)
     wxLogDebug("yuvImageControl::OnPaint()");
@@ -316,26 +318,26 @@ void yuvImageControl::OnPaint(wxPaintEvent& event) {
     PrepareDC( dc );
 
     wxSize		size;
-	wxBitmap 	bmp;
-	int			xoff = 0, yoff = 0;
+    wxBitmap 	bmp;
+    int			xoff = 0, yoff = 0;
 
-	size = GetClientSize();
+    size = GetClientSize();
 
-	if (m_pScaledImage) {
-		bmp = wxBitmap( *m_pScaledImage );
+    if (m_pScaledImage) {
+        bmp = wxBitmap( *m_pScaledImage );
 
-		/* calculate offsets to center image in window */
-		if (size.GetWidth() > bmp.GetWidth()) {
-			xoff = (size.GetWidth() - bmp.GetWidth()) / 2;
-		}
+        /* calculate offsets to center image in window */
+        if (size.GetWidth() > bmp.GetWidth()) {
+            xoff = (size.GetWidth() - bmp.GetWidth()) / 2;
+        }
 
-		if (size.GetHeight() > bmp.GetHeight()) {
-			yoff = (size.GetHeight() - bmp.GetHeight()) / 2;
-		}
+        if (size.GetHeight() > bmp.GetHeight()) {
+            yoff = (size.GetHeight() - bmp.GetHeight()) / 2;
+        }
 
         dc.DrawBitmap( bmp, xoff, yoff );
 
-		if (m_bEnableGrid) {
+        if (m_bEnableGrid) {
             int inc;
 
             if (m_scale == 0.0) {
@@ -359,12 +361,12 @@ void yuvImageControl::OnPaint(wxPaintEvent& event) {
             for (int y = yoff ; y < (yoff + bmp.GetHeight()) ; y += inc) {
                 dc.DrawLine(xoff, y, xoff + bmp.GetWidth(), y);
             }
-		}
-	} else {
-	    dc.SetPen(*wxBLACK_PEN);
+        }
+    } else {
+        dc.SetPen(*wxBLACK_PEN);
         dc.DrawLine( 0, 0, size.GetWidth(), size.GetHeight());
         dc.DrawLine( 0, size.GetHeight(), size.GetWidth(), 0);
-	}
+    }
 }
 
 /**
@@ -426,8 +428,9 @@ bool yuvImageControl::GetImage() {
         wxLogDebug("PROFILE : load failed time %ld", swTimer.Time());
 #endif
 
-        wxMessageBox(wxT("Unable to load image!\nRead past end of file..."), wxT("frameInspector"));
-        set_image( (wxImage*)NULL );
+        wxMessageBox(wxT("Unable to load image!\n"
+                         "Read past end of file..."), wxT("frameInspector"));
+        set_image( (wxImage*)nullptr );
     }
 
 #ifdef	ENABLE_BUSY_CURSOR
@@ -442,14 +445,14 @@ bool yuvImageControl::GetImage() {
  */
 
 bool yuvImageControl::set_image(wxImage* pImage, long scaling) {
-	wxSize			size = GetClientSize();
+    wxSize			size = GetClientSize();
     double          scaleFactor = 0;
 
-	wxLogDebug("yuvImageControl::set_image(%p, %ld)", pImage, scaling);
-	wxLogDebug("client size = %d x %d", size.GetWidth(), size.GetHeight());
+    wxLogDebug("yuvImageControl::set_image(%p, %ld)", pImage, scaling);
+    wxLogDebug("client size = %d x %d", size.GetWidth(), size.GetHeight());
 
-	/* make sure the image pointer is set */
-	if (pImage == 0L) {
+    /* make sure the image pointer is set */
+    if (pImage == 0L) {
         wxLogDebug("ERROR: set_image called with NULL pointer!");
 
         delete m_pImage;
@@ -459,59 +462,59 @@ bool yuvImageControl::set_image(wxImage* pImage, long scaling) {
         m_pScaledImage = 0L;
 
         return false;
-	}
+    }
 
-	/* if image exists, delete it... */
-	if (m_pScaledImage) {
-		delete m_pScaledImage;
-		m_pScaledImage = 0L;
-	}
+    /* if image exists, delete it... */
+    if (m_pScaledImage) {
+        delete m_pScaledImage;
+        m_pScaledImage = 0L;
+    }
 
-	double	scaleVector[] = {
-		1.0,	/* IS_IMAGE_DEFAULT */
-		0.0,	/* IS_IMAGE_SCALE   */
-		0.5,	/* IS_IMAGE_HALF    */
-		2.0,	/* IS_IMAGE_DOUBLE  */
-	};
+    double	scaleVector[] = {
+        1.0,	/* IS_IMAGE_DEFAULT */
+        0.0,	/* IS_IMAGE_SCALE   */
+        0.5,	/* IS_IMAGE_HALF    */
+        2.0,	/* IS_IMAGE_DOUBLE  */
+    };
 
-	scaleFactor = scaleVector[scaling];
+    scaleFactor = scaleVector[scaling];
 
-	if (scaleFactor == 0.0) {
-		int image_w 	= pImage->GetWidth(),
-			image_h 	= pImage->GetHeight();
-		int window_w	= size.GetWidth();
-		int window_h 	= size.GetHeight();
-		int scale_w, scale_h;
+    if (scaleFactor == 0.0) {
+        int image_w 	= pImage->GetWidth(),
+               image_h 	= pImage->GetHeight();
+        int window_w	= size.GetWidth();
+        int window_h 	= size.GetHeight();
+        int scale_w, scale_h;
 
-		scale_w = (int)(((double)window_h / (double)image_h) * (double)image_w);
-		scale_h = (int)(((double)window_w / (double)image_w) * (double)image_h);
+        scale_w = (int)(((double)window_h / (double)image_h) * (double)image_w);
+        scale_h = (int)(((double)window_w / (double)image_w) * (double)image_h);
 
-		if (scale_w > window_w) {
-			scale_w = window_w;
-		}
-		if (scale_h > window_h) {
-			scale_h = window_h;
-		}
+        if (scale_w > window_w) {
+            scale_w = window_w;
+        }
+        if (scale_h > window_h) {
+            scale_h = window_h;
+        }
 
-		m_pScaledImage = new wxImage(pImage->Scale(scale_w, scale_h));
-	} else {
-		int image_w 	= (int)((double)pImage->GetWidth() * scaleFactor),
-			image_h 	= (int)((double)pImage->GetHeight() * scaleFactor);
+        m_pScaledImage = new wxImage(pImage->Scale(scale_w, scale_h));
+    } else {
+        int image_w 	= (int)((double)pImage->GetWidth() * scaleFactor),
+               image_h 	= (int)((double)pImage->GetHeight() * scaleFactor);
 
-		m_pScaledImage = new wxImage(pImage->Scale(image_w, image_h));
-	}
+        m_pScaledImage = new wxImage(pImage->Scale(image_w, image_h));
+    }
 
     wxLogDebug("-- calling SetVirtualSize(%d, %d)", m_pScaledImage->GetWidth(), m_pScaledImage->GetHeight());
-	SetVirtualSize( m_pScaledImage->GetWidth(), m_pScaledImage->GetHeight() );
+    SetVirtualSize( m_pScaledImage->GetWidth(), m_pScaledImage->GetHeight() );
 
 #ifdef  __WXDEBUG__
-	wxSize	wndSize = GetClientSize();
-	wxLogDebug("Scroller Size = %d x %d", wndSize.GetWidth(), wndSize.GetHeight());
+    wxSize	wndSize = GetClientSize();
+    wxLogDebug("Scroller Size = %d x %d", wndSize.GetWidth(), wndSize.GetHeight());
 #endif // __WXDEBUG__
 
-	Refresh(/* false */);
+    Refresh(/* false */);
 
-	return true;
+    return true;
 }
 
 /**
@@ -662,23 +665,23 @@ bool yuvImageControl::OpenYUVDump(const wxString& sPath) {
 void yuvImageControl::CloseImage() {
     wxLogDebug("yuvImageControl::Close()");
 
-	/* delete the image */
-	if (m_pImage) {
-		delete m_pImage;
-		m_pImage = 0L;
-	}
-	if (m_pScaledImage) {
+    /* delete the image */
+    if (m_pImage) {
+        delete m_pImage;
+        m_pImage = 0L;
+    }
+    if (m_pScaledImage) {
         delete m_pScaledImage;
         m_pScaledImage = 0L;
-	}
-	if (m_buffer) {
+    }
+    if (m_buffer) {
         delete m_buffer;
         m_buffer = 0L;
-	}
+    }
 
     m_yuvType   = DATA_UNKNOWN;
     m_bufType   = YUV_FILE_UNKNOWN;
-	m_bValid 	= false;
+    m_bValid 	= false;
 
     SetVirtualSize( -1, -1 );
     Refresh(true);
@@ -1078,7 +1081,7 @@ void yuvImageControl::SetYUVFormat(dataType type,
 wxString yuvImageControl::GetYUVFormatString() {
     wxString sFormat;
 
-    wxASSERT(m_buffer != NULL);
+    wxASSERT(m_buffer != nullptr);
 
     if (m_buffer != 0L) {
         sFormat = m_buffer->YUVTypeToString( m_yuvType );

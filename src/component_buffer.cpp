@@ -10,22 +10,22 @@
 #include "misc_utils.h"
 
 component_buffer::component_buffer()
-:   m_ptr_start(0),
-    m_ptr_end(0),
-    m_buf_len(0),
-    m_inc(sizeof(wxUint8)),
-    m_endian(endian_little)
+    :   m_ptr_start(0),
+        m_ptr_end(0),
+        m_buf_len(0),
+        m_inc(sizeof(wxUint8)),
+        m_endian(endian_little)
 {
     wxLogDebug("component_buffer::component_buffer() default constructor");
 }
 
 component_buffer::component_buffer(void* pStart, size_t len, size_t inc,
                                    formatEndian endianness)
-:   m_ptr_start(pStart),
-    m_ptr_end((void *)((wxUint8*)pStart + len)),
-    m_buf_len(len),
-    m_inc(inc),
-    m_endian(endianness)
+    :   m_ptr_start(pStart),
+        m_ptr_end((void *)((wxUint8*)pStart + len)),
+        m_buf_len(len),
+        m_inc(inc),
+        m_endian(endianness)
 {
     wxLogDebug("component_buffer::component_buffer(%p, %ld, %ld, %s)", pStart,
                len, inc, (endianness == endian_little)?"le":"be");
@@ -110,8 +110,8 @@ size_t  component_buffer::get_fetch_size() const
  */
 
 component_buffer::component_iterator::component_iterator()
-:   m_ptr(0),
-    m_inc(sizeof(wxUint8))
+    :   m_ptr(0),
+        m_inc(sizeof(wxUint8))
 {
     // ctor
     wxLogDebug("component_buffer::component_iterator::component_iterator() default constructor");
@@ -122,13 +122,13 @@ component_buffer::component_iterator::component_iterator()
  */
 
 component_buffer::component_iterator::component_iterator(component_buffer*      parent,
-                                                         void*                  pStart,
-                                                         size_t                 inc,
-                                                         formatEndian    endianness)
-:   m_parent(parent),
-    m_ptr(pStart),
-    m_inc(inc),
-    m_endian(endianness)
+        void*                  pStart,
+        size_t                 inc,
+        formatEndian    endianness)
+    :   m_parent(parent),
+        m_ptr(pStart),
+        m_inc(inc),
+        m_endian(endianness)
 {
     // ctor
     wxLogDebug("component_buffer::component_iterator::component_iterator(%p, %p, %zu)", parent, pStart, inc);

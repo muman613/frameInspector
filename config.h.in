@@ -9,6 +9,9 @@
 /* Define to '1' if libgcrypt is available */
 #undef HAVE_LIBGCRYPT
 
+/* Define to '1' if libswscale is available */
+#undef HAVE_LIBSWSCALE
+
 /* Define to 1 if you have the <memory.h> header file. */
 #undef HAVE_MEMORY_H
 

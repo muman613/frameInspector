@@ -44,21 +44,32 @@ fi
 #AC_CHECK_HEADER([fam.h], opt_enable_fam=yes, opt_enable_fam=no)
 
 AC_ARG_ENABLE([fam],
-	[  --enable-fam Enable File Alteration monitor],
+	[AS_HELP_STRING([--enable-fam],[Enable File Alteration monitor])],
 	[opt_enable_fam=$enableval])
 
 AC_ARG_ENABLE([optimize],
-	[  --enable-optimize Enable optimizations],
-	[opt_optimize=$enableval])
+	[AS_HELP_STRING([--enable-optimize],[Enable optimizations])],
+	[opt_optimize=$enableval],
+	[opt_optimize=false])
 
 AC_ARG_ENABLE([debug],
-	[  --enable-debug    Enable debug messages],
-	[opt_debug_build=$enableval])
+	[AS_HELP_STRING( [--enable-debug],[Enable debug messages])],
+	[opt_debug_build=$enableval],
+	[opt_debug_build=no])
+
+AC_ARG_ENABLE([libswscale],
+	[AS_HELP_STRING( [--enable-libswscale],[Enable ffmpeg libswscale library])],
+	[opt_libswscale=$enableval]
+	[opt_libswscale=no])
+
+if test "$opt_libswscale" = yes; then
+	AC_DEFINE([HAVE_LIBSWSCALE], [1], [Define to '1' if libswscale is available])
+fi
 
 if test "$opt_debug_build" = yes; then
-	DEBUGFLAGS="-D_ENABLE_DEBUG"
+	DEBUGFLAGS="-D_ENABLE_DEBUG -g3 -O0"
 else
-	DEBUGFLAGS="-DNDEBUG"
+	DEBUGFLAGS="-DNDEBUG -g -O2"
 fi
 
 if test "$opt_enable_fam" = yes; then
@@ -74,7 +85,7 @@ if test "$opt_optimize" = yes; then
 fi
 
 
-CPPFLAGS="$OPTIMIZE $DEBUGFLAGS $WX_CXXFLAGS -DHAS_GCRYPT=1 -std=c++11"
+CXXFLAGS="$OPTIMIZE $DEBUGFLAGS $WX_CXXFLAGS -std=c++11"
 LIBS="$WX_LIBS $LIBS -lpopt -lX11"
 
 AC_CONFIG_FILES([Makefile

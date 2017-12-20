@@ -5,8 +5,13 @@
  *  @brief      Buffer class supporting the Sigma 'dump' format.
  */
 
+#ifdef HAVE_CONFIG_H
+#include "config.h"
+#endif
+
+#include <wx/wx.h>
 #include <stdio.h>
-#ifdef  HAS_GCRYPT
+#ifdef  HAVE_LIBGCRYPT
 #include <gcrypt.h>
 #endif
 #include "imageBuffer.h"
@@ -18,8 +23,8 @@
 
 
 dumpImageBuffer::dumpImageBuffer()
-:   ImageBuffer(DATA_YUV420, -1, -1),
-    m_frameNo(-1)
+    :   ImageBuffer(DATA_YUV420, -1, -1),
+        m_frameNo(-1)
 {
 //constructor
     wxLogDebug("dumpImageBuffer::dumpImageBuffer()");
@@ -28,8 +33,8 @@ dumpImageBuffer::dumpImageBuffer()
 }
 
 dumpImageBuffer::dumpImageBuffer(int width, int height)
-:   ImageBuffer(DATA_YUV420, width, height),
-    m_frameNo(-1)
+    :   ImageBuffer(DATA_YUV420, width, height),
+        m_frameNo(-1)
 {
 //constructor
     wxLogDebug("dumpImageBuffer::dumpImageBuffer(%d, %d)", width, height);
@@ -281,10 +286,10 @@ bool dumpImageBuffer::Load(size_t frame) {
                             flags |= FOUND_CHRM;
                         } else {
                             wxLogDebug("-- found unknown tag [%c%c%c%c]!",
-                                ((nTag & 0xff000000) >> 24),
-                                ((nTag & 0x00ff0000) >> 16),
-                                ((nTag & 0x0000ff00) >> 8),
-                                ((nTag & 0x000000ff)));
+                                       ((nTag & 0xff000000) >> 24),
+                                       ((nTag & 0x00ff0000) >> 16),
+                                       ((nTag & 0x0000ff00) >> 8),
+                                       ((nTag & 0x000000ff)));
                             m_fp.Seek(lSize, wxFromCurrent);
                         }
                     }
@@ -298,17 +303,19 @@ bool dumpImageBuffer::Load(size_t frame) {
 
                 wxLogDebug("luma w X h = %d X %d", lumaW, lumaH);
 
-                pDesty = m_yuv.m_pY; pDestu = m_yuv.m_pU ; pDestv = m_yuv.m_pV;
+                pDesty = m_yuv.m_pY;
+                pDestu = m_yuv.m_pU ;
+                pDestv = m_yuv.m_pV;
 
                 wxLogDebug("-- m_lumaSize %d m_chromaSize %d",
-                      m_yuv.m_lumaSize, m_yuv.m_chromaSize);
+                           m_yuv.m_lumaSize, m_yuv.m_chromaSize);
 
                 /* save the luma buffer */
                 for (wxUint32 y = 0 ; y < lumaH ; y++)
                     for (wxUint32 x = 0 ; x < lumaW ; x++) {
                         wxUint8* pixel = (pLumaBuffer +\
-                                (x/pvc_tw) * pvc_ts + (y/pvc_th) * lumaTotalWidth * pvc_th +
-                                (x % pvc_tw) + (y % pvc_th)*pvc_tw);
+                                          (x/pvc_tw) * pvc_ts + (y/pvc_th) * lumaTotalWidth * pvc_th +
+                                          (x % pvc_tw) + (y % pvc_th)*pvc_tw);
 
                         *(pDesty++) = *pixel;
                     }
@@ -317,8 +324,8 @@ bool dumpImageBuffer::Load(size_t frame) {
                 for (wxUint32 y = 0 ; y < chromaH ; y++)
                     for (wxUint32 x = 0 ; x < chromaW*2 ; x += 2) {
                         wxUint8* pixel = (pChromaBuffer +\
-                                (x/pvc_tw) * pvc_ts + (y/pvc_th) * chromaTotalWidth * pvc_th +
-                                (x % pvc_tw) + (y % pvc_th)*pvc_tw);
+                                          (x/pvc_tw) * pvc_ts + (y/pvc_th) * chromaTotalWidth * pvc_th +
+                                          (x % pvc_tw) + (y % pvc_th)*pvc_tw);
 
                         *(pDestu++) = *pixel;
                         *(pDestv++) = *(pixel + 1);
@@ -381,6 +388,7 @@ PIXEL*		dumpImageBuffer::getPixel(int x, int y) {
  */
 
 bool dumpImageBuffer::QueryFrameSize(int& width, int& height) {
-    width = m_width; height = m_height;
+    width = m_width;
+    height = m_height;
     return true;
 }

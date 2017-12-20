@@ -3,7 +3,6 @@
 //  PROJECT     :   frameInspector
 //	PROGRAMMER	:	Michael A. Uman
 //  DATE        :   October 8, 2013
-//  COPYRIGHT   :   (C) 2006-2013 Sigma Designs
 //==============================================================================
 
 #include <wx/wx.h>
@@ -23,12 +22,12 @@
  */
 
 YUV420ImageBufferSplit::YUV420ImageBufferSplit(int x, int y, int bits,
-                                               formatEndian endianness)
-:   ImageBuffer(DATA_YUV420, x, y, bits, endianness)
+        formatEndian endianness)
+    :   ImageBuffer(DATA_YUV420, x, y, bits, endianness)
 {
-	wxLogDebug("YUV420ImageBufferSplit::YUVImageBuffer(%d, %d)", x, y);
+    wxLogDebug("YUV420ImageBufferSplit::YUVImageBuffer(%d, %d)", x, y);
 
-	return;
+    return;
 }
 
 /**
@@ -37,14 +36,14 @@ YUV420ImageBufferSplit::YUV420ImageBufferSplit(int x, int y, int bits,
 
 YUV420ImageBufferSplit::~YUV420ImageBufferSplit()
 {
-	wxLogDebug("YUV420ImageBufferSplit::~YUV420ImageBufferSplit()");
+    wxLogDebug("YUV420ImageBufferSplit::~YUV420ImageBufferSplit()");
 
-	if (m_imageData) {
-		free(m_imageData);
-		m_imageData = 0L;
-	}
+    if (m_imageData) {
+        free(m_imageData);
+        m_imageData = nullptr;
+    }
 
-	return;
+    return;
 }
 
 wxString YUV420ImageBufferSplit::GetFileBase(size_t frame) {
@@ -58,7 +57,7 @@ wxString YUV420ImageBufferSplit::GetFileBase(size_t frame) {
 bool YUV420ImageBufferSplit::Load(size_t frame) {
     wxString    imageFilePath;
 
-	/* create the image filename from the path and frame #. */
+    /* create the image filename from the path and frame #. */
     imageFilePath = m_fileVec[frame];
 
     return Load(imageFilePath.c_str());
@@ -69,19 +68,19 @@ bool YUV420ImageBufferSplit::Load(size_t frame) {
  */
 
 bool YUV420ImageBufferSplit::Load(const char* filename) {
-	bool			result = false;
+    bool			result = false;
     wxString        fullName;
     wxFile          yfp, ufp, vfp;
 
-	wxLogDebug("YUV420ImageBufferSplit::Load(%s)", filename);
+    wxLogDebug("YUV420ImageBufferSplit::Load(%s)", filename);
 
-	/* If image data already exists, free it */
-	if (m_imageData != 0L) {
-		wxLogDebug("-- freeing old image data (0x%p)", m_imageData);
+    /* If image data already exists, free it */
+    if (m_imageData != nullptr) {
+        wxLogDebug("-- freeing old image data (0x%p)", m_imageData);
 
-		free(m_imageData);
-		m_imageData = 0L;
-	}
+        free(m_imageData);
+        m_imageData = nullptr;
+    }
 
     m_yuv.alloc_buffer( m_width, m_height, m_bits, true, m_endianness );
 
@@ -125,28 +124,28 @@ bool YUV420ImageBufferSplit::Load(const char* filename) {
     }
 
     m_imageData = m_yuv.DoConversionToRGB(m_bufType, m_ccir601);
-    wxASSERT( m_imageData != 0L );
+    wxASSERT( m_imageData != nullptr );
 
     result = true;
 
-	return result;
+    return result;
 }
 
 PIXEL* YUV420ImageBufferSplit::getPixel(int x, int y) {
-	size_t	offset = ((y * sizeof(PIXEL) * m_width) + (x * sizeof(PIXEL)));
+    size_t	offset = ((y * sizeof(PIXEL) * m_width) + (x * sizeof(PIXEL)));
 
-	return (PIXEL *)&m_imageData[offset];
+    return (PIXEL *)&m_imageData[offset];
 }
 
 void YUV420ImageBufferSplit::GetImage(wxImage* pImage) {
-	wxLogDebug("YUV420ImageBufferSplit::GetImage(0x%p)", pImage);
-	assert(pImage != 0L);
+    wxLogDebug("YUV420ImageBufferSplit::GetImage(0x%p)", pImage);
+    assert(pImage != nullptr);
 
-	pImage->Destroy();
-	pImage->Create(m_width, m_height);
-	pImage->SetData(copy_data()); //m_imageData);
+    pImage->Destroy();
+    pImage->Create(m_width, m_height);
+    pImage->SetData(copy_data()); //m_imageData);
 
-	return;
+    return;
 }
 
 void YUV420ImageBufferSplit::getImageVec() {

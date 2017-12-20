@@ -13,10 +13,10 @@ END_EVENT_TABLE()
 
 ImageScroller::ImageScroller(wxWindow* parent, wxWindowID id, const wxPoint& pos, const wxSize& size)
     :	wxScrolledWindow(parent, id, pos, size, wxSUNKEN_BORDER, _T("canvas")),
-        m_pImage(0L),
-        m_bEnableGrid(false),
-        m_gridH(16),
-        m_gridV(16)
+      m_pImage(nullptr),
+      m_bEnableGrid(false),
+      m_gridH(16),
+      m_gridV(16)
 {
 //	int xoff, yoff;
     SetScrollRate( 1,1 );
@@ -28,7 +28,7 @@ ImageScroller::~ImageScroller()
     /* delete the image */
     if (m_pImage) {
         delete m_pImage;
-        m_pImage = 0L;
+        m_pImage = nullptr;
     }
 }
 
@@ -97,17 +97,16 @@ void ImageScroller::set_image(wxImage* pImage, long scaling)
     debug("client size = %d x %d\n", size.GetWidth(), size.GetHeight());
 
     /* make sure the image pointer is set */
-    if (pImage == 0L) {
-//		debug("ERROR: set_image called with NULL pointer!\n");
+    if (pImage == nullptr) {
         delete m_pImage;
-        m_pImage = 0L;
+        m_pImage = nullptr;
         return;
     }
 
     /* if image exists, delete it... */
     if (m_pImage) {
         delete m_pImage;
-        m_pImage = 0L;
+        m_pImage = nullptr;
     }
 
 
@@ -161,17 +160,17 @@ void ImageScroller::set_image(wxImage* pImage, double scale)
     debug("client size = %d x %d\n", size.GetWidth(), size.GetHeight());
 
     /* make sure the image pointer is set */
-    if (pImage == 0L) {
+    if (pImage == nullptr) {
 //		debug("ERROR: set_image called with NULL pointer!\n");
         delete m_pImage;
-        m_pImage = 0L;
+        m_pImage = nullptr;
         return;
     }
 
     /* if image exists, delete it... */
     if (m_pImage) {
         delete m_pImage;
-        m_pImage = 0L;
+        m_pImage = nullptr;
     }
 
     m_scale = scale;

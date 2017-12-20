@@ -5,7 +5,7 @@
 //#include "dbgutils.h"
 
 YUVCompDialog::YUVCompDialog( wxWindow* parent )
-:   YUVCompDialogBase( parent )
+    :   YUVCompDialogBase( parent )
 {
     utils::PopulateStandardDropDown(m_stdChoice);
 
@@ -113,10 +113,10 @@ void YUVCompDialog::OnChangeStandard( wxCommandEvent& event )
 
     wxLogDebug("YUVCompDialog::OnChangeStandard()\n");
 
-    wxASSERT(pEntry != 0L);
+    wxASSERT(pEntry != nullptr);
 
     wxLogDebug("Selected %d (%s %d x %d)\n", selection,
-          (const char*)pEntry->name.c_str(), pEntry->width, pEntry->height);
+               (const char*)pEntry->name.c_str(), pEntry->width, pEntry->height);
 
     if (selection > 0) {
         m_WidthCtl->SetValue( wxString::Format(wxT("%d"), pEntry->width) );
@@ -286,12 +286,12 @@ void YUVCompDialog::GetFrameYUVFmt(dataType& type) {
 void YUVCompDialog::OnUpdateUI(wxUpdateUIEvent& event) {
     switch (event.GetId()) {
     case wxID_FORMAT_ENDIAN:
-        {
-            int nChoice = m_bitsChoice->GetSelection();
+    {
+        int nChoice = m_bitsChoice->GetSelection();
 
-            event.Enable( ((nChoice == 1) || (nChoice == 2))?true:false );
-        }
-        break;
+        event.Enable( ((nChoice == 1) || (nChoice == 2))?true:false );
+    }
+    break;
     default:
         break;
     }

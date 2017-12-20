@@ -3,7 +3,6 @@
 //  PROJECT     :   frameInspector
 //  PROGRAMMER  :   Michael A. Uman
 //  DATE        :   October 4, 2013
-//  COPYRIGHT   :   (C) 2006-2013 Sigma Designs
 //==============================================================================
 
 #include <wx/wx.h>
@@ -92,7 +91,7 @@ bool viewApp::OnInit() {
 int viewApp::OnExit() {
 #if defined(__WXDEBUG__) && defined(USE_WXLOGWINDOW)
     delete m_pLogWindow;
-    m_pLogWindow = 0L;
+    m_pLogWindow = nullptr;
 #endif
 
     return 0;
@@ -136,9 +135,9 @@ bool viewApp::getCPUID() {
             jz	0f                      ;	\
             movl $1, 28(%0)				;	\
             0:" 							\
-            : /* No output */ 				\
-            : "D" (&m_cpuPack)					\
-            : "eax", "ebx", "ecx", "edx" );
+          : /* No output */ 				\
+          : "D" (&m_cpuPack)					\
+          : "eax", "ebx", "ecx", "edx" );
 
 #else   // Not an intel 32/64bit CPU...
 

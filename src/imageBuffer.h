@@ -1,9 +1,8 @@
 //==============================================================================
 //	MODULE		:	imageBuffer.h
-//	PROJECT		:	PlayVideoBrowser
+//	PROJECT		:	frameInspector
 //	PROGRAMMER	:	Michael A. Uman
 //	DATE		:	May 5, 2006
-//	COPYRIGHT	:	(C) 2006 Sigma Designs
 //==============================================================================
 
 #ifndef __IMAGEBUFFER_H__
@@ -70,135 +69,149 @@ public:
 
 /// Class which encapsulates a buffer of pixels.
 class ImageBuffer {
-    public:
+public:
 
 
-        enum eError {
-            IB_ERROR_NO_ERROR,
-            IB_ERROR_OUT_OF_BOUNDS,
-            IB_ERROR_FILE_NOT_FOUND,
-            IB_ERROR_NOT_OPEN,
-        };
+    enum eError {
+        IB_ERROR_NO_ERROR,
+        IB_ERROR_OUT_OF_BOUNDS,
+        IB_ERROR_FILE_NOT_FOUND,
+        IB_ERROR_NOT_OPEN,
+    };
 
-        enum eSaveType {
-            SAVE_YUV_SPLIT,
-            SAVE_YUV_COMP,
-        };
+    enum eSaveType {
+        SAVE_YUV_SPLIT,
+        SAVE_YUV_COMP,
+    };
 
-        ImageBuffer();
-        /// Initialize an ImageBuffer with type and size.
-        ImageBuffer(dataType type, int width, int height, int bits = 8,
-                    formatEndian endianness = endian_little);
+    ImageBuffer();
+    /// Initialize an ImageBuffer with type and size.
+    ImageBuffer(dataType type, int width, int height, int bits = 8,
+                formatEndian endianness = endian_little);
 
-        virtual ~ImageBuffer(); // {}
+    virtual ~ImageBuffer(); // {}
 
-        dataType	type() const 	{ return m_bufType; }
-        int			width() const 	{ return m_width; }
-        int			height() const 	{ return m_height; }
-        void*		data() const 	{ return m_imageData; }
-        int         bits() const    { return m_bits; }
-        formatEndian endian() const { return m_endianness; }
+    dataType	type() const 	{
+        return m_bufType;
+    }
+    int			width() const 	{
+        return m_width;
+    }
+    int			height() const 	{
+        return m_height;
+    }
+    void*		data() const 	{
+        return m_imageData;
+    }
+    int         bits() const    {
+        return m_bits;
+    }
+    formatEndian endian() const {
+        return m_endianness;
+    }
 
-        eError      lastError() const { return m_lastError; }
+    eError      lastError() const {
+        return m_lastError;
+    }
 
-        dataType	type(const dataType type) {
-            m_bufType = type;
-            return m_bufType;
-        }
+    dataType	type(const dataType type) {
+        m_bufType = type;
+        return m_bufType;
+    }
 
-        int         bits(const int bits) {
-            m_bits = bits;
-            return m_bits;
-        }
+    int         bits(const int bits) {
+        m_bits = bits;
+        return m_bits;
+    }
 
-        formatEndian endian(formatEndian endianness) {
-            m_endianness = endianness;
-            return m_endianness;
-        }
+    formatEndian endian(formatEndian endianness) {
+        m_endianness = endianness;
+        return m_endianness;
+    }
 
-        virtual bool        CanQueryFrameSize() const {
-            return false;
-        }
+    virtual bool        CanQueryFrameSize() const {
+        return false;
+    }
 
-        virtual bool        QueryFrameSize(int& width, int& height) {
-            width = height = -1;
-            return false;
-        }
+    virtual bool        QueryFrameSize(int& width, int& height) {
+        width = height = -1;
+        return false;
+    }
 
-        virtual bool        CanChecksum() const {
-            return false;
-        }
-        virtual bool        CanSave() const {
-            return false;
-        }
+    virtual bool        CanChecksum() const {
+        return false;
+    }
+    virtual bool        CanSave() const {
+        return false;
+    }
 
-        //virtual bool        GetChecksum(size_t frame, wxUint8* lumaSum, wxUint8* chromaSum);
-        bool                GetChecksum(checksumAlgoBase* pAlgo, checksumEntry& entry);
+    //virtual bool        GetChecksum(size_t frame, wxUint8* lumaSum, wxUint8* chromaSum);
+    bool                GetChecksum(checksumAlgoBase* pAlgo, checksumEntry& entry);
 
-        virtual bool        SaveYUV(wxString sFilename, eSaveType type);
+    virtual bool        SaveYUV(wxString sFilename, eSaveType type);
 
-        /* Pure virtual functions must be implemented in derived classes */
+    /* Pure virtual functions must be implemented in derived classes */
 
-        virtual ssize_t     GetFrameCount()				= 0;
-        virtual void        GetImage(wxImage* pImage) 	= 0;
-        virtual bool        Load(size_t frame) 			= 0;
-        virtual PIXEL*      getPixel(int x, int y)		= 0;
+    virtual ssize_t     GetFrameCount()				= 0;
+    virtual void        GetImage(wxImage* pImage) 	= 0;
+    virtual bool        Load(size_t frame) 			= 0;
+    virtual PIXEL*      getPixel(int x, int y)		= 0;
 
-        void                enable_ccir601(bool bEnable = true) {
-            m_ccir601 = bEnable;
-        }
+    void                enable_ccir601(bool bEnable = true) {
+        m_ccir601 = bEnable;
+    }
 
-		bool                SaveCurrentFrame(const wxString& sFilename);
+    bool                SaveCurrentFrame(const wxString& sFilename);
 
-        static wxString     YUVTypeToString(dataType type);
-        static wxString     BufTypeToString(yuvBufType type);
+    static wxString     YUVTypeToString(dataType type);
+    static wxString     BufTypeToString(yuvBufType type);
 
 //        void                setmaskYUV(bool ymask, bool umask, bool vmask);
 //        void                setmaskYUV(const yuvMask& mask);
 //        void                getmaskYUV(yuvMask& mask);
 
-        void                setYUVMask(yuvMask* pMask);
+    void                setYUVMask(yuvMask* pMask);
 
-    protected:
-        /// Make a copy of the image data
-        UBYTE*		copy_data() {
-            UBYTE*	newData = 0L;
-            size_t	bufSize = (sizeof(PIXEL) * m_width * m_height);
+protected:
+    /// Make a copy of the image data
+    UBYTE*		copy_data() {
+        UBYTE*	newData = nullptr;
+        size_t	bufSize = (sizeof(PIXEL) * m_width * m_height);
 
-            wxASSERT(m_imageData != 0L);
+        wxASSERT(m_imageData != nullptr);
 
-            if (bufSize != 0) {
-                newData = (UBYTE*)malloc(bufSize);
-                if (newData) {
-                    memcpy(newData, m_imageData, bufSize);
-                }
+        if (bufSize != 0) {
+            newData = (UBYTE*)malloc(bufSize);
+            if (newData) {
+                memcpy(newData, m_imageData, bufSize);
             }
-
-            return newData;
         }
 
-        inline void free_buffer() {
-            wxLogDebug("ImageBuffer::free_buffer() [buffer @ %p]", m_imageData);
+        return newData;
+    }
 
-            if (m_imageData) {
-                free(m_imageData);
-                m_imageData = 0;
-            }
+    inline void free_buffer() {
+        wxLogDebug("ImageBuffer::free_buffer() [buffer @ %p]", m_imageData);
 
-            return;
+        if (m_imageData) {
+            free(m_imageData);
+            m_imageData = 0;
         }
 
-        dataType			m_bufType;		//!< Type of buffer
-        int					m_width;		//!< Width of buffer
-        int					m_height;		//!< Height of buffer
-        int         		m_bits;         //!< 8 or 10 bits per component
-        formatEndian m_endianness;
-        UBYTE*				m_imageData;	//!< Pointer to RGB data
-        bool				m_ccir601;      //!< Enable CCIR 601
-        eError      		m_lastError;    //!< Last error code
+        return;
+    }
 
-        yuvBuffer   		m_yuv;          //!< Buffer stores YUV data.
-        yuvMask*            m_pMask;         //!< YUV Mask
+    dataType			m_bufType;		//!< Type of buffer
+    int					m_width;		//!< Width of buffer
+    int					m_height;		//!< Height of buffer
+    int         		m_bits;         //!< 8 or 10 bits per component
+    formatEndian m_endianness;
+    UBYTE*				m_imageData;	//!< Pointer to RGB data
+    bool				m_ccir601;      //!< Enable CCIR 601
+    eError      		m_lastError;    //!< Last error code
+
+    yuvBuffer   		m_yuv;          //!< Buffer stores YUV data.
+    yuvMask*            m_pMask;         //!< YUV Mask
 };
 
 #endif	// __IMAGEBUFFER_H__

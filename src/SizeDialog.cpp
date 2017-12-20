@@ -8,7 +8,7 @@
  */
 
 SizeDialog::SizeDialog( wxWindow* parent, int width, int height )
-: SizeDialogBase( parent )
+    : SizeDialogBase( parent )
 {
     utils::PopulateStandardDropDown(m_stdChoice);
 
@@ -33,10 +33,10 @@ void SizeDialog::OnChangeStandard( wxCommandEvent& event )
 
     wxLogDebug("SizeDialog::OnChangeStandard()");
 
-    wxASSERT(pEntry != 0L);
+    wxASSERT(pEntry != nullptr);
 
     wxLogDebug("Selected %d (%s %d x %d)\n", selection,
-          (const char*)pEntry->name.c_str(), pEntry->width, pEntry->height);
+               (const char*)pEntry->name.c_str(), pEntry->width, pEntry->height);
 
     if (selection > 0) {
         m_WidthCtl->SetValue( wxString::Format(wxT("%d"), pEntry->width) );

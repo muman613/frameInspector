@@ -2,8 +2,8 @@
 #include "ChecksumDialog.h"
 
 ChecksumDialog::ChecksumDialog( wxWindow* parent )
-:
-ChecksumDialogBase( parent )
+    :
+    ChecksumDialogBase( parent )
 {
     // ctor
     wxLogDebug("ChecksumDialog::ChecksumDialog()");

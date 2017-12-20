@@ -7,8 +7,8 @@ class YUV420ImageSpec {
 public:
     YUV420ImageSpec() { };
     YUV420ImageSpec(wxString sPath, wxString sPrefix, int first, int last)
-    :   m_imagePath(sPath), m_prefix(sPrefix),
-        m_first(first), m_last(last)
+        :   m_imagePath(sPath), m_prefix(sPrefix),
+            m_first(first), m_last(last)
     {
 
     }

@@ -133,12 +133,12 @@ public:
     algoVecEntry(eChecksumAlgo algo,
                  const wxString& name,
                  CHECKSUM_CREATE_FUNC* func)
-     :  m_algoType(algo),
-        m_algoName(name),
-        m_algoCreate(func)
-     {
-         // ctor
-     }
+        :  m_algoType(algo),
+           m_algoName(name),
+           m_algoCreate(func)
+    {
+        // ctor
+    }
 
     eChecksumAlgo           m_algoType;
     wxString                m_algoName;

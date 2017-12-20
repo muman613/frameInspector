@@ -10,7 +10,7 @@ DEFINE_EVENT_TYPE(EVT_FAMEVENT)
 
 wxFAM::wxFAM(wxWindow* parent)
     :	wxThread(wxTHREAD_JOINABLE),
-        m_parent(parent)
+      m_parent(parent)
 {
     debug("wxFAM::wxFAM()\n");
 }
@@ -49,7 +49,7 @@ bool wxFAM::MonitorDir(const wxString& dname)
     status = FAMMonitorDirectory(&m_conn,
                                  dname.c_str(),
                                  &req,
-                                 (void*)0L);
+                                 (void*)nullptr);
 
     m_request.push_back(req);
 
@@ -69,7 +69,7 @@ bool wxFAM::MonitorFile(const wxString& fname)
     status = FAMMonitorFile(&m_conn,
                             fname.c_str(),
                             &req,
-                            (void*)0L);
+                            (void*)nullptr);
 
     m_request.push_back(req);
 

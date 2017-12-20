@@ -3,7 +3,6 @@
 //  PROJECT     :   frameInspector
 //  PROGRAMMER  :   Michael A. Uman
 //  DATE        :   October 4, 2013
-//  COPYRIGHT   :   (C) 2006-2013 Sigma Designs
 //==============================================================================
 
 #ifndef __APP_H__

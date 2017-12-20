@@ -3,13 +3,15 @@
 //  PROJECT     :   frameInspector
 //  PROGRAMMER  :   Michael A. Uman
 //  DATE        :   October 7, 2013
-//  COPYRIGHT   :   (C) 2006-2013 Sigma Designs
 //==============================================================================
 
+#ifdef HAVE_CONFIG_H
+#include "config.h"
+#endif
 #include <wx/wx.h>
 #include <wx/filename.h>
 #include <wx/file.h>
-#ifdef  HAS_GCRYPT
+#ifdef  HAVE_LIBGCRYPT
 #include <gcrypt.h>
 #endif
 #include <stdio.h>
@@ -26,15 +28,15 @@
  */
 
 yuvBuffer::yuvBuffer()
-:   m_yuvWidth(0),
-    m_yuvHeight(0),
-    m_lumaSize(0),
-    m_chromaSize(0),
-    m_bits(8),
-    m_endianness(endian_little),
-    m_pY(0L),
-    m_pU(0L),
-    m_pV(0L)
+    :   m_yuvWidth(0),
+        m_yuvHeight(0),
+        m_lumaSize(0),
+        m_chromaSize(0),
+        m_bits(8),
+        m_endianness(endian_little),
+        m_pY(nullptr),
+        m_pU(nullptr),
+        m_pV(nullptr)
 {
     // ctor
     wxLogDebug("yuvBuffer::yuvBuffer()");
@@ -74,8 +76,8 @@ void yuvBuffer::alloc_buffer(wxUint32 width, wxUint32 height, wxUint32 bits,
 
     /* Only realloc if the width or height or bits has changed... */
     if ((width  != m_yuvWidth) ||
-        (height != m_yuvHeight) ||
-        (bits != m_bits))
+            (height != m_yuvHeight) ||
+            (bits != m_bits))
     {
         m_yuvWidth      = width;
         m_yuvHeight     = height;
@@ -90,7 +92,7 @@ void yuvBuffer::alloc_buffer(wxUint32 width, wxUint32 height, wxUint32 bits,
         m_pU = (wxUint8*)realloc((void*)m_pU, m_chromaSize);
         m_pV = (wxUint8*)realloc((void*)m_pV, m_chromaSize);
 
-        wxASSERT( (m_pY != 0L) && (m_pU != 0L) && (m_pV != 0L) );
+        wxASSERT( (m_pY != nullptr) && (m_pU != nullptr) && (m_pV != nullptr) );
     }
 
     if (bClear) {
@@ -113,15 +115,15 @@ void yuvBuffer::free_buffer() {
 
     if (m_pY) {
         free(m_pY);
-        m_pY = 0L;
+        m_pY = nullptr;
     }
     if (m_pU) {
         free(m_pU);
-        m_pU = 0L;
+        m_pU = nullptr;
     }
     if (m_pV) {
         free(m_pV);
-        m_pV = 0L;
+        m_pV = nullptr;
     }
 
     m_yuvWidth = m_yuvHeight = m_lumaSize = m_chromaSize = 0;
@@ -135,7 +137,7 @@ void yuvBuffer::free_buffer() {
  */
 
 wxUint8* yuvBuffer::DoConversionToRGB(dataType bufType, bool ccir601) {
-	long int  		            u,v,y0,y1,y2,y3,u0,u1,u2,u3,v0,v1,v2,v3;
+    long int  		            u,v,y0,y1,y2,y3,u0,u1,u2,u3,v0,v1,v2,v3;
     unsigned char  	            *y1buf,*y2buf,*ubuf,*vbuf;
     register PIXEL              *pP1,*pP2;
     int                         rows, row,
@@ -157,7 +159,7 @@ wxUint8* yuvBuffer::DoConversionToRGB(dataType bufType, bool ccir601) {
         shift = 8;
     } else {
         wxLogWarning("Invalid value of %d for m_bits!", m_bits);
-        return (wxUint8*)NULL;
+        return (wxUint8*)nullptr;
     }
 
     wxLogDebug("bpc %zu shift %zu", bpc, shift);
@@ -189,13 +191,19 @@ wxUint8* yuvBuffer::DoConversionToRGB(dataType bufType, bool ccir601) {
         for (col = 0 ; col < (cols & ~1); col += 2) {
             long int r0,g0,b0,r1,g1,b1,r2,g2,b2,r3,g3,b3;
 
-            y0 = (long int) (*y1It >> shift); y1It++;
-            y1 = (long int) (*y1It >> shift); y1It++;
-            y2 = (long int) (*y2It >> shift); y2It++;
-            y3 = (long int) (*y2It >> shift); y2It++;
+            y0 = (long int) (*y1It >> shift);
+            y1It++;
+            y1 = (long int) (*y1It >> shift);
+            y1It++;
+            y2 = (long int) (*y2It >> shift);
+            y2It++;
+            y3 = (long int) (*y2It >> shift);
+            y2It++;
 
-            u  = (long int) ((wxUint8)(*uIt >> shift) - 128); uIt++;
-            v  = (long int) ((wxUint8)(*vIt >> shift) - 128); vIt++;
+            u  = (long int) ((wxUint8)(*uIt >> shift) - 128);
+            uIt++;
+            v  = (long int) ((wxUint8)(*vIt >> shift) - 128);
+            vIt++;
 
             if (bufType == DATA_YUV422) {
                 uIt++;
@@ -204,7 +212,7 @@ wxUint8* yuvBuffer::DoConversionToRGB(dataType bufType, bool ccir601) {
 
 #if 0
             wxLogDebug("y0 %04x y1 %04x y2 %04x y3 %04x u %04x v %04x",
-                    (wxUint16)y0,(wxUint16)y1,(wxUint16)y2,(wxUint16)y3,(wxUint16)u,(wxUint16)v);
+                       (wxUint16)y0,(wxUint16)y1,(wxUint16)y2,(wxUint16)y3,(wxUint16)u,(wxUint16)v);
 #endif
 
             if (ccir601) {
@@ -222,13 +230,13 @@ wxUint8* yuvBuffer::DoConversionToRGB(dataType bufType, bool ccir601) {
             u0=u1=u2=u3=u;
             v0=v1=v2=v3=v;
 
-/* The inverse of the JFIF RGB to YUV Matrix for $00010000 = 1.0
+            /* The inverse of the JFIF RGB to YUV Matrix for $00010000 = 1.0
 
-[Y]   [65496        0   91880][R]
-[U] = [65533   -22580  -46799[G]
-[V]   [65537   116128      -8][B]
+            [Y]   [65496        0   91880][R]
+            [U] = [65533   -22580  -46799[G]
+            [V]   [65537   116128      -8][B]
 
-*/
+            */
 
             r0 = 65536 * y0               + 91880 * v0;
             g0 = 65536 * y0 -  22580 * u0 - 46799 * v0;
@@ -292,14 +300,14 @@ wxUint8* yuvBuffer::DoConversionToRGB(dataType bufType, bool ccir601) {
 /******************************************************************************/
 
 ImageBuffer::ImageBuffer()
-:	m_bufType(DATA_UNKNOWN),
-    m_width(0L),
-    m_height(0L),
-    m_endianness(endian_little),
-    m_imageData(0L),
-    m_ccir601(false),
-    m_lastError(IB_ERROR_NO_ERROR),
-    m_pMask(0L)
+    :	m_bufType(DATA_UNKNOWN),
+      m_width(0L),
+      m_height(0L),
+      m_endianness(endian_little),
+      m_imageData(nullptr),
+      m_ccir601(false),
+      m_lastError(IB_ERROR_NO_ERROR),
+      m_pMask(nullptr)
 {
     // ctor
     wxLogDebug("ImageBuffer::ImageBuffer() default");
@@ -313,15 +321,15 @@ ImageBuffer::ImageBuffer(dataType type,
                          int width, int height,
                          int bits /* = 8 */,
                          formatEndian endianness /* = endian_little */)
-:   m_bufType(type),
-    m_width(width),
-    m_height(height),
-    m_bits(bits),
-    m_endianness(endianness),
-    m_imageData(0L),
-    m_ccir601(false),
-    m_lastError(IB_ERROR_NO_ERROR),
-    m_pMask(0L)
+    :   m_bufType(type),
+        m_width(width),
+        m_height(height),
+        m_bits(bits),
+        m_endianness(endianness),
+        m_imageData(nullptr),
+        m_ccir601(false),
+        m_lastError(IB_ERROR_NO_ERROR),
+        m_pMask(nullptr)
 {
     // ctor
     wxLogDebug("ImageBuffer::ImageBuffer(%s, %d, %d, %d, %s)",
@@ -395,7 +403,7 @@ bool ImageBuffer::GetChecksum(checksumAlgoBase* pAlgo, checksumEntry& entry) {
 
     wxLogDebug("ImageBuffer::GetChecksum(0x%p, ...)", pAlgo);
 
-    wxASSERT( pAlgo != 0L );
+    wxASSERT( pAlgo != nullptr );
 
     bRes = pAlgo->calculate( &m_yuv, entry );
 
@@ -411,7 +419,7 @@ bool ImageBuffer::SaveCurrentFrame(const wxString& sFilename) {
 
     wxLogDebug("ImageBuffer::SaveCurrentFrame(%s)", sFilename);
 
-    if (m_imageData != 0L) {
+    if (m_imageData != nullptr) {
         wxImage pImage;
 
         wxASSERT( (m_width > 0) && (m_height > 0) );
@@ -433,30 +441,30 @@ wxString ImageBuffer::YUVTypeToString(dataType type)
     wxString        sBufferType;
 
     switch (type) {
-        case DATA_UNKNOWN:   //!< Data format unknown
-            sBufferType = "Unknown";
-            break;
-        case DATA_YUV420:    //!< Data in YUV420 format
-            sBufferType = "YUV4:2:0";
-            break;
-        case DATA_YUV422:    //!< Data in YUV422 format
-            sBufferType = "YUV4:2:2";
-            break;
-        case DATA_YUV444:    //!< Data in YUV444 format
-            sBufferType = "YUV4:4:4";
-            break;
-        case DATA_NV12:      //!< Data in NV12 format
-            sBufferType = "NV12";
-            break;
-        case DATA_NV21:      //!< Data in NV21 format
-            sBufferType = "NV21";
-            break;
-        case DATA_RGB32:     //!< Data in RGB32 format
-            sBufferType = "RBG32";
-            break;
-        default:
-            sBufferType = "Undefined";
-            break;
+    case DATA_UNKNOWN:   //!< Data format unknown
+        sBufferType = "Unknown";
+        break;
+    case DATA_YUV420:    //!< Data in YUV420 format
+        sBufferType = "YUV4:2:0";
+        break;
+    case DATA_YUV422:    //!< Data in YUV422 format
+        sBufferType = "YUV4:2:2";
+        break;
+    case DATA_YUV444:    //!< Data in YUV444 format
+        sBufferType = "YUV4:4:4";
+        break;
+    case DATA_NV12:      //!< Data in NV12 format
+        sBufferType = "NV12";
+        break;
+    case DATA_NV21:      //!< Data in NV21 format
+        sBufferType = "NV21";
+        break;
+    case DATA_RGB32:     //!< Data in RGB32 format
+        sBufferType = "RBG32";
+        break;
+    default:
+        sBufferType = "Undefined";
+        break;
     }
 
     return sBufferType;
@@ -471,18 +479,18 @@ wxString ImageBuffer::BufTypeToString(yuvBufType type)
     wxString sBufferType;
 
     switch (type) {
-        case YUV_FILE_UNKNOWN:
-            sBufferType = "YUV_FILE_UNKNOWN";
-            break;
-        case YUV_FILE_SPLIT:
-            sBufferType = "YUV_FILE_SPLIT";
-            break;
-        case YUV_FILE_COMP:
-            sBufferType = "YUV_FILE_COMP";
-            break;
-        case YUV_FILE_DUMP:
-            sBufferType = "YUV_FILE_DUMP";
-            break;
+    case YUV_FILE_UNKNOWN:
+        sBufferType = "YUV_FILE_UNKNOWN";
+        break;
+    case YUV_FILE_SPLIT:
+        sBufferType = "YUV_FILE_SPLIT";
+        break;
+    case YUV_FILE_COMP:
+        sBufferType = "YUV_FILE_COMP";
+        break;
+    case YUV_FILE_DUMP:
+        sBufferType = "YUV_FILE_DUMP";
+        break;
     }
 
     return sBufferType;

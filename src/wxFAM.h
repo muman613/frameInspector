@@ -32,7 +32,7 @@ public:
 
     wxFAMEvent(const char* filename, int famEvt)
         :	m_filename(filename),
-            m_event(famEvt) {
+          m_event(famEvt) {
         m_eventType = EVT_FAMEVENT;
     }
     wxFAMEvent(const wxFAMEvent& copy) {

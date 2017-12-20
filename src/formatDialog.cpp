@@ -1,8 +1,8 @@
 #include "formatDialog.h"
 
 formatDialog::formatDialog( wxWindow* parent )
-:
-formatDialogBase( parent )
+    :
+    formatDialogBase( parent )
 {
 
 }
@@ -15,12 +15,12 @@ void formatDialog::OnUpdateUI( wxUpdateUIEvent& event )
 {
     switch (event.GetId()) {
     case wxID_FORMAT_ENDIAN:
-        {
-            int nChoice = m_bitsChoice->GetSelection();
+    {
+        int nChoice = m_bitsChoice->GetSelection();
 
-            event.Enable( ((nChoice == 1) || (nChoice == 2))?true:false );
-        }
-        break;
+        event.Enable( ((nChoice == 1) || (nChoice == 2))?true:false );
+    }
+    break;
     default:
         break;
     }
@@ -42,26 +42,26 @@ void formatDialog::SetDialogOptions(dataType format,
     }
 
     switch (bits) {
-        case 8:
-            m_bitsChoice->SetSelection(0);
-            break;
-        case 10:
-            m_bitsChoice->SetSelection(1);
-            break;
-        case 16:
-            m_bitsChoice->SetSelection(2);
-            break;
+    case 8:
+        m_bitsChoice->SetSelection(0);
+        break;
+    case 10:
+        m_bitsChoice->SetSelection(1);
+        break;
+    case 16:
+        m_bitsChoice->SetSelection(2);
+        break;
     }
 
     switch (endian) {
-        case endian_little:
-            m_bitsEndian->SetSelection(0);
-            break;
-        case endian_big:
-            m_bitsEndian->SetSelection(1);
-            break;
-        default:
-            break;
+    case endian_little:
+        m_bitsEndian->SetSelection(0);
+        break;
+    case endian_big:
+        m_bitsEndian->SetSelection(1);
+        break;
+    default:
+        break;
     }
 
     return;

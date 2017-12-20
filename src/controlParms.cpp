@@ -9,18 +9,18 @@
  */
 
 controlParms::controlParms()
-:   m_bufType(YUV_FILE_UNKNOWN),
-    m_yuvType(DATA_UNKNOWN),
-    m_scale(IS_IMAGE_DEFAULT),
-    m_imageSize(wxSize(0,0)),
-    m_curFrame(0),
-    m_bEnableGrid(false),
-    m_gridH(16),
-    m_gridV(16),
-    m_gridColor(*wxBLUE),
-    m_bits(8),
-    m_endianness(endian_little),
-    m_spec("", "", 0, 1000)
+    :   m_bufType(YUV_FILE_UNKNOWN),
+        m_yuvType(DATA_UNKNOWN),
+        m_scale(IS_IMAGE_DEFAULT),
+        m_imageSize(wxSize(0,0)),
+        m_curFrame(0),
+        m_bEnableGrid(false),
+        m_gridH(16),
+        m_gridV(16),
+        m_gridColor(*wxBLUE),
+        m_bits(8),
+        m_endianness(endian_little),
+        m_spec("", "", 0, 1000)
 {
     // ctor
 }
@@ -72,7 +72,7 @@ bool controlParms::LoadParmsFromConfig(wxConfig* pConfig,
 
     wxLogDebug("controlParms::LoadParmsFromConfig(%p, %s)", pConfig, sSection);
 
-    wxASSERT( pConfig != 0L );
+    wxASSERT( pConfig != nullptr );
 
     if (pConfig == 0) {
         wxLogDebug("ERROR: Called SaveState with a NULL wxConfig!");

@@ -1,11 +1,13 @@
 //==============================================================================
 //	MODULE		:	YUVImageBufferFile.cpp
-//	PROJECT		:	PlayVideoBrowser
+//	PROJECT		:	frameInspector
 //	PROGRAMMER	:	Michael A. Uman
 //	DATE		:	May 25, 2010
-//	COPYRIGHT	:	(C) 2006-2010 Sigma Designs
 //==============================================================================
 
+#ifdef HAVE_CONFIG_H
+#include "config.h"
+#endif
 #include <wx/wx.h>
 #include <wx/filename.h>
 #include <wx/file.h>
@@ -14,7 +16,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <assert.h>
-#ifdef HAS_GCRYPT
+#ifdef HAVE_LIBGCRYPT
 #include <gcrypt.h>
 #endif
 #include "imageBuffer.h"
@@ -27,9 +29,9 @@
  */
 
 YUV420ImageBufferFile::YUV420ImageBufferFile(int x, int y, int bits, formatEndian endianness)
-:   ImageBuffer(DATA_YUV420, x, y, bits, endianness)
+    :   ImageBuffer(DATA_YUV420, x, y, bits, endianness)
 {
-	wxLogDebug("YUV420ImageBufferFile::YUV420ImageBufferFile(%d, %d, %d)", x, y, bits);
+    wxLogDebug("YUV420ImageBufferFile::YUV420ImageBufferFile(%d, %d, %d)", x, y, bits);
 }
 
 /**
@@ -38,9 +40,9 @@ YUV420ImageBufferFile::YUV420ImageBufferFile(int x, int y, int bits, formatEndia
 
 YUV420ImageBufferFile::~YUV420ImageBufferFile()
 {
-	wxLogDebug("YUV420ImageBufferFile::~YUV420ImageBufferFile()");
+    wxLogDebug("YUV420ImageBufferFile::~YUV420ImageBufferFile()");
 
-	m_file.Close();
+    m_file.Close();
 
     free_buffer();
     m_yuv.free_buffer();
@@ -52,22 +54,22 @@ YUV420ImageBufferFile::~YUV420ImageBufferFile()
 
 bool YUV420ImageBufferFile::SetFilename(const wxString& filename)
 {
-	bool	result = false;
+    bool	result = false;
 
-	wxLogDebug("YUV420ImageBufferFile::SetFilename(%s)", (const char*)filename.c_str());
+    wxLogDebug("YUV420ImageBufferFile::SetFilename(%s)", (const char*)filename.c_str());
 
-	m_file.Close();
+    m_file.Close();
 
-	if (m_file.Exists(filename.c_str()) && m_file.Open(filename.c_str())) {
-		wxLogDebug("-- file opened!");
-		m_imageFilename = filename;
-		result = true;
+    if (m_file.Exists(filename.c_str()) && m_file.Open(filename.c_str())) {
+        wxLogDebug("-- file opened!");
+        m_imageFilename = filename;
+        result = true;
         m_lastError = IB_ERROR_NO_ERROR;
-	} else {
-	    m_lastError = IB_ERROR_FILE_NOT_FOUND;
-	}
+    } else {
+        m_lastError = IB_ERROR_FILE_NOT_FOUND;
+    }
 
-	return result;
+    return result;
 }
 
 /**
@@ -78,13 +80,13 @@ bool YUV420ImageBufferFile::Load(size_t frame)
 {
     int bpc = 1; // bytes per component
 
-	wxLogDebug("YUV420ImageBufferFile::Load(%ld)", frame);
+    wxLogDebug("YUV420ImageBufferFile::Load(%ld)", frame);
 
-	if (frame == (size_t)-1) {
-		wxLogDebug("-- Load called with frame == -1");
-		m_lastError = IB_ERROR_OUT_OF_BOUNDS;
-		return false;
-	}
+    if (frame == (size_t)-1) {
+        wxLogDebug("-- Load called with frame == -1");
+        m_lastError = IB_ERROR_OUT_OF_BOUNDS;
+        return false;
+    }
 
     if (!m_file.IsOpened()) {
         wxLogDebug("ERROR: File is not opened!");
@@ -95,17 +97,17 @@ bool YUV420ImageBufferFile::Load(size_t frame)
     wxLogDebug("-- loading YUV format %s %d bits...", ImageBuffer::YUVTypeToString(m_bufType), m_bits);
 
     switch (m_bits) {
-        case 8:
-            bpc = 1;
-            break;
+    case 8:
+        bpc = 1;
+        break;
 
-        case 10:
-            bpc = 2;
-            break;
+    case 10:
+        bpc = 2;
+        break;
 
-        case 16:
-            bpc = 2;
-            break;
+    case 16:
+        bpc = 2;
+        break;
     }
 
     wxLogDebug("Bytes per component = %d", bpc);
@@ -126,7 +128,7 @@ bool YUV420ImageBufferFile::Load(size_t frame)
         wxLogDebug("framesize = %d", frameSize);
 
         /* If image data already exists, free it */
-        if (m_imageData != 0L) {
+        if (m_imageData != nullptr) {
             wxLogDebug("-- freeing old image data (0x%p)", m_imageData);
             free_buffer();
         }
@@ -170,7 +172,7 @@ bool YUV420ImageBufferFile::Load(size_t frame)
         int				frameSize = 0;
         wxFileOffset 	offY, offUV;
         wxUint8         *pU = 0,
-                        *pV = 0;
+                         *pV = 0;
 
         ySize       = m_width * m_height;
         uSize       = ySize / 4;
@@ -184,7 +186,7 @@ bool YUV420ImageBufferFile::Load(size_t frame)
         wxLogDebug("framesize = %d", frameSize);
 
         /* If image data already exists, free it */
-        if (m_imageData != 0L) {
+        if (m_imageData != nullptr) {
             wxLogDebug("-- freeing old image data (0x%p)", m_imageData);
             free_buffer();
         }
@@ -202,16 +204,16 @@ bool YUV420ImageBufferFile::Load(size_t frame)
 
         /* Swap U & V components in case of NV21 */
         switch (m_bufType) {
-            case DATA_NV12:
-                pU = m_yuv.m_pU;
-                pV = m_yuv.m_pV;
-                break;
-            case DATA_NV21:
-                pV = m_yuv.m_pU;
-                pU = m_yuv.m_pV;
-                break;
-            default:
-                break;
+        case DATA_NV12:
+            pU = m_yuv.m_pU;
+            pV = m_yuv.m_pV;
+            break;
+        case DATA_NV21:
+            pV = m_yuv.m_pU;
+            pU = m_yuv.m_pV;
+            break;
+        default:
+            break;
         }
 
         /* de-interleave the U & V components */
@@ -233,11 +235,11 @@ bool YUV420ImageBufferFile::Load(size_t frame)
 
     m_imageData = m_yuv.DoConversionToRGB(m_bufType, m_ccir601);
 
-	wxLogDebug("Image data @ 0x%p", m_imageData);
+    wxLogDebug("Image data @ 0x%p", m_imageData);
 
     m_lastError = IB_ERROR_NO_ERROR;
 
-	return true;
+    return true;
 }
 
 /**
@@ -245,17 +247,17 @@ bool YUV420ImageBufferFile::Load(size_t frame)
  */
 
 void YUV420ImageBufferFile::GetImage(wxImage* pImage) {
-	wxLogDebug("YUV420ImageBufferFile::GetImage(0x%p)", pImage);
+    wxLogDebug("YUV420ImageBufferFile::GetImage(0x%p)", pImage);
 
-    wxASSERT(pImage != 0L);
+    wxASSERT(pImage != nullptr);
 
-    if (m_imageData != 0L) {
+    if (m_imageData != nullptr) {
         pImage->Destroy();
         pImage->Create(m_width, m_height);
         pImage->SetData(copy_data()); //m_imageData);
     }
 
-	return;
+    return;
 }
 
 /**
@@ -263,13 +265,13 @@ void YUV420ImageBufferFile::GetImage(wxImage* pImage) {
  */
 
 ssize_t YUV420ImageBufferFile::GetFrameCount() {
-	int	ySize, uSize, vSize;
-	int	frameSize = 0;
-	wxFileOffset off;
-	ssize_t	result = -1;
+    int	ySize, uSize, vSize;
+    int	frameSize = 0;
+    wxFileOffset off;
+    ssize_t	result = -1;
     int bpc = sizeof(wxUint8);
 
-	wxLogDebug("YUV420ImageBufferFile::GetFrameCount(%s)", (const char*)m_imageFilename.c_str());
+    wxLogDebug("YUV420ImageBufferFile::GetFrameCount(%s)", (const char*)m_imageFilename.c_str());
 
     if (m_bits == 8) {
         bpc = sizeof(wxUint8);
@@ -279,20 +281,20 @@ ssize_t YUV420ImageBufferFile::GetFrameCount() {
         bpc = sizeof(wxUint16);
     }
 
-	ySize = (m_width * m_height * bpc);
-	uSize = ySize / 4;
-	vSize = ySize / 4;
-	frameSize = ySize + uSize + vSize;
+    ySize = (m_width * m_height * bpc);
+    uSize = ySize / 4;
+    vSize = ySize / 4;
+    frameSize = ySize + uSize + vSize;
 
-	wxLogDebug("framesize = %d", frameSize);
+    wxLogDebug("framesize = %d", frameSize);
 
-	if (m_file.IsOpened()) {
-		m_file.SeekEnd();
-		off = m_file.Tell();
-		result = (off / frameSize) - 1;
-	}
+    if (m_file.IsOpened()) {
+        m_file.SeekEnd();
+        off = m_file.Tell();
+        result = (off / frameSize) - 1;
+    }
 
-	return result;
+    return result;
 }
 
 /**
@@ -300,6 +302,6 @@ ssize_t YUV420ImageBufferFile::GetFrameCount() {
  */
 
 PIXEL* YUV420ImageBufferFile::getPixel(int x, int y) {
-	return (PIXEL*)0L;
+    return (PIXEL*)nullptr;
 }
 

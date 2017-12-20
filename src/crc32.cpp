@@ -51,7 +51,7 @@ wxUint32 crc32::crc32_be(wxUint8* buffer_start, wxUint32 buffer_length) {
 
     wxLogDebug("crc32::crc32_be(0x%p, %d)", buffer_start, buffer_length);
 
-    assert((buffer_start != 0L) && (buffer_length != 0));
+    assert((buffer_start != nullptr) && (buffer_length != 0));
 
     crc = 0xFFFFFFFF;
 
@@ -120,7 +120,7 @@ wxUint32 crc32_be(wxUint8* buffer_start, wxUint32 buffer_length) {
 
     wxLogDebug("crc32_be(0x%08lx, %ld)", buffer_start, buffer_length);
 
-    assert((buffer_start != 0L) && (buffer_length != 0));
+    assert((buffer_start != nullptr) && (buffer_length != 0));
 
     crc = 0xFFFFFFFF;
 

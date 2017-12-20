@@ -10,8 +10,12 @@ public:
                      formatEndian endianness = endian_little);
     virtual ~component_buffer();
 
-    size_t  size() const { return m_buf_len; }
-    void*   ptr() const { return m_ptr_start; }
+    size_t  size() const {
+        return m_buf_len;
+    }
+    void*   ptr() const {
+        return m_ptr_start;
+    }
 
     void    set_fetch_size(size_t inc = sizeof(wxUint8));
     size_t  get_fetch_size() const;

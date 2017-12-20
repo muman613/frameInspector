@@ -2,7 +2,7 @@
 #include "YUV420ImageBufferSplit.h"
 
 YUVSplitDialog::YUVSplitDialog( wxWindow* parent )
-:   YUVSplitDialogBase( parent )
+    :   YUVSplitDialogBase( parent )
 {
     wxLogDebug("YUVSplitDialog::YUVSplitDialog()");
 #if 0
@@ -31,12 +31,12 @@ void YUVSplitDialog::OnUpdateUI( wxUpdateUIEvent& event )
 {
     switch (event.GetId()) {
     case wxID_FORMAT_ENDIAN:
-        {
-            int nChoice = m_bitsChoice->GetSelection();
+    {
+        int nChoice = m_bitsChoice->GetSelection();
 
-            event.Enable( ((nChoice == 1) || (nChoice == 2))?true:false );
-        }
-        break;
+        event.Enable( ((nChoice == 1) || (nChoice == 2))?true:false );
+    }
+    break;
 
     case wxID_OK:
         event.Enable(ValidateFileSpec());
@@ -49,12 +49,12 @@ void YUVSplitDialog::OnUpdateUI( wxUpdateUIEvent& event )
 
 void YUVSplitDialog::OnPrefixChanged( wxCommandEvent& event )
 {
-	// TODO: Implement OnPrefixChanged
+    // TODO: Implement OnPrefixChanged
 }
 
 void YUVSplitDialog::OnDirChanged( wxFileDirPickerEvent& event )
 {
-	// TODO: Implement OnDirChanged
+    // TODO: Implement OnDirChanged
     wxString            sFilename;
     utils::imageParms   parms;
 
@@ -105,10 +105,10 @@ void YUVSplitDialog::OnChangeStandard( wxCommandEvent& event )
 
     wxLogDebug("YUVSplitDialog::OnChangeStandard()\n");
 
-    wxASSERT(pEntry != 0L);
+    wxASSERT(pEntry != nullptr);
 
     wxLogDebug("Selected %d (%s %d x %d)\n", selection,
-          (const char*)pEntry->name.c_str(), pEntry->width, pEntry->height);
+               (const char*)pEntry->name.c_str(), pEntry->width, pEntry->height);
 
     if (selection > 0) {
         m_WidthCtl->SetValue( wxString::Format(wxT("%d"), pEntry->width) );
@@ -132,10 +132,10 @@ void YUVSplitDialog::OnChangeStandard( wxCommandEvent& event )
 //                         const formatEndian         endian,
 //                         const dataType             yuvFmt)
 void YUVSplitDialog::SetDialogOptions(const wxSize  frameSize,
-                         const YUV420ImageSpec&     spec,
-                         const wxUint16             bits,
-                         const formatEndian         endian,
-                         const dataType             yuvFmt)
+                                      const YUV420ImageSpec&     spec,
+                                      const wxUint16             bits,
+                                      const formatEndian         endian,
+                                      const dataType             yuvFmt)
 {
     wxLogDebug("YUVSplitDialog::SetDialogOptions(%d, %d, %s, %s, %d, %s)",
                frameSize.GetWidth(),

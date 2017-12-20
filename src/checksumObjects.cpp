@@ -1,3 +1,7 @@
+#ifdef HAVE_CONFIG_H
+#include "config.h"
+#endif
+
 #include <wx/wx.h>
 #include "checksumObjects.h"
 #include "imageBuffer.h"
@@ -7,17 +11,17 @@
  */
 
 checksumEntry::checksumEntry()
-:   m_algo(CHECKSUM_UNDEFINED),
-    m_dataLen(0),
-    m_chromaSum(0),
-    m_lumaSum(0)
+    :   m_algo(CHECKSUM_UNDEFINED),
+        m_dataLen(0),
+        m_chromaSum(0),
+        m_lumaSum(0)
 {
     wxLogDebug("checksumEntry::checksumEntry() default");
 }
 
 checksumEntry::checksumEntry(const checksumEntry& copy)
-:   m_algo(copy.m_algo),
-    m_dataLen(copy.m_dataLen)
+    :   m_algo(copy.m_algo),
+        m_dataLen(copy.m_dataLen)
 {
     wxLogDebug("checksumEntry::checksumEntry(copy)");
 
@@ -33,8 +37,8 @@ checksumEntry::checksumEntry(const checksumEntry& copy)
  */
 
 checksumEntry::checksumEntry(eChecksumAlgo algo, wxUint32 dataLen)
-:   m_algo(algo),
-    m_dataLen(dataLen)
+    :   m_algo(algo),
+        m_dataLen(dataLen)
 {
     // ctor
     wxLogDebug("checksumEntry::checksumEntry(%d, %d)", (int)algo, dataLen);
@@ -55,11 +59,11 @@ checksumEntry::~checksumEntry() {
 
     if (m_chromaSum) {
         delete [] m_chromaSum;
-        m_chromaSum = 0L;
+        m_chromaSum = nullptr;
     }
     if (m_lumaSum) {
         delete [] m_lumaSum;
-        m_lumaSum = 0L;
+        m_lumaSum = nullptr;
     }
 }
 
@@ -117,11 +121,11 @@ checksumEntry& checksumEntry::operator =(const checksumEntry& copy) {
     if (m_dataLen != copy.m_dataLen) {
         if (m_lumaSum) {
             delete [] m_lumaSum;
-            m_lumaSum = 0L;
+            m_lumaSum = nullptr;
         }
         if (m_chromaSum) {
             delete [] m_chromaSum;
-            m_chromaSum = 0L;
+            m_chromaSum = nullptr;
         }
 
         m_dataLen   = copy.m_dataLen;
@@ -150,7 +154,7 @@ bool checksumEntry::operator ==(const checksumEntry& compare) {
         wxASSERT(m_dataLen == compare.m_dataLen);
 
         if ((memcmp(m_chromaSum, compare.m_chromaSum, m_dataLen) == 0) &&
-            (memcmp(m_lumaSum, compare.m_lumaSum, m_dataLen) == 0))
+                (memcmp(m_lumaSum, compare.m_lumaSum, m_dataLen) == 0))
         {
             bRes = true;
         }
@@ -173,9 +177,9 @@ void checksumEntry::Dump(FILE* fp) {
 checksumAlgoBase::checksumAlgoBase(eChecksumAlgo algo,
                                    wxUint32 dataLen,
                                    wxString name)
-:   m_name(name),
-    m_algo(algo),
-    m_dataLen(dataLen)
+    :   m_name(name),
+        m_algo(algo),
+        m_dataLen(dataLen)
 {
 //ctor
 }
@@ -214,7 +218,7 @@ void checksumAlgoBase::Dump(FILE* fp) {
 /*----------------------------------------------------------------------------*/
 
 checksumCRC::checksumCRC()
-:   checksumAlgoBase(CHECKSUM_CRC32, 4, "CRC32")
+    :   checksumAlgoBase(CHECKSUM_CRC32, 4, "CRC32")
 {
     // ctor
     wxLogDebug("checksumCRC::checksumCRC()");
@@ -238,7 +242,7 @@ checksumAlgoBase* checksumCRC::Create() {
 
 bool checksumCRC::calculate(yuvBuffer* pBuffer, checksumEntry& entry) {
     wxUint32    crcValue = 0;
-    wxUint8*    pCur = 0L;
+    wxUint8*    pCur = nullptr;
 
     wxLogDebug("checksumCRC::calculate(0x%p, ...)", pBuffer);
 
@@ -263,11 +267,11 @@ bool checksumCRC::calculate(yuvBuffer* pBuffer, checksumEntry& entry) {
 }
 
 
-#ifdef HAS_GCRYPT
+#ifdef HAVE_LIBGCRYPT
 /*----------------------------------------------------------------------------*/
 
 checksumMD5::checksumMD5()
-:   checksumAlgoBase(CHECKSUM_MD5, 16, "MD5")
+    :   checksumAlgoBase(CHECKSUM_MD5, 16, "MD5")
 {
     //ctor
     wxLogDebug("checksumMD5::checksumMD5()");
@@ -325,7 +329,7 @@ bool checksumMD5::calculate(yuvBuffer* pBuffer, checksumEntry& entry) {
 /*----------------------------------------------------------------------------*/
 
 checksumSHA1::checksumSHA1()
-:   checksumAlgoBase(CHECKSUM_SHA1, 20, "SHA1")
+    :   checksumAlgoBase(CHECKSUM_SHA1, 20, "SHA1")
 {
     //ctor
     wxLogDebug("checksumSHA1::checksumSHA1()");
@@ -380,7 +384,7 @@ bool checksumSHA1::calculate(yuvBuffer* pBuffer, checksumEntry& entry) {
 
     return true;
 }
-#endif // HAS_GCRYPT
+#endif // HAVE_LIBGCRYPT
 
 /*----------------------------------------------------------------------------*/
 
@@ -393,10 +397,10 @@ checksumManager::checksumManager()
 
     AddAlgorithm( CHECKSUM_CRC32, "CRC32",  &checksumCRC::Create );
 
-#ifdef HAS_GCRYPT
+#ifdef HAVE_LIBGCRYPT
     AddAlgorithm( CHECKSUM_MD5,   "MD5SUM", &checksumMD5::Create );
     AddAlgorithm( CHECKSUM_SHA1,  "SHA1",   &checksumSHA1::Create );
-#endif // HAS_GCRYPT
+#endif // HAVE_LIBGCRYPT
 
     wxLogDebug("There are %ld algorithms in vector...", m_algoVec.size());
 }
@@ -470,8 +474,8 @@ eChecksumAlgo checksumManager::GetAlgoType(const wxString& name) {
 
 checksumAlgoBase* checksumManager::GetAlgoClass(eChecksumAlgo algo) {
     CHECKSUM_ALGO_VEC_ITER  aIter;
-    checksumAlgoBase*       pAlgo = 0L;
-    CHECKSUM_CREATE_FUNC*   pFunc = 0L;
+    checksumAlgoBase*       pAlgo = nullptr;
+    CHECKSUM_CREATE_FUNC*   pFunc = nullptr;
 
     wxLogDebug("checksumManager::GetAlgoClass(%d)", (int)algo);
 

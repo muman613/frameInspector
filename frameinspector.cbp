@@ -86,7 +86,7 @@
 		<Compiler>
 			<Add option="-Wall" />
 			<Add option="-std=c++11" />
-			<Add option="-DHAS_GCRYPT=1" />
+			<Add option="-DHAVE_LIBGCRYPT=1" />
 		</Compiler>
 		<Linker>
 			<Add library="gcrypt" />
