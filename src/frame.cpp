@@ -681,8 +681,8 @@ void Frame::OnHelpAbout(wxCommandEvent& event) {
     dlgInfo.SetDescription(sDescription);
 
     dlgInfo.AddDeveloper(wxT("Michael A. Uman"));
-    dlgInfo.SetCopyright(wxT("(C) 2009-2017 Sigma Designs"));
-    dlgInfo.SetWebSite(wxT("ftp://revelation.sdesigns.com/"));
+    dlgInfo.SetCopyright(wxT("(C) 2016-2017 Uman Software Designs"));
+    dlgInfo.SetWebSite(wxT("ftp://laserquad.ddns.net"));
 
     sVersion = wxString::Format(wxT("%d.%d"), VERSION_MAJOR, VERSION_MINOR);
     dlgInfo.SetVersion(sVersion);

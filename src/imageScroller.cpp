@@ -1,6 +1,9 @@
+/**
+ *
+ */
+
 #include <wx/wx.h>
 #include "imageScroller.h"
-#include "dbgutils.h"
 
 //#define	LOAD_IMAGE		1
 

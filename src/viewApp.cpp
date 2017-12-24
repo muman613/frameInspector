@@ -5,12 +5,14 @@
 //  DATE        :   October 4, 2013
 //==============================================================================
 
+#ifdef HAVE_CONFIG_H
+#include "config.h"
+#endif
 #include <wx/wx.h>
 #include <wx/gdicmn.h>
 #include <wx/cmdline.h>
 #include "viewApp.h"
 #include "frame.h"
-//#include "dbgutils.h"
 #include "imageBuffer.h"
 
 #ifdef  __WXMSW__

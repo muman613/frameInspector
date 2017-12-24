@@ -1,3 +1,6 @@
+#ifdef HAVE_CONFIG_H
+#include "config.h"
+#endif
 #include <wx/wx.h>
 #include <wx/regex.h>
 #include <wx/sound.h>
@@ -11,7 +14,6 @@
 #include "YUV420ImageBufferSplit.h"
 
 #include "misc_utils.h"
-//#include "dbgutils.h"
 
 #ifdef  ENABLE_SOUND
 #   include "bell.h"

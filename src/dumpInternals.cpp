@@ -1,6 +1,5 @@
 #include <wx/wx.h>
 #include "dumpInternals.h"
-//#include "dbgutils.h"
 
 namespace dumpInternals {
 bool read_box(wxFile* fp, wxUint32& tag, wxUint32& version, wxInt64& size) {

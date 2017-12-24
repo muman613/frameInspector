@@ -3,8 +3,10 @@
 
 #include <wx/wx.h>
 #include "imageBuffer.h"
-//#include "dbgutils.h"
 
+/**
+ *  ImageBuffer to read a Sigma rmar file.
+ */
 class dumpImageBuffer : public ImageBuffer {
 public:
     dumpImageBuffer();
@@ -44,12 +46,6 @@ private:
     wxArrayString   m_frameList;
     wxFile          m_fp;
     size_t          m_frameNo;
-//    wxUint32        m_lumaSize;
-//    wxUint32        m_chromaSize;
-//    wxUint8*        m_pY;
-//    wxUint8*        m_pU;
-//    wxUint8*        m_pV;
-//    bool            m_ccir601;
 };
 
 #endif  // __DUMPIMAGEBUFFER_H__

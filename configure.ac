@@ -9,6 +9,7 @@ AM_CONFIG_HEADER([config.h])
 # Checks for programs.
 AC_PROG_CXX
 AC_PROG_CC
+PKG_PROG_PKG_CONFIG
 
 AM_OPTIONS_WXCONFIG()
 AM_PATH_WXCONFIG(3.0.0, wxWin=1, wxWin=0, std)
@@ -59,11 +60,12 @@ AC_ARG_ENABLE([debug],
 
 AC_ARG_ENABLE([libswscale],
 	[AS_HELP_STRING( [--enable-libswscale],[Enable ffmpeg libswscale library])],
-	[opt_libswscale=$enableval]
+	[opt_libswscale=$enableval],
 	[opt_libswscale=no])
 
 if test "$opt_libswscale" = yes; then
-	AC_DEFINE([HAVE_LIBSWSCALE], [1], [Define to '1' if libswscale is available])
+	PKG_CHECK_MODULES([LIBSWSCALE], [libswscale],
+		[AC_DEFINE([HAVE_LIBSWSCALE], [1], [Define to '1' if libswscale is available])])
 fi
 
 if test "$opt_debug_build" = yes; then
@@ -84,9 +86,8 @@ if test "$opt_optimize" = yes; then
 	OPTIMIZE="-march=pentium4 -msse2 -mfpmath=sse"
 fi
 
-
-CXXFLAGS="$OPTIMIZE $DEBUGFLAGS $WX_CXXFLAGS -std=c++11"
-LIBS="$WX_LIBS $LIBS -lpopt -lX11"
+CXXFLAGS="$OPTIMIZE $DEBUGFLAGS $WX_CXXFLAGS $LIBSWSCALE_CFLAGS -std=c++11"
+LIBS="$WX_LIBS $LIBS $LIBSWSCALE_LIBS -lX11"
 
 AC_CONFIG_FILES([Makefile
                  src/Makefile])

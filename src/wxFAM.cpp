@@ -1,7 +1,6 @@
 #include <wx/wx.h>
 #include <wx/thread.h>
 #include "wxFAM.h"
-#include "dbgutils.h"
 
 //#define OLDWAY
 

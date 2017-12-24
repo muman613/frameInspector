@@ -5,12 +5,14 @@
  *  @brief      Classes representing CRC32 results/reference.
  */
 
+#ifdef HAVE_CONFIG_H
+#include "config.h"
+#endif
 #include <wx/wx.h>
 #include <wx/arrimpl.cpp>
 #include <wx/textfile.h>
 #include <wx/regex.h>
 #include "crcVector.h"
-//#include "dbgutils.h"
 
 WX_DEFINE_OBJARRAY(CRCENTRY_ARRAY);
 

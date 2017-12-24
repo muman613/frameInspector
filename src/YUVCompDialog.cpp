@@ -2,7 +2,6 @@
 #include <wx/regex.h>
 #include "YUVCompDialog.h"
 #include "misc_utils.h"
-//#include "dbgutils.h"
 
 YUVCompDialog::YUVCompDialog( wxWindow* parent )
     :   YUVCompDialogBase( parent )

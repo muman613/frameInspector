@@ -1,3 +1,11 @@
+/**
+ * @file    yuvImageControl.cpp
+ * @author  Michael A. Uman
+ * @date    December 20, 2017
+ *
+ * @brief   Implementation of the yuvImageControl component.
+ */
+
 #include <wx/wx.h>
 #include <wx/config.h>
 #include <typeinfo>
@@ -8,7 +16,6 @@
 #include "YUV420ImageBufferFile.h"
 #include "DumpImageBuffer.h"
 #include "controlParms.h"
-//#include "dbgutils.h"
 
 IMPLEMENT_DYNAMIC_CLASS( yuvImageControl, wxScrolledWindow )
 
@@ -71,6 +78,10 @@ bool yuvImageControl::IsValid() const {
     return m_bValid;
 }
 
+/**
+ * @brief Return the image path.
+ */
+
 wxString yuvImageControl::GetImagePath() const {
     return m_imagePath;
 }
@@ -93,7 +104,7 @@ formatEndian yuvImageControl::GetEndianness() const {
 }
 
 /**
- *
+ *  @brief Set the image scale.
  */
 
 void yuvImageControl::SetImageScale(scaleVal imageScale) {
@@ -118,7 +129,7 @@ scaleVal yuvImageControl::GetImageScale() const {
 }
 
 /**
- *
+ *  @brief Set the image size.
  */
 
 void yuvImageControl::SetImageSize(const wxSize& size) {
@@ -131,7 +142,7 @@ void yuvImageControl::SetImageSize(const wxSize& size) {
 }
 
 /**
- *
+ *  @brief Get the image size.
  */
 
 wxSize yuvImageControl::GetImageSize() const {
@@ -197,7 +208,7 @@ bool yuvImageControl::get_grid_state()  {
 }
 
 /**
- *
+ *  @brief Get the grid dimensions.
  */
 
 void yuvImageControl::set_grid_dimensions(int hor, int ver, const wxColor& color) {
@@ -208,7 +219,7 @@ void yuvImageControl::set_grid_dimensions(int hor, int ver, const wxColor& color
 }
 
 /**
- *
+ *  @brief  Allocate the image buffer object.
  */
 
 bool yuvImageControl::allocate_image_buffer() {
@@ -268,7 +279,7 @@ bool yuvImageControl::allocate_image_buffer() {
         return false;
     }
 
-    return (m_buffer != 0);
+    return (m_buffer != nullptr);
 }
 
 /**
@@ -393,7 +404,7 @@ bool yuvImageControl::GetImage() {
     /* delete image if already loaded. */
     if (m_pImage) {
         delete m_pImage;
-        m_pImage = 0L;
+        m_pImage = nullptr;
     }
 
     m_buffer->type(m_yuvType);
@@ -405,8 +416,6 @@ bool yuvImageControl::GetImage() {
     wxLogDebug("-- loading frame # %ld", m_curFrame);
 
     if (m_buffer->Load(m_curFrame)) {
-        wxString	sMsg;
-
 #ifdef  ENABLE_PROFILE_LOAD
         swTimer.Pause();
         wxLogDebug("PROFILE : load time %ld", swTimer.Time());
@@ -414,12 +423,9 @@ bool yuvImageControl::GetImage() {
 
         /* create an empty image. */
         m_pImage = new wxImage(m_imageSize.GetWidth(), m_imageSize.GetHeight());
-        assert(m_pImage != 0L);
-
+        wxASSERT(m_pImage != nullptr);
         m_buffer->GetImage(m_pImage);
-
         set_image( m_pImage, m_scale );
-
         result = true;
     } else {
 
