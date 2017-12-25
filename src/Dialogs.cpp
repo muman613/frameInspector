@@ -1,8 +1,8 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Jun 19 2017)
+// C++ code generated with wxFormBuilder (version Dec 24 2017)
 // http://www.wxformbuilder.org/
 //
-// PLEASE DO "NOT" EDIT THIS FILE!
+// PLEASE DO *NOT* EDIT THIS FILE!
 ///////////////////////////////////////////////////////////////////////////
 
 #include "Dialogs.h"
@@ -60,29 +60,27 @@ SizeDialogBase::SizeDialogBase( wxWindow* parent, wxWindowID id, const wxString&
     wxGridSizer* gSizer1;
     gSizer1 = new wxGridSizer( 3, 2, 0, 0 );
 
-    m_staticText44 = new wxStaticText( this, wxID_ANY, wxT("Standard :"), wxDefaultPosition, wxDefaultSize, 0 );
+    m_staticText44 = new wxStaticText( sbSizer1->GetStaticBox(), wxID_ANY, wxT("Standard :"), wxDefaultPosition, wxDefaultSize, 0 );
     m_staticText44->Wrap( -1 );
     gSizer1->Add( m_staticText44, 0, wxALIGN_CENTER_VERTICAL|wxALIGN_RIGHT|wxALL, 5 );
 
     wxArrayString m_stdChoiceChoices;
-    m_stdChoice = new wxChoice( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, m_stdChoiceChoices, 0 );
+    m_stdChoice = new wxChoice( sbSizer1->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxDefaultSize, m_stdChoiceChoices, 0 );
     m_stdChoice->SetSelection( 0 );
     gSizer1->Add( m_stdChoice, 0, wxALL|wxEXPAND, 5 );
 
-    m_staticText7 = new wxStaticText( this, wxID_ANY, wxT("Width :"), wxDefaultPosition, wxDefaultSize, 0 );
+    m_staticText7 = new wxStaticText( sbSizer1->GetStaticBox(), wxID_ANY, wxT("Width :"), wxDefaultPosition, wxDefaultSize, 0 );
     m_staticText7->Wrap( -1 );
     gSizer1->Add( m_staticText7, 0, wxALIGN_CENTER_VERTICAL|wxALIGN_RIGHT|wxALL, 5 );
 
-    m_WidthCtl = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-    m_WidthCtl->SetMaxLength( 0 );
+    m_WidthCtl = new wxTextCtrl( sbSizer1->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
     gSizer1->Add( m_WidthCtl, 0, wxALL, 5 );
 
-    m_staticText8 = new wxStaticText( this, wxID_ANY, wxT("Height :"), wxDefaultPosition, wxDefaultSize, 0 );
+    m_staticText8 = new wxStaticText( sbSizer1->GetStaticBox(), wxID_ANY, wxT("Height :"), wxDefaultPosition, wxDefaultSize, 0 );
     m_staticText8->Wrap( -1 );
     gSizer1->Add( m_staticText8, 0, wxALIGN_CENTER_VERTICAL|wxALIGN_RIGHT|wxALL, 5 );
 
-    m_HeightCtl = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-    m_HeightCtl->SetMaxLength( 0 );
+    m_HeightCtl = new wxTextCtrl( sbSizer1->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
     gSizer1->Add( m_HeightCtl, 0, wxALL, 5 );
 
 
@@ -133,35 +131,34 @@ YUVSplitDialogBase::YUVSplitDialogBase( wxWindow* parent, wxWindowID id, const w
     fgSizer2->SetFlexibleDirection( wxBOTH );
     fgSizer2->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
 
-    m_staticText39 = new wxStaticText( this, wxID_ANY, wxT("File Spec :"), wxDefaultPosition, wxDefaultSize, 0 );
+    m_staticText39 = new wxStaticText( imageFileSizer->GetStaticBox(), wxID_ANY, wxT("File Spec :"), wxDefaultPosition, wxDefaultSize, 0 );
     m_staticText39->Wrap( -1 );
     fgSizer2->Add( m_staticText39, 0, wxALIGN_CENTER_VERTICAL|wxALIGN_RIGHT|wxALL, 5 );
 
-    m_prefix = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-    m_prefix->SetMaxLength( 0 );
+    m_prefix = new wxTextCtrl( imageFileSizer->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
     m_prefix->SetToolTip( wxT("Filename template.\nframe_%02d") );
 
     fgSizer2->Add( m_prefix, 0, wxALL|wxEXPAND, 5 );
 
-    m_staticText20 = new wxStaticText( this, wxID_ANY, wxT("Path :"), wxDefaultPosition, wxDefaultSize, 0 );
+    m_staticText20 = new wxStaticText( imageFileSizer->GetStaticBox(), wxID_ANY, wxT("Path :"), wxDefaultPosition, wxDefaultSize, 0 );
     m_staticText20->Wrap( -1 );
     fgSizer2->Add( m_staticText20, 0, wxALIGN_CENTER_VERTICAL|wxALIGN_RIGHT|wxALL, 5 );
 
-    m_dirPicker = new wxDirPickerCtrl( this, wxID_ANY, wxEmptyString, wxT("Select a folder"), wxDefaultPosition, wxDefaultSize, wxDIRP_SMALL|wxDIRP_USE_TEXTCTRL );
+    m_dirPicker = new wxDirPickerCtrl( imageFileSizer->GetStaticBox(), wxID_ANY, wxEmptyString, wxT("Select a folder"), wxDefaultPosition, wxDefaultSize, wxDIRP_SMALL|wxDIRP_USE_TEXTCTRL );
     fgSizer2->Add( m_dirPicker, 0, wxALL|wxEXPAND, 5 );
 
-    m_staticText30 = new wxStaticText( this, wxID_ANY, wxT("First :"), wxDefaultPosition, wxDefaultSize, 0 );
+    m_staticText30 = new wxStaticText( imageFileSizer->GetStaticBox(), wxID_ANY, wxT("First :"), wxDefaultPosition, wxDefaultSize, 0 );
     m_staticText30->Wrap( -1 );
     fgSizer2->Add( m_staticText30, 0, wxALIGN_CENTER_VERTICAL|wxALIGN_RIGHT|wxALL, 5 );
 
-    m_firstFrame = new wxSpinCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxSP_ARROW_KEYS, 0, 10, 0 );
+    m_firstFrame = new wxSpinCtrl( imageFileSizer->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxSP_ARROW_KEYS, 0, 10, 0 );
     fgSizer2->Add( m_firstFrame, 0, wxALL, 5 );
 
-    m_staticText31 = new wxStaticText( this, wxID_ANY, wxT("Last :"), wxDefaultPosition, wxDefaultSize, 0 );
+    m_staticText31 = new wxStaticText( imageFileSizer->GetStaticBox(), wxID_ANY, wxT("Last :"), wxDefaultPosition, wxDefaultSize, 0 );
     m_staticText31->Wrap( -1 );
     fgSizer2->Add( m_staticText31, 0, wxALIGN_CENTER_VERTICAL|wxALIGN_RIGHT|wxALL, 5 );
 
-    m_lastFrame = new wxSpinCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxSP_ARROW_KEYS, 0, 10, 0 );
+    m_lastFrame = new wxSpinCtrl( imageFileSizer->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxSP_ARROW_KEYS, 0, 10, 0 );
     fgSizer2->Add( m_lastFrame, 0, wxALL, 5 );
 
 
@@ -178,32 +175,32 @@ YUVSplitDialogBase::YUVSplitDialogBase( wxWindow* parent, wxWindowID id, const w
     fgSizer5->SetFlexibleDirection( wxBOTH );
     fgSizer5->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
 
-    m_staticText19 = new wxStaticText( this, wxID_ANY, wxT("Format :"), wxDefaultPosition, wxDefaultSize, 0 );
+    m_staticText19 = new wxStaticText( imageFormatSizer->GetStaticBox(), wxID_ANY, wxT("Format :"), wxDefaultPosition, wxDefaultSize, 0 );
     m_staticText19->Wrap( -1 );
     fgSizer5->Add( m_staticText19, 0, wxALIGN_CENTER_VERTICAL|wxALIGN_RIGHT|wxALL, 5 );
 
     wxString m_fmtChoiceChoices[] = { wxT("YUV 4:2:0"), wxT("YUV 4:2:2"), wxT("YUV 4:4:4"), wxT("NV12"), wxT("NV21") };
     int m_fmtChoiceNChoices = sizeof( m_fmtChoiceChoices ) / sizeof( wxString );
-    m_fmtChoice = new wxChoice( this, wxID_FORMAT_YUV, wxDefaultPosition, wxDefaultSize, m_fmtChoiceNChoices, m_fmtChoiceChoices, 0 );
+    m_fmtChoice = new wxChoice( imageFormatSizer->GetStaticBox(), wxID_FORMAT_YUV, wxDefaultPosition, wxDefaultSize, m_fmtChoiceNChoices, m_fmtChoiceChoices, 0 );
     m_fmtChoice->SetSelection( 0 );
     fgSizer5->Add( m_fmtChoice, 1, wxALL|wxEXPAND, 5 );
 
 
     fgSizer5->Add( 0, 0, 1, wxEXPAND, 5 );
 
-    m_staticText201 = new wxStaticText( this, wxID_ANY, wxT("Bits :"), wxDefaultPosition, wxDefaultSize, 0 );
+    m_staticText201 = new wxStaticText( imageFormatSizer->GetStaticBox(), wxID_ANY, wxT("Bits :"), wxDefaultPosition, wxDefaultSize, 0 );
     m_staticText201->Wrap( -1 );
     fgSizer5->Add( m_staticText201, 0, wxALIGN_CENTER_VERTICAL|wxALIGN_RIGHT|wxALL, 5 );
 
     wxString m_bitsChoiceChoices[] = { wxT("8-bit"), wxT("10-bit"), wxT("16-bit") };
     int m_bitsChoiceNChoices = sizeof( m_bitsChoiceChoices ) / sizeof( wxString );
-    m_bitsChoice = new wxChoice( this, wxID_FORMAT_BITS, wxDefaultPosition, wxDefaultSize, m_bitsChoiceNChoices, m_bitsChoiceChoices, 0 );
+    m_bitsChoice = new wxChoice( imageFormatSizer->GetStaticBox(), wxID_FORMAT_BITS, wxDefaultPosition, wxDefaultSize, m_bitsChoiceNChoices, m_bitsChoiceChoices, 0 );
     m_bitsChoice->SetSelection( 0 );
     fgSizer5->Add( m_bitsChoice, 0, wxALL|wxEXPAND, 5 );
 
     wxString m_bitsEndianChoices[] = { wxT("Little Endian"), wxT("Big Endian") };
     int m_bitsEndianNChoices = sizeof( m_bitsEndianChoices ) / sizeof( wxString );
-    m_bitsEndian = new wxChoice( this, wxID_FORMAT_ENDIAN, wxDefaultPosition, wxDefaultSize, m_bitsEndianNChoices, m_bitsEndianChoices, 0 );
+    m_bitsEndian = new wxChoice( imageFormatSizer->GetStaticBox(), wxID_FORMAT_ENDIAN, wxDefaultPosition, wxDefaultSize, m_bitsEndianNChoices, m_bitsEndianChoices, 0 );
     m_bitsEndian->SetSelection( 0 );
     m_bitsEndian->Enable( false );
     m_bitsEndian->SetToolTip( wxT("Format Endianness") );
@@ -224,29 +221,27 @@ YUVSplitDialogBase::YUVSplitDialogBase( wxWindow* parent, wxWindowID id, const w
     fgSizer3->SetFlexibleDirection( wxBOTH );
     fgSizer3->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
 
-    m_staticText44 = new wxStaticText( this, wxID_ANY, wxT("Standard :"), wxDefaultPosition, wxDefaultSize, 0 );
+    m_staticText44 = new wxStaticText( imageDimensionsSizer->GetStaticBox(), wxID_ANY, wxT("Standard :"), wxDefaultPosition, wxDefaultSize, 0 );
     m_staticText44->Wrap( -1 );
     fgSizer3->Add( m_staticText44, 0, wxALIGN_CENTER_VERTICAL|wxALIGN_RIGHT|wxALL, 5 );
 
     wxArrayString m_stdChoiceChoices;
-    m_stdChoice = new wxChoice( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, m_stdChoiceChoices, 0 );
+    m_stdChoice = new wxChoice( imageDimensionsSizer->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxDefaultSize, m_stdChoiceChoices, 0 );
     m_stdChoice->SetSelection( 0 );
     fgSizer3->Add( m_stdChoice, 0, wxALL, 5 );
 
-    m_staticText7 = new wxStaticText( this, wxID_ANY, wxT("Width :"), wxDefaultPosition, wxDefaultSize, 0 );
+    m_staticText7 = new wxStaticText( imageDimensionsSizer->GetStaticBox(), wxID_ANY, wxT("Width :"), wxDefaultPosition, wxDefaultSize, 0 );
     m_staticText7->Wrap( -1 );
     fgSizer3->Add( m_staticText7, 0, wxALIGN_CENTER_VERTICAL|wxALIGN_RIGHT|wxALL, 5 );
 
-    m_WidthCtl = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-    m_WidthCtl->SetMaxLength( 0 );
+    m_WidthCtl = new wxTextCtrl( imageDimensionsSizer->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
     fgSizer3->Add( m_WidthCtl, 0, wxALL, 5 );
 
-    m_staticText8 = new wxStaticText( this, wxID_ANY, wxT("Height :"), wxDefaultPosition, wxDefaultSize, 0 );
+    m_staticText8 = new wxStaticText( imageDimensionsSizer->GetStaticBox(), wxID_ANY, wxT("Height :"), wxDefaultPosition, wxDefaultSize, 0 );
     m_staticText8->Wrap( -1 );
     fgSizer3->Add( m_staticText8, 0, wxALIGN_CENTER_VERTICAL|wxALIGN_RIGHT|wxALL, 5 );
 
-    m_HeightCtl = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-    m_HeightCtl->SetMaxLength( 0 );
+    m_HeightCtl = new wxTextCtrl( imageDimensionsSizer->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
     fgSizer3->Add( m_HeightCtl, 0, wxALL, 5 );
 
 
@@ -304,11 +299,11 @@ YUVCompDialogBase::YUVCompDialogBase( wxWindow* parent, wxWindowID id, const wxS
     fgSizer2->SetFlexibleDirection( wxBOTH );
     fgSizer2->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
 
-    m_staticText20 = new wxStaticText( this, wxID_ANY, wxT("YUV File :"), wxDefaultPosition, wxDefaultSize, 0 );
+    m_staticText20 = new wxStaticText( imageFileSizer->GetStaticBox(), wxID_ANY, wxT("YUV File :"), wxDefaultPosition, wxDefaultSize, 0 );
     m_staticText20->Wrap( -1 );
     fgSizer2->Add( m_staticText20, 0, wxALIGN_CENTER_VERTICAL|wxALIGN_RIGHT|wxALL, 5 );
 
-    m_filePicker = new wxFilePickerCtrl( this, wxID_ANY, wxEmptyString, wxT("Select a YUV Composite File"), wxT("YUV Files (*.yuv)|*.yuv"), wxDefaultPosition, wxSize( 280,-1 ), wxFLP_FILE_MUST_EXIST|wxFLP_OPEN|wxFLP_USE_TEXTCTRL );
+    m_filePicker = new wxFilePickerCtrl( imageFileSizer->GetStaticBox(), wxID_ANY, wxEmptyString, wxT("Select a YUV Composite File"), wxT("YUV Files (*.yuv)|*.yuv"), wxDefaultPosition, wxSize( 280,-1 ), wxFLP_FILE_MUST_EXIST|wxFLP_OPEN|wxFLP_USE_TEXTCTRL );
     fgSizer2->Add( m_filePicker, 0, wxALL|wxEXPAND, 5 );
 
 
@@ -325,32 +320,32 @@ YUVCompDialogBase::YUVCompDialogBase( wxWindow* parent, wxWindowID id, const wxS
     fgSizer5->SetFlexibleDirection( wxBOTH );
     fgSizer5->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
 
-    m_staticText19 = new wxStaticText( this, wxID_ANY, wxT("Format :"), wxDefaultPosition, wxDefaultSize, 0 );
+    m_staticText19 = new wxStaticText( imageFormatSizer->GetStaticBox(), wxID_ANY, wxT("Format :"), wxDefaultPosition, wxDefaultSize, 0 );
     m_staticText19->Wrap( -1 );
     fgSizer5->Add( m_staticText19, 0, wxALIGN_CENTER_VERTICAL|wxALIGN_RIGHT|wxALL, 5 );
 
     wxString m_fmtChoiceChoices[] = { wxT("YUV 4:2:0"), wxT("YUV 4:2:2"), wxT("YUV 4:4:4"), wxT("NV12"), wxT("NV21") };
     int m_fmtChoiceNChoices = sizeof( m_fmtChoiceChoices ) / sizeof( wxString );
-    m_fmtChoice = new wxChoice( this, wxID_FORMAT_YUV, wxDefaultPosition, wxDefaultSize, m_fmtChoiceNChoices, m_fmtChoiceChoices, 0 );
+    m_fmtChoice = new wxChoice( imageFormatSizer->GetStaticBox(), wxID_FORMAT_YUV, wxDefaultPosition, wxDefaultSize, m_fmtChoiceNChoices, m_fmtChoiceChoices, 0 );
     m_fmtChoice->SetSelection( 0 );
     fgSizer5->Add( m_fmtChoice, 1, wxALL|wxEXPAND, 5 );
 
 
     fgSizer5->Add( 0, 0, 1, wxEXPAND, 5 );
 
-    m_staticText201 = new wxStaticText( this, wxID_ANY, wxT("Bits :"), wxDefaultPosition, wxDefaultSize, 0 );
+    m_staticText201 = new wxStaticText( imageFormatSizer->GetStaticBox(), wxID_ANY, wxT("Bits :"), wxDefaultPosition, wxDefaultSize, 0 );
     m_staticText201->Wrap( -1 );
     fgSizer5->Add( m_staticText201, 0, wxALIGN_CENTER_VERTICAL|wxALIGN_RIGHT|wxALL, 5 );
 
     wxString m_bitsChoiceChoices[] = { wxT("8-bit"), wxT("10-bit"), wxT("16-bit") };
     int m_bitsChoiceNChoices = sizeof( m_bitsChoiceChoices ) / sizeof( wxString );
-    m_bitsChoice = new wxChoice( this, wxID_FORMAT_BITS, wxDefaultPosition, wxDefaultSize, m_bitsChoiceNChoices, m_bitsChoiceChoices, 0 );
+    m_bitsChoice = new wxChoice( imageFormatSizer->GetStaticBox(), wxID_FORMAT_BITS, wxDefaultPosition, wxDefaultSize, m_bitsChoiceNChoices, m_bitsChoiceChoices, 0 );
     m_bitsChoice->SetSelection( 0 );
     fgSizer5->Add( m_bitsChoice, 0, wxALL|wxEXPAND, 5 );
 
     wxString m_bitsEndianChoices[] = { wxT("Little Endian"), wxT("Big Endian") };
     int m_bitsEndianNChoices = sizeof( m_bitsEndianChoices ) / sizeof( wxString );
-    m_bitsEndian = new wxChoice( this, wxID_FORMAT_ENDIAN, wxDefaultPosition, wxDefaultSize, m_bitsEndianNChoices, m_bitsEndianChoices, 0 );
+    m_bitsEndian = new wxChoice( imageFormatSizer->GetStaticBox(), wxID_FORMAT_ENDIAN, wxDefaultPosition, wxDefaultSize, m_bitsEndianNChoices, m_bitsEndianChoices, 0 );
     m_bitsEndian->SetSelection( 0 );
     m_bitsEndian->Enable( false );
     m_bitsEndian->SetToolTip( wxT("Format Endianness") );
@@ -371,29 +366,27 @@ YUVCompDialogBase::YUVCompDialogBase( wxWindow* parent, wxWindowID id, const wxS
     fgSizer3->SetFlexibleDirection( wxBOTH );
     fgSizer3->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
 
-    m_staticText44 = new wxStaticText( this, wxID_ANY, wxT("Standard :"), wxDefaultPosition, wxDefaultSize, 0 );
+    m_staticText44 = new wxStaticText( imageDimensionsSizer->GetStaticBox(), wxID_ANY, wxT("Standard :"), wxDefaultPosition, wxDefaultSize, 0 );
     m_staticText44->Wrap( -1 );
     fgSizer3->Add( m_staticText44, 0, wxALIGN_CENTER_VERTICAL|wxALIGN_RIGHT|wxALL, 5 );
 
     wxArrayString m_stdChoiceChoices;
-    m_stdChoice = new wxChoice( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, m_stdChoiceChoices, 0 );
+    m_stdChoice = new wxChoice( imageDimensionsSizer->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxDefaultSize, m_stdChoiceChoices, 0 );
     m_stdChoice->SetSelection( 0 );
     fgSizer3->Add( m_stdChoice, 0, wxALL, 5 );
 
-    m_staticText7 = new wxStaticText( this, wxID_ANY, wxT("Width :"), wxDefaultPosition, wxDefaultSize, 0 );
+    m_staticText7 = new wxStaticText( imageDimensionsSizer->GetStaticBox(), wxID_ANY, wxT("Width :"), wxDefaultPosition, wxDefaultSize, 0 );
     m_staticText7->Wrap( -1 );
     fgSizer3->Add( m_staticText7, 0, wxALIGN_CENTER_VERTICAL|wxALIGN_RIGHT|wxALL, 5 );
 
-    m_WidthCtl = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-    m_WidthCtl->SetMaxLength( 0 );
+    m_WidthCtl = new wxTextCtrl( imageDimensionsSizer->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
     fgSizer3->Add( m_WidthCtl, 0, wxALL, 5 );
 
-    m_staticText8 = new wxStaticText( this, wxID_ANY, wxT("Height :"), wxDefaultPosition, wxDefaultSize, 0 );
+    m_staticText8 = new wxStaticText( imageDimensionsSizer->GetStaticBox(), wxID_ANY, wxT("Height :"), wxDefaultPosition, wxDefaultSize, 0 );
     m_staticText8->Wrap( -1 );
     fgSizer3->Add( m_staticText8, 0, wxALIGN_CENTER_VERTICAL|wxALIGN_RIGHT|wxALL, 5 );
 
-    m_HeightCtl = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-    m_HeightCtl->SetMaxLength( 0 );
+    m_HeightCtl = new wxTextCtrl( imageDimensionsSizer->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
     fgSizer3->Add( m_HeightCtl, 0, wxALL, 5 );
 
 
@@ -446,18 +439,18 @@ GridDialogBase::GridDialogBase( wxWindow* parent, wxWindowID id, const wxString&
     wxGridSizer* gSizer1;
     gSizer1 = new wxGridSizer( 2, 2, 0, 0 );
 
-    m_staticText7 = new wxStaticText( this, wxID_ANY, wxT("Horizontal :"), wxDefaultPosition, wxDefaultSize, 0 );
+    m_staticText7 = new wxStaticText( sbSizer1->GetStaticBox(), wxID_ANY, wxT("Horizontal :"), wxDefaultPosition, wxDefaultSize, 0 );
     m_staticText7->Wrap( -1 );
     gSizer1->Add( m_staticText7, 0, wxALIGN_CENTER_VERTICAL|wxALIGN_RIGHT|wxALL, 5 );
 
-    m_spinH = new wxSpinCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxSP_ARROW_KEYS, 0, 128, 0 );
+    m_spinH = new wxSpinCtrl( sbSizer1->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxSP_ARROW_KEYS, 0, 128, 0 );
     gSizer1->Add( m_spinH, 0, wxALL, 5 );
 
-    m_staticText8 = new wxStaticText( this, wxID_ANY, wxT("Vertical :"), wxDefaultPosition, wxDefaultSize, 0 );
+    m_staticText8 = new wxStaticText( sbSizer1->GetStaticBox(), wxID_ANY, wxT("Vertical :"), wxDefaultPosition, wxDefaultSize, 0 );
     m_staticText8->Wrap( -1 );
     gSizer1->Add( m_staticText8, 0, wxALIGN_CENTER_VERTICAL|wxALIGN_RIGHT|wxALL, 5 );
 
-    m_spinV = new wxSpinCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxSP_ARROW_KEYS, 0, 128, 0 );
+    m_spinV = new wxSpinCtrl( sbSizer1->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxSP_ARROW_KEYS, 0, 128, 0 );
     gSizer1->Add( m_spinV, 0, wxALL, 5 );
 
 
@@ -472,11 +465,11 @@ GridDialogBase::GridDialogBase( wxWindow* parent, wxWindowID id, const wxString&
     wxGridSizer* gSizer4;
     gSizer4 = new wxGridSizer( 2, 2, 0, 0 );
 
-    m_staticText14 = new wxStaticText( this, wxID_ANY, wxT("Grid Color :"), wxDefaultPosition, wxDefaultSize, 0 );
+    m_staticText14 = new wxStaticText( sbSizer4->GetStaticBox(), wxID_ANY, wxT("Grid Color :"), wxDefaultPosition, wxDefaultSize, 0 );
     m_staticText14->Wrap( -1 );
     gSizer4->Add( m_staticText14, 0, wxALIGN_CENTER_VERTICAL|wxALIGN_RIGHT|wxALL, 5 );
 
-    m_gridColorControl = new wxColourPickerCtrl( this, wxID_ANY, *wxBLACK, wxDefaultPosition, wxDefaultSize, wxCLRP_DEFAULT_STYLE );
+    m_gridColorControl = new wxColourPickerCtrl( sbSizer4->GetStaticBox(), wxID_ANY, *wxBLACK, wxDefaultPosition, wxDefaultSize, wxCLRP_DEFAULT_STYLE );
     gSizer4->Add( m_gridColorControl, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
 
 
@@ -518,25 +511,25 @@ ChecksumDialogBase::ChecksumDialogBase( wxWindow* parent, wxWindowID id, const w
     fgSizer4->SetFlexibleDirection( wxBOTH );
     fgSizer4->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
 
-    m_staticText18 = new wxStaticText( this, wxID_ANY, wxT("Luma :"), wxDefaultPosition, wxDefaultSize, 0 );
+    m_staticText18 = new wxStaticText( m_staticBoxSizer->GetStaticBox(), wxID_ANY, wxT("Luma :"), wxDefaultPosition, wxDefaultSize, 0 );
     m_staticText18->Wrap( -1 );
     m_staticText18->SetFont( wxFont( 9, wxFONTFAMILY_TELETYPE, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL, false, wxEmptyString ) );
 
     fgSizer4->Add( m_staticText18, 0, wxALIGN_RIGHT|wxALL, 5 );
 
-    m_lumaText = new wxStaticText( this, wxID_ANY, wxT("0xdeadbeef"), wxDefaultPosition, wxDefaultSize, 0 );
+    m_lumaText = new wxStaticText( m_staticBoxSizer->GetStaticBox(), wxID_ANY, wxT("0xdeadbeef"), wxDefaultPosition, wxDefaultSize, 0 );
     m_lumaText->Wrap( -1 );
     m_lumaText->SetFont( wxFont( 9, wxFONTFAMILY_TELETYPE, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL, false, wxT("Monospace") ) );
 
     fgSizer4->Add( m_lumaText, 0, wxALL, 5 );
 
-    m_staticText20 = new wxStaticText( this, wxID_ANY, wxT("Chroma :"), wxDefaultPosition, wxDefaultSize, 0 );
+    m_staticText20 = new wxStaticText( m_staticBoxSizer->GetStaticBox(), wxID_ANY, wxT("Chroma :"), wxDefaultPosition, wxDefaultSize, 0 );
     m_staticText20->Wrap( -1 );
     m_staticText20->SetFont( wxFont( 9, wxFONTFAMILY_TELETYPE, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL, false, wxT("Monospace") ) );
 
     fgSizer4->Add( m_staticText20, 0, wxALIGN_RIGHT|wxALL, 5 );
 
-    m_chromaText = new wxStaticText( this, wxID_ANY, wxT("0xdeadbeef"), wxDefaultPosition, wxDefaultSize, 0 );
+    m_chromaText = new wxStaticText( m_staticBoxSizer->GetStaticBox(), wxID_ANY, wxT("0xdeadbeef"), wxDefaultPosition, wxDefaultSize, 0 );
     m_chromaText->Wrap( -1 );
     m_chromaText->SetFont( wxFont( 9, wxFONTFAMILY_TELETYPE, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL, false, wxT("Monospace") ) );
 
@@ -687,6 +680,10 @@ frameInspectorMenu::frameInspectorMenu( long style ) : wxMenuBar( style )
     m_menuItem19 = new wxMenuItem( m_viewMenu, ID_VIEW_GRID, wxString( wxT("Enable Grid") ) , wxEmptyString, wxITEM_CHECK );
     m_viewMenu->Append( m_menuItem19 );
 
+    wxMenuItem* m_menuItem33;
+    m_menuItem33 = new wxMenuItem( m_viewMenu, ID_VIEW_GRID_SETTINGS, wxString( wxT("Grid Settings...") ) , wxEmptyString, wxITEM_NORMAL );
+    m_viewMenu->Append( m_menuItem33 );
+
     wxMenuItem* m_menuItem29;
     m_menuItem29 = new wxMenuItem( m_viewMenu, ID_VIEW_FULLSCREEN, wxString( wxT("Fullscreen") ) + wxT('\t') + wxT("F11"), wxEmptyString, wxITEM_NORMAL );
     m_viewMenu->Append( m_menuItem29 );
@@ -740,32 +737,32 @@ formatDialogBase::formatDialogBase( wxWindow* parent, wxWindowID id, const wxStr
     fgSizer5->SetFlexibleDirection( wxBOTH );
     fgSizer5->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
 
-    m_staticText19 = new wxStaticText( this, wxID_ANY, wxT("Format :"), wxDefaultPosition, wxDefaultSize, 0 );
+    m_staticText19 = new wxStaticText( sbSizer8->GetStaticBox(), wxID_ANY, wxT("Format :"), wxDefaultPosition, wxDefaultSize, 0 );
     m_staticText19->Wrap( -1 );
     fgSizer5->Add( m_staticText19, 0, wxALIGN_CENTER_VERTICAL|wxALIGN_RIGHT|wxALL, 5 );
 
     wxString m_fmtChoiceChoices[] = { wxT("YUV 4:2:0"), wxT("YUV 4:2:2"), wxT("YUV 4:4:4"), wxT("NV12"), wxT("NV21") };
     int m_fmtChoiceNChoices = sizeof( m_fmtChoiceChoices ) / sizeof( wxString );
-    m_fmtChoice = new wxChoice( this, wxID_FORMAT_YUV, wxDefaultPosition, wxDefaultSize, m_fmtChoiceNChoices, m_fmtChoiceChoices, 0 );
+    m_fmtChoice = new wxChoice( sbSizer8->GetStaticBox(), wxID_FORMAT_YUV, wxDefaultPosition, wxDefaultSize, m_fmtChoiceNChoices, m_fmtChoiceChoices, 0 );
     m_fmtChoice->SetSelection( 0 );
     fgSizer5->Add( m_fmtChoice, 1, wxALL|wxEXPAND, 5 );
 
 
     fgSizer5->Add( 0, 0, 1, wxEXPAND, 5 );
 
-    m_staticText201 = new wxStaticText( this, wxID_ANY, wxT("Bits :"), wxDefaultPosition, wxDefaultSize, 0 );
+    m_staticText201 = new wxStaticText( sbSizer8->GetStaticBox(), wxID_ANY, wxT("Bits :"), wxDefaultPosition, wxDefaultSize, 0 );
     m_staticText201->Wrap( -1 );
     fgSizer5->Add( m_staticText201, 0, wxALIGN_CENTER_VERTICAL|wxALIGN_RIGHT|wxALL, 5 );
 
     wxString m_bitsChoiceChoices[] = { wxT("8-bit"), wxT("10-bit"), wxT("16-bit") };
     int m_bitsChoiceNChoices = sizeof( m_bitsChoiceChoices ) / sizeof( wxString );
-    m_bitsChoice = new wxChoice( this, wxID_FORMAT_BITS, wxDefaultPosition, wxDefaultSize, m_bitsChoiceNChoices, m_bitsChoiceChoices, 0 );
+    m_bitsChoice = new wxChoice( sbSizer8->GetStaticBox(), wxID_FORMAT_BITS, wxDefaultPosition, wxDefaultSize, m_bitsChoiceNChoices, m_bitsChoiceChoices, 0 );
     m_bitsChoice->SetSelection( 0 );
     fgSizer5->Add( m_bitsChoice, 0, wxALL|wxEXPAND, 5 );
 
     wxString m_bitsEndianChoices[] = { wxT("Little Endian"), wxT("Big Endian") };
     int m_bitsEndianNChoices = sizeof( m_bitsEndianChoices ) / sizeof( wxString );
-    m_bitsEndian = new wxChoice( this, wxID_FORMAT_ENDIAN, wxDefaultPosition, wxDefaultSize, m_bitsEndianNChoices, m_bitsEndianChoices, 0 );
+    m_bitsEndian = new wxChoice( sbSizer8->GetStaticBox(), wxID_FORMAT_ENDIAN, wxDefaultPosition, wxDefaultSize, m_bitsEndianNChoices, m_bitsEndianChoices, 0 );
     m_bitsEndian->SetSelection( 0 );
     m_bitsEndian->Enable( false );
     m_bitsEndian->SetToolTip( wxT("Format Endianness") );

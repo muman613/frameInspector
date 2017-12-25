@@ -72,7 +72,6 @@ BEGIN_EVENT_TABLE(Frame, wxFrame)
     EVT_MENU(ID_FILE_CONV_TO_COMPOSITE, Frame::OnConvertTo)
 #endif  // ENABLE_CONVERT
 
-//    EVT_MENU(ID_FILE_GRID_SETTINGS,  Frame::OnGridSettings)
     EVT_MENU(ID_FILE_EXIT,           Frame::OnExit)
 
     EVT_MENU(ID_FORMAT_SETSIZE,      Frame::OnFormatSetSize)
@@ -85,6 +84,7 @@ BEGIN_EVENT_TABLE(Frame, wxFrame)
     EVT_MENU(ID_VIEW_GO_LAST,        Frame::OnGotoLast)
     EVT_MENU(ID_VIEW_STEP,           Frame::OnViewAutoStep)
     EVT_MENU(ID_VIEW_GRID,           Frame::OnGridChange)
+    EVT_MENU(ID_VIEW_GRID_SETTINGS,  Frame::OnGridSettings)
     EVT_MENU(ID_VIEW_FULLSCREEN,     Frame::OnViewFullscreen)
 
     EVT_MENU_RANGE(ID_VIEW_SCALE_ACTUAL, ID_VIEW_SCALE_DOUBLE, Frame::OnViewScaleToggle)

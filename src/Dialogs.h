@@ -1,8 +1,8 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Jun 19 2017)
+// C++ code generated with wxFormBuilder (version Dec 24 2017)
 // http://www.wxformbuilder.org/
 //
-// PLEASE DO "NOT" EDIT THIS FILE!
+// PLEASE DO *NOT* EDIT THIS FILE!
 ///////////////////////////////////////////////////////////////////////////
 
 #ifndef __DIALOGS_H__
@@ -61,12 +61,13 @@
 #define ID_VIEW_SCALE_DOUBLE 1026
 #define ID_VIEW_STEP 1027
 #define ID_VIEW_GRID 1028
-#define ID_VIEW_FULLSCREEN 1029
-#define ID_CHECKSUM_NONE 1030
-#define ID_CHECKSUM_CRC32 1031
-#define ID_CHECKSUM_MD5 1032
-#define ID_CHECKSUM_SHA1 1033
-#define ID_HELP_ABOUT 1034
+#define ID_VIEW_GRID_SETTINGS 1029
+#define ID_VIEW_FULLSCREEN 1030
+#define ID_CHECKSUM_NONE 1031
+#define ID_CHECKSUM_CRC32 1032
+#define ID_CHECKSUM_MD5 1033
+#define ID_CHECKSUM_SHA1 1034
+#define ID_HELP_ABOUT 1035
 
 ///////////////////////////////////////////////////////////////////////////////
 /// Class HashDialogBase
