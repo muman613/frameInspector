@@ -1,4 +1,4 @@
-#                                               -*- Autoconf -*-
+	#                                               -*- Autoconf -*-
 # Process this file with autoconf to produce a configure script.
 
 AC_PREREQ(2.5)
@@ -44,14 +44,15 @@ fi
 # Check for FAM header
 #AC_CHECK_HEADER([fam.h], opt_enable_fam=yes, opt_enable_fam=no)
 
-AC_ARG_ENABLE([fam],
-	[AS_HELP_STRING([--enable-fam],[Enable File Alteration monitor])],
-	[opt_enable_fam=$enableval])
+#AC_ARG_ENABLE([fam],
+#	[AS_HELP_STRING([--enable-fam],[Enable File Alteration monitor])],
+#	[opt_enable_fam=$enableval],
+#	[opt_enable_fam=no])
 
 AC_ARG_ENABLE([optimize],
 	[AS_HELP_STRING([--enable-optimize],[Enable optimizations])],
 	[opt_optimize=$enableval],
-	[opt_optimize=false])
+	[opt_optimize=no])
 
 AC_ARG_ENABLE([debug],
 	[AS_HELP_STRING( [--enable-debug],[Enable debug messages])],
@@ -63,28 +64,54 @@ AC_ARG_ENABLE([libswscale],
 	[opt_libswscale=$enableval],
 	[opt_libswscale=no])
 
-if test "$opt_libswscale" = yes; then
-	PKG_CHECK_MODULES([LIBSWSCALE], [libswscale],
-		[AC_DEFINE([HAVE_LIBSWSCALE], [1], [Define to '1' if libswscale is available])])
-fi
+AC_ARG_ENABLE([libmjpegtools],
+	[AS_HELP_STRING( [--enable-libmjpegtools], [Enable yuv4mpeg support])],
+	[opt_libmjpegtools=$enableval],
+	[opt_libmkpegtools=no])
+
+
+AS_IF([test "$opt_libswscale" = yes],
+	[
+		PKG_CHECK_MODULES([LIBSWSCALE], [libswscale],
+			[
+				AC_DEFINE([HAVE_LIBSWSCALE], [1], [Define to '1' if libswscale is available])
+				AM_CONDITIONAL([INCLUDE_LIBSWSCALE], [true])
+			])
+	],[
+		AM_CONDITIONAL([INCLUDE_LIBSWSCALE], [false])
+	])
+
+AS_IF([test "$opt_libmjpegtools" = yes],
+	[
+		PKG_CHECK_MODULES([LIBMJPEGTOOLS], [mjpegtools],
+			[
+				AC_DEFINE([HAVE_LIBMJPEGTOOLS], [1], [Define to '1' if mjpegtools is available])
+				AM_CONDITIONAL([INCLUDE_LIBMJPEGTOOLS], [true])
+			])
+	],[
+				AM_CONDITIONAL([INCLUDE_LIBMJPEGTOOLS], [false])
+	])
 
 if test "$opt_debug_build" = yes; then
 	DEBUGFLAGS="-D_ENABLE_DEBUG -g3 -O0"
+	AM_CONDITIONAL([DEBUG], [true])
 else
 	DEBUGFLAGS="-DNDEBUG -g -O2"
+	AM_CONDITIONAL([DEBUG], [false])
 fi
 
-if test "$opt_enable_fam" = yes; then
-	AC_DEFINE([HAVE_FAM], [1], [Define to '1' if FAM is available])
-	AM_CONDITIONAL(INCLUDE_FAM, true)
-	LIBS="-lfam"
-else
-	AM_CONDITIONAL(INCLUDE_FAM, false)
-fi
+# if test "$opt_enable_fam" = yes; then
+#	AC_DEFINE([HAVE_FAM], [1], [Define to '1' if FAM is available])
+#	AM_CONDITIONAL(INCLUDE_FAM, true)
+#	LIBS="-lfam"
+#else
+#	AM_CONDITIONAL(INCLUDE_FAM, false)
+#fi
 
 if test "$opt_optimize" = yes; then
 	OPTIMIZE="-march=pentium4 -msse2 -mfpmath=sse"
 fi
+
 
 CXXFLAGS="$OPTIMIZE $DEBUGFLAGS $WX_CXXFLAGS $LIBSWSCALE_CFLAGS -std=c++11"
 LIBS="$WX_LIBS $LIBS $LIBSWSCALE_LIBS -lX11"

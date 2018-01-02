@@ -11,3 +11,8 @@ noinst_HEADERS=ChecksumDialog.h Dialogs.h DumpImageBuffer.h GridSettingsDialog.h
 			   crc32.h crcVector.h dumpInternals.h frame.h imageBuffer.h misc_utils.h types.h viewApp.h         \
 			   yuvImageControl.h
 
+if INCLUDE_LIBMJPEGTOOLS
+	frameInspector_SOURCES += YUV420ImageBufferY4M.cpp
+	CXXFLAGS += $(LIBMJPEGTOOLS_CFLAGS)
+	LIBS += $(LIBMJPEGTOOLS_LIBS)
+endif
