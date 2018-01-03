@@ -12,7 +12,7 @@ noinst_HEADERS=ChecksumDialog.h Dialogs.h DumpImageBuffer.h GridSettingsDialog.h
 			   yuvImageControl.h
 
 if INCLUDE_LIBMJPEGTOOLS
-	frameInspector_SOURCES += YUV420ImageBufferY4M.cpp
-	CXXFLAGS += $(LIBMJPEGTOOLS_CFLAGS)
-	LIBS += $(LIBMJPEGTOOLS_LIBS)
+frameInspector_SOURCES += YUV420ImageBufferY4M.cpp
+CXXFLAGS += $(LIBMJPEGTOOLS_CFLAGS)
+LIBS += $(LIBMJPEGTOOLS_LIBS)
 endif

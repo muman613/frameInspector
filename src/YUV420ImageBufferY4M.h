@@ -1,8 +1,13 @@
 #ifndef __YUV420IMAGEBUFFERY4M_H__
 #define __YUV420IMAGEBUFFERY4M_H__
 
+#include <wx/dynarray.h>
+#include <yuv4mpeg.h>
+
 #include "imageBuffer.h"
 #include "misc_utils.h"
+
+WX_DEFINE_ARRAY_SIZE_T(wxFileOffset, ArrayOfOffsets);
 
 /**
   * Implement an imagebuffer which loads from composite YUV file.
@@ -11,8 +16,7 @@
 
 class YUV420ImageBufferY4M : public ImageBuffer {
 	public:
-		YUV420ImageBufferY4M(int width, int height, int bits = 8,
-                        formatEndian endianness = endian_little);
+		YUV420ImageBufferY4M();
 		virtual ~YUV420ImageBufferY4M();
 
 		bool		Load(size_t frame);
@@ -28,10 +32,15 @@ class YUV420ImageBufferY4M : public ImageBuffer {
         //bool        GetChecksum(size_t frame, wxUint8* lumaSum, wxUint8* chromaSum);
 
 	protected:
+		wxString			m_imageFilename;
+		wxFile				m_file;
 
-//		bool		m_ccir601;
-		wxString	m_imageFilename;
-		wxFile		m_file;
+		y4m_stream_info_t	m_strInfo;
+		y4m_frame_info_t	m_frmInfo;
+
+		size_t				generateIndex();
+
+		ArrayOfOffsets		m_frameOffsets;
 };
 
 #endif

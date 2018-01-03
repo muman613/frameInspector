@@ -26,6 +26,7 @@ enum yuvBufType {
     YUV_FILE_SPLIT,
     YUV_FILE_COMP,
     YUV_FILE_DUMP,
+    YUV_FILE_Y4M,
 };
 
 enum formatEndian {

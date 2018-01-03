@@ -6,6 +6,10 @@
  * @brief   Implementation of the yuvImageControl component.
  */
 
+#ifdef HAVE_CONFIG_H
+    #include "config.h"
+#endif
+
 #include <wx/wx.h>
 #include <wx/config.h>
 #include <typeinfo>
@@ -15,6 +19,9 @@
 #include "YUV420ImageBufferSplit.h"
 #include "YUV420ImageBufferFile.h"
 #include "DumpImageBuffer.h"
+#ifdef  HAVE_LIBMJPEGTOOLS
+    #include "YUV420ImageBufferY4M.h"
+#endif
 #include "controlParms.h"
 
 IMPLEMENT_DYNAMIC_CLASS( yuvImageControl, wxScrolledWindow )
@@ -227,43 +234,65 @@ bool yuvImageControl::allocate_image_buffer() {
 
     free_image_buffer();                /* delete any existing image buffer */
 
-    if (m_bufType == YUV_FILE_SPLIT) {
-        YUV420ImageBufferSplit*	newBuf = new YUV420ImageBufferSplit(m_imageSize.GetWidth(),
-                m_imageSize.GetHeight(), m_bits, m_endianness);
+    switch (m_bufType) {
+    case YUV_FILE_SPLIT:
+        {
+            YUV420ImageBufferSplit*	newBuf = new YUV420ImageBufferSplit(m_imageSize.GetWidth(),
+                    m_imageSize.GetHeight(), m_bits, m_endianness);
 
-        wxASSERT(newBuf != 0L);
+            wxASSERT(newBuf != 0L);
 
-//        newBuf->setPrefix(m_prefix);
-//        newBuf->setPath(m_imagePath);
-        newBuf->setImageSpec(m_imageSpec);
-        newBuf->getImageVec();
+            newBuf->setImageSpec(m_imageSpec);
+            newBuf->getImageVec();
 
-        m_buffer = dynamic_cast<ImageBuffer*>(newBuf);
-    } else if (m_bufType == YUV_FILE_COMP) {
-        YUV420ImageBufferFile* newBuf = new YUV420ImageBufferFile(m_imageSize.GetWidth(),
-                m_imageSize.GetHeight(), m_bits, m_endianness);
-        wxASSERT(newBuf != 0L);
+            m_buffer = dynamic_cast<ImageBuffer*>(newBuf);
+        }
+        break;
+    case YUV_FILE_COMP:
+        {
+            YUV420ImageBufferFile* newBuf = new YUV420ImageBufferFile(m_imageSize.GetWidth(),
+                    m_imageSize.GetHeight(), m_bits, m_endianness);
 
-        newBuf->SetFilename(m_imageFilename);
+            wxASSERT(newBuf != 0L);
 
-        m_buffer = dynamic_cast<ImageBuffer*>(newBuf);
-    } else if (m_bufType == YUV_FILE_DUMP) {
-        dumpImageBuffer* newBuf = new dumpImageBuffer(m_imageSize.GetWidth(), m_imageSize.GetHeight());
+            newBuf->SetFilename(m_imageFilename);
 
-        wxASSERT(newBuf != 0L);
+            m_buffer = dynamic_cast<ImageBuffer*>(newBuf);
+        }
+        break;
+    case YUV_FILE_DUMP:
+        {
+            dumpImageBuffer* newBuf = new dumpImageBuffer(m_imageSize.GetWidth(), m_imageSize.GetHeight());
 
-        newBuf->setPath(m_imagePath);
+            wxASSERT(newBuf != nullptr);
 
-        m_buffer = dynamic_cast<ImageBuffer*>(newBuf);
-    } else {
-        wxLogDebug("ERROR: Buffer type not specified!");
+            newBuf->setPath(m_imagePath);
+
+            m_buffer = dynamic_cast<ImageBuffer*>(newBuf);
+        }
+        break;
+
+#ifdef  HAVE_LIBMJPEGTOOLS
+    case YUV_FILE_Y4M:
+        {
+            YUV420ImageBufferY4M* newBuf = new YUV420ImageBufferY4M();
+            wxASSERT(newBuf != nullptr);
+
+            newBuf->SetFilename(m_imageFilename);
+
+            m_buffer = dynamic_cast<ImageBuffer*>(newBuf);
+        }
+        break;
+#endif  // HAVE_LIBMJPEGTOOLS
+
+    default:
+        wxLogDebug("ERROR: Buffer type not recognized!");
         return false;
     }
 
-
     m_buffer->setYUVMask(&m_mask);
 
-    wxASSERT( m_buffer != 0L );
+    wxASSERT( m_buffer != nullptr );
 
     m_lastFrame = m_buffer->GetFrameCount();
 
@@ -389,7 +418,7 @@ bool yuvImageControl::GetImage() {
 
     bool    result = false;
 
-    if (m_buffer == 0)
+    if (m_buffer == nullptr)
         return false;
 
     if (m_buffer->lastError() != ImageBuffer::IB_ERROR_NO_ERROR) {
@@ -637,6 +666,31 @@ bool yuvImageControl::OpenYUVComposite(const wxString& sYUVCompFile,
 
     return m_bValid;
 }
+
+/**
+ *
+ */
+
+#ifdef HAVE_LIBMJPEGTOOLS
+
+bool yuvImageControl::OpenYUVY4M(const wxString& sYUVY4MFile)
+{
+    wxFileName  fname(sYUVY4MFile);
+
+    wxLogDebug("yuvImageControl::OpenYUVY4M(%s)", sYUVY4MFile);
+
+    m_prefix.clear();
+    m_imagePath     = fname.GetPath();
+    m_imageFilename = sYUVY4MFile;
+    m_bufType       = YUV_FILE_Y4M;
+
+    RefreshImage();
+
+    return m_bValid;
+}
+
+#endif
+
 
 /**
  *
@@ -1105,3 +1159,40 @@ bool yuvImageControl::getYUVMask(yuvMask& mask) {
     mask = m_mask;
     return true;
 }
+
+
+#if 0
+
+    if (m_bufType == YUV_FILE_SPLIT) {
+        YUV420ImageBufferSplit*	newBuf = new YUV420ImageBufferSplit(m_imageSize.GetWidth(),
+                m_imageSize.GetHeight(), m_bits, m_endianness);
+
+        wxASSERT(newBuf != 0L);
+
+//        newBuf->setPrefix(m_prefix);
+//        newBuf->setPath(m_imagePath);
+        newBuf->setImageSpec(m_imageSpec);
+        newBuf->getImageVec();
+
+        m_buffer = dynamic_cast<ImageBuffer*>(newBuf);
+    } else if (m_bufType == YUV_FILE_COMP) {
+        YUV420ImageBufferFile* newBuf = new YUV420ImageBufferFile(m_imageSize.GetWidth(),
+                m_imageSize.GetHeight(), m_bits, m_endianness);
+        wxASSERT(newBuf != 0L);
+
+        newBuf->SetFilename(m_imageFilename);
+
+        m_buffer = dynamic_cast<ImageBuffer*>(newBuf);
+    } else if (m_bufType == YUV_FILE_DUMP) {
+        dumpImageBuffer* newBuf = new dumpImageBuffer(m_imageSize.GetWidth(), m_imageSize.GetHeight());
+
+        wxASSERT(newBuf != 0L);
+
+        newBuf->setPath(m_imagePath);
+
+        m_buffer = dynamic_cast<ImageBuffer*>(newBuf);
+    } else {
+        wxLogDebug("ERROR: Buffer type not specified!");
+        return false;
+    }
+#endif

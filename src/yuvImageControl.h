@@ -78,10 +78,14 @@ public:
                                          dataType type,
                                          formatEndian endianness);
     bool                    OpenYUVComposite(const wxString& sYUVCompFile,
-            const wxSize& size,
-            const wxUint16 bits,
-            dataType type = DATA_YUV420,
-            formatEndian endianness = endian_little);
+                                        const wxSize& size,
+                                        const wxUint16 bits,
+                                        dataType type = DATA_YUV420,
+                                        formatEndian endianness = endian_little);
+#ifdef HAVE_LIBMJPEGTOOLS
+    bool                    OpenYUVY4M(const wxString& sYUVY4MFile);
+#endif
+
     bool                    OpenYUVDump(const wxString& sPath);
     void                    CloseImage();
 

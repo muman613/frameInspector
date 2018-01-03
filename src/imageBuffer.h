@@ -20,27 +20,7 @@
 
 struct yuvMask;
 
-#if 1
 #include "types.h"
-#else
-/// Image data representation
-enum dataType {
-    DATA_UNKNOWN,   //!< Data format unknown
-    DATA_YUV420,    //!< Data in YUV420 format
-    DATA_YUV422,    //!< Data in YUV422 format
-    DATA_YUV444,    //!< Data in YUV444 format
-    DATA_NV12,      //!< Data in NV12 format
-    DATA_NV21,      //!< Data in NV21 format
-    DATA_RGB32,     //!< Data in RGB32 format
-};
-
-enum yuvBufType {
-    YUV_FILE_UNKNOWN,
-    YUV_FILE_SPLIT,
-    YUV_FILE_COMP,
-    YUV_FILE_DUMP,
-};
-#endif
 
 /// Buffer encapsulates a YUV frame
 class yuvBuffer {
@@ -53,7 +33,7 @@ public:
     wxUint32                m_lumaSize;
     wxUint32                m_chromaSize;
     wxUint32                m_bits;
-    formatEndian     m_endianness;
+    formatEndian            m_endianness;
     wxUint8*                m_pY;
     wxUint8*                m_pU;
     wxUint8*                m_pV;
@@ -77,6 +57,7 @@ public:
         IB_ERROR_OUT_OF_BOUNDS,
         IB_ERROR_FILE_NOT_FOUND,
         IB_ERROR_NOT_OPEN,
+        IB_ERROR_SYSTEM,
     };
 
     enum eSaveType {

@@ -50,6 +50,7 @@ public:
     void        OnFileOpenSplit(wxCommandEvent& event);
     void        OnFileOpenFile(wxCommandEvent& event);
     void        OnFileOpenDump(wxCommandEvent& event);
+    void        OnFileOpenY4M(wxCommandEvent& event);
     void        OnFileClose(wxCommandEvent& event);
     void        OnViewNext(wxCommandEvent& event);
     void        OnViewPrevious(wxCommandEvent& event);

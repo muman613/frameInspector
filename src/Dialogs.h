@@ -1,8 +1,8 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Dec 24 2017)
+// C++ code generated with wxFormBuilder (version Aug  3 2017)
 // http://www.wxformbuilder.org/
 //
-// PLEASE DO *NOT* EDIT THIS FILE!
+// PLEASE DO "NOT" EDIT THIS FILE!
 ///////////////////////////////////////////////////////////////////////////
 
 #ifndef __DIALOGS_H__
@@ -38,290 +38,271 @@
 #define ID_FILE_OPEN_SPLIT 1003
 #define ID_FILE_OPEN_FILE 1004
 #define ID_FILE_OPEN_DUMP 1005
-#define ID_FILE_CLOSE 1006
-#define ID_FILE_REFRESH 1007
-#define ID_FILE_SAVE_IMAGE 1008
-#define ID_FILE_SAVE_YUV_SPLIT 1009
-#define ID_FILE_SAVE_YUV_COMP 1010
-#define ID_FILE_EXIT 1011
-#define ID_FORMAT_SETSIZE 1012
-#define ID_FORMAT_YUV 1013
-#define ID_FORMAT_MASK_Y 1014
-#define ID_FORMAT_MASK_U 1015
-#define ID_FORMAT_MASK_V 1016
-#define ID_FORMAT_PROPERTIES 1017
-#define ID_VIEW_NEXT 1018
-#define ID_VIEW_PREV 1019
-#define ID_VIEW_GO_HOME 1020
-#define ID_VIEW_GO_LAST 1021
-#define ID_VIEW_GOTO 1022
-#define ID_VIEW_SCALE_ACTUAL 1023
-#define ID_VIEW_SCALE_SCALED 1024
-#define ID_VIEW_SCALE_HALF 1025
-#define ID_VIEW_SCALE_DOUBLE 1026
-#define ID_VIEW_STEP 1027
-#define ID_VIEW_GRID 1028
-#define ID_VIEW_GRID_SETTINGS 1029
-#define ID_VIEW_FULLSCREEN 1030
-#define ID_CHECKSUM_NONE 1031
-#define ID_CHECKSUM_CRC32 1032
-#define ID_CHECKSUM_MD5 1033
-#define ID_CHECKSUM_SHA1 1034
-#define ID_HELP_ABOUT 1035
+#define ID_FILE_OPEN_Y4M 1006
+#define ID_FILE_CLOSE 1007
+#define ID_FILE_REFRESH 1008
+#define ID_FILE_SAVE_IMAGE 1009
+#define ID_FILE_SAVE_YUV_SPLIT 1010
+#define ID_FILE_SAVE_YUV_COMP 1011
+#define ID_FILE_EXIT 1012
+#define ID_FORMAT_SETSIZE 1013
+#define ID_FORMAT_YUV 1014
+#define ID_FORMAT_MASK_Y 1015
+#define ID_FORMAT_MASK_U 1016
+#define ID_FORMAT_MASK_V 1017
+#define ID_FORMAT_PROPERTIES 1018
+#define ID_VIEW_NEXT 1019
+#define ID_VIEW_PREV 1020
+#define ID_VIEW_GO_HOME 1021
+#define ID_VIEW_GO_LAST 1022
+#define ID_VIEW_GOTO 1023
+#define ID_VIEW_SCALE_ACTUAL 1024
+#define ID_VIEW_SCALE_SCALED 1025
+#define ID_VIEW_SCALE_HALF 1026
+#define ID_VIEW_SCALE_DOUBLE 1027
+#define ID_VIEW_STEP 1028
+#define ID_VIEW_GRID 1029
+#define ID_VIEW_GRID_SETTINGS 1030
+#define ID_VIEW_FULLSCREEN 1031
+#define ID_CHECKSUM_NONE 1032
+#define ID_CHECKSUM_CRC32 1033
+#define ID_CHECKSUM_MD5 1034
+#define ID_CHECKSUM_SHA1 1035
+#define ID_HELP_ABOUT 1036
 
 ///////////////////////////////////////////////////////////////////////////////
 /// Class HashDialogBase
 ///////////////////////////////////////////////////////////////////////////////
-class HashDialogBase : public wxDialog
+class HashDialogBase : public wxDialog 
 {
-private:
-
-protected:
-    wxStaticText* m_staticText9;
-    wxStaticText* m_lumaText;
-    wxStaticText* m_staticText11;
-    wxStaticText* m_chromaText;
-
-public:
-
-    HashDialogBase( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = wxT("Checksum Dialog"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxCAPTION );
-    ~HashDialogBase();
-
+	private:
+	
+	protected:
+		wxStaticText* m_staticText9;
+		wxStaticText* m_lumaText;
+		wxStaticText* m_staticText11;
+		wxStaticText* m_chromaText;
+	
+	public:
+		
+		HashDialogBase( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = wxT("Checksum Dialog"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxCAPTION ); 
+		~HashDialogBase();
+	
 };
 
 ///////////////////////////////////////////////////////////////////////////////
 /// Class SizeDialogBase
 ///////////////////////////////////////////////////////////////////////////////
-class SizeDialogBase : public wxDialog
+class SizeDialogBase : public wxDialog 
 {
-private:
-
-protected:
-    wxBoxSizer* bSizer1;
-    wxStaticText* m_staticText44;
-    wxChoice* m_stdChoice;
-    wxStaticText* m_staticText7;
-    wxTextCtrl* m_WidthCtl;
-    wxStaticText* m_staticText8;
-    wxTextCtrl* m_HeightCtl;
-    wxStdDialogButtonSizer* m_sdbSizer1;
-    wxButton* m_sdbSizer1OK;
-    wxButton* m_sdbSizer1Cancel;
-
-    // Virtual event handlers, overide them in your derived class
-    virtual void OnChangeStandard( wxCommandEvent& event ) {
-        event.Skip();
-    }
-
-
-public:
-
-    SizeDialogBase( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = wxT("Set Image Size"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize, long style = wxDEFAULT_DIALOG_STYLE );
-    ~SizeDialogBase();
-
+	private:
+	
+	protected:
+		wxBoxSizer* bSizer1;
+		wxStaticText* m_staticText44;
+		wxChoice* m_stdChoice;
+		wxStaticText* m_staticText7;
+		wxTextCtrl* m_WidthCtl;
+		wxStaticText* m_staticText8;
+		wxTextCtrl* m_HeightCtl;
+		wxStdDialogButtonSizer* m_sdbSizer1;
+		wxButton* m_sdbSizer1OK;
+		wxButton* m_sdbSizer1Cancel;
+		
+		// Virtual event handlers, overide them in your derived class
+		virtual void OnChangeStandard( wxCommandEvent& event ) { event.Skip(); }
+		
+	
+	public:
+		
+		SizeDialogBase( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = wxT("Set Image Size"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize, long style = wxDEFAULT_DIALOG_STYLE ); 
+		~SizeDialogBase();
+	
 };
 
 ///////////////////////////////////////////////////////////////////////////////
 /// Class YUVSplitDialogBase
 ///////////////////////////////////////////////////////////////////////////////
-class YUVSplitDialogBase : public wxDialog
+class YUVSplitDialogBase : public wxDialog 
 {
-private:
-
-protected:
-    wxBoxSizer* bSizer1;
-    wxStaticText* m_staticText39;
-    wxTextCtrl* m_prefix;
-    wxStaticText* m_staticText20;
-    wxDirPickerCtrl* m_dirPicker;
-    wxStaticText* m_staticText30;
-    wxSpinCtrl* m_firstFrame;
-    wxStaticText* m_staticText31;
-    wxSpinCtrl* m_lastFrame;
-    wxStaticText* m_staticText19;
-    wxChoice* m_fmtChoice;
-    wxStaticText* m_staticText201;
-    wxChoice* m_bitsChoice;
-    wxChoice* m_bitsEndian;
-    wxStaticText* m_staticText44;
-    wxChoice* m_stdChoice;
-    wxStaticText* m_staticText7;
-    wxTextCtrl* m_WidthCtl;
-    wxStaticText* m_staticText8;
-    wxTextCtrl* m_HeightCtl;
-    wxStdDialogButtonSizer* m_sdbSizer1;
-    wxButton* m_sdbSizer1OK;
-    wxButton* m_sdbSizer1Cancel;
-
-    // Virtual event handlers, overide them in your derived class
-    virtual void OnInitDialog( wxInitDialogEvent& event ) {
-        event.Skip();
-    }
-    virtual void OnUpdateUI( wxUpdateUIEvent& event ) {
-        event.Skip();
-    }
-    virtual void OnPrefixChanged( wxCommandEvent& event ) {
-        event.Skip();
-    }
-    virtual void OnDirChanged( wxFileDirPickerEvent& event ) {
-        event.Skip();
-    }
-    virtual void OnChangeStandard( wxCommandEvent& event ) {
-        event.Skip();
-    }
-
-
-public:
-
-    YUVSplitDialogBase( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = wxT("Open YUV Split File"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize, long style = wxDEFAULT_DIALOG_STYLE );
-    ~YUVSplitDialogBase();
-
+	private:
+	
+	protected:
+		wxBoxSizer* bSizer1;
+		wxStaticText* m_staticText39;
+		wxTextCtrl* m_prefix;
+		wxStaticText* m_staticText20;
+		wxDirPickerCtrl* m_dirPicker;
+		wxStaticText* m_staticText30;
+		wxSpinCtrl* m_firstFrame;
+		wxStaticText* m_staticText31;
+		wxSpinCtrl* m_lastFrame;
+		wxStaticText* m_staticText19;
+		wxChoice* m_fmtChoice;
+		wxStaticText* m_staticText201;
+		wxChoice* m_bitsChoice;
+		wxChoice* m_bitsEndian;
+		wxStaticText* m_staticText44;
+		wxChoice* m_stdChoice;
+		wxStaticText* m_staticText7;
+		wxTextCtrl* m_WidthCtl;
+		wxStaticText* m_staticText8;
+		wxTextCtrl* m_HeightCtl;
+		wxStdDialogButtonSizer* m_sdbSizer1;
+		wxButton* m_sdbSizer1OK;
+		wxButton* m_sdbSizer1Cancel;
+		
+		// Virtual event handlers, overide them in your derived class
+		virtual void OnInitDialog( wxInitDialogEvent& event ) { event.Skip(); }
+		virtual void OnUpdateUI( wxUpdateUIEvent& event ) { event.Skip(); }
+		virtual void OnPrefixChanged( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnDirChanged( wxFileDirPickerEvent& event ) { event.Skip(); }
+		virtual void OnChangeStandard( wxCommandEvent& event ) { event.Skip(); }
+		
+	
+	public:
+		
+		YUVSplitDialogBase( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = wxT("Open YUV Split File"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize, long style = wxDEFAULT_DIALOG_STYLE ); 
+		~YUVSplitDialogBase();
+	
 };
 
 ///////////////////////////////////////////////////////////////////////////////
 /// Class YUVCompDialogBase
 ///////////////////////////////////////////////////////////////////////////////
-class YUVCompDialogBase : public wxDialog
+class YUVCompDialogBase : public wxDialog 
 {
-private:
-
-protected:
-    wxBoxSizer* bSizer1;
-    wxStaticText* m_staticText20;
-    wxFilePickerCtrl* m_filePicker;
-    wxStaticText* m_staticText19;
-    wxChoice* m_fmtChoice;
-    wxStaticText* m_staticText201;
-    wxChoice* m_bitsChoice;
-    wxChoice* m_bitsEndian;
-    wxStaticText* m_staticText44;
-    wxChoice* m_stdChoice;
-    wxStaticText* m_staticText7;
-    wxTextCtrl* m_WidthCtl;
-    wxStaticText* m_staticText8;
-    wxTextCtrl* m_HeightCtl;
-    wxStdDialogButtonSizer* m_sdbSizer1;
-    wxButton* m_sdbSizer1OK;
-    wxButton* m_sdbSizer1Cancel;
-
-    // Virtual event handlers, overide them in your derived class
-    virtual void OnUpdateUI( wxUpdateUIEvent& event ) {
-        event.Skip();
-    }
-    virtual void OnFileSelected( wxFileDirPickerEvent& event ) {
-        event.Skip();
-    }
-    virtual void OnChangeStandard( wxCommandEvent& event ) {
-        event.Skip();
-    }
-
-
-public:
-
-    YUVCompDialogBase( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = wxT("Open YUV Composite File"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize, long style = wxDEFAULT_DIALOG_STYLE );
-    ~YUVCompDialogBase();
-
+	private:
+	
+	protected:
+		wxBoxSizer* bSizer1;
+		wxStaticText* m_staticText20;
+		wxFilePickerCtrl* m_filePicker;
+		wxStaticText* m_staticText19;
+		wxChoice* m_fmtChoice;
+		wxStaticText* m_staticText201;
+		wxChoice* m_bitsChoice;
+		wxChoice* m_bitsEndian;
+		wxStaticText* m_staticText44;
+		wxChoice* m_stdChoice;
+		wxStaticText* m_staticText7;
+		wxTextCtrl* m_WidthCtl;
+		wxStaticText* m_staticText8;
+		wxTextCtrl* m_HeightCtl;
+		wxStdDialogButtonSizer* m_sdbSizer1;
+		wxButton* m_sdbSizer1OK;
+		wxButton* m_sdbSizer1Cancel;
+		
+		// Virtual event handlers, overide them in your derived class
+		virtual void OnUpdateUI( wxUpdateUIEvent& event ) { event.Skip(); }
+		virtual void OnFileSelected( wxFileDirPickerEvent& event ) { event.Skip(); }
+		virtual void OnChangeStandard( wxCommandEvent& event ) { event.Skip(); }
+		
+	
+	public:
+		
+		YUVCompDialogBase( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = wxT("Open YUV Composite File"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize, long style = wxDEFAULT_DIALOG_STYLE ); 
+		~YUVCompDialogBase();
+	
 };
 
 ///////////////////////////////////////////////////////////////////////////////
 /// Class GridDialogBase
 ///////////////////////////////////////////////////////////////////////////////
-class GridDialogBase : public wxDialog
+class GridDialogBase : public wxDialog 
 {
-private:
-
-protected:
-    wxStaticText* m_staticText7;
-    wxStaticText* m_staticText8;
-    wxStaticText* m_staticText14;
-    wxStdDialogButtonSizer* m_sdbSizer1;
-    wxButton* m_sdbSizer1OK;
-    wxButton* m_sdbSizer1Cancel;
-
-public:
-    wxSpinCtrl* m_spinH;
-    wxSpinCtrl* m_spinV;
-    wxColourPickerCtrl* m_gridColorControl;
-
-    GridDialogBase( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = wxT("Grid Options"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize, long style = wxDEFAULT_DIALOG_STYLE );
-    ~GridDialogBase();
-
+	private:
+	
+	protected:
+		wxStaticText* m_staticText7;
+		wxStaticText* m_staticText8;
+		wxStaticText* m_staticText14;
+		wxStdDialogButtonSizer* m_sdbSizer1;
+		wxButton* m_sdbSizer1OK;
+		wxButton* m_sdbSizer1Cancel;
+	
+	public:
+		wxSpinCtrl* m_spinH;
+		wxSpinCtrl* m_spinV;
+		wxColourPickerCtrl* m_gridColorControl;
+		
+		GridDialogBase( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = wxT("Grid Options"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize, long style = wxDEFAULT_DIALOG_STYLE ); 
+		~GridDialogBase();
+	
 };
 
 ///////////////////////////////////////////////////////////////////////////////
 /// Class ChecksumDialogBase
 ///////////////////////////////////////////////////////////////////////////////
-class ChecksumDialogBase : public wxDialog
+class ChecksumDialogBase : public wxDialog 
 {
-private:
-
-protected:
-    wxStaticBoxSizer* m_staticBoxSizer;
-    wxStaticText* m_staticText18;
-    wxStaticText* m_lumaText;
-    wxStaticText* m_staticText20;
-    wxStaticText* m_chromaText;
-
-public:
-
-    ChecksumDialogBase( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = wxT("Checksum Info"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize, long style = wxCAPTION );
-    ~ChecksumDialogBase();
-
+	private:
+	
+	protected:
+		wxStaticBoxSizer* m_staticBoxSizer;
+		wxStaticText* m_staticText18;
+		wxStaticText* m_lumaText;
+		wxStaticText* m_staticText20;
+		wxStaticText* m_chromaText;
+	
+	public:
+		
+		ChecksumDialogBase( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = wxT("Checksum Info"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize, long style = wxCAPTION ); 
+		~ChecksumDialogBase();
+	
 };
 
 ///////////////////////////////////////////////////////////////////////////////
 /// Class frameInspectorMenu
 ///////////////////////////////////////////////////////////////////////////////
-class frameInspectorMenu : public wxMenuBar
+class frameInspectorMenu : public wxMenuBar 
 {
-private:
-
-protected:
-    wxMenu* m_fileMenu;
-    wxMenu* m_submenuFileOpen;
-    wxMenu* m_submenuFileSave;
-    wxMenu* m_formatMenu;
-    wxMenu* m_menuFormatMask;
-    wxMenu* m_viewMenu;
-    wxMenu* m_submenuViewScaling;
-    wxMenu* m_crcMenu;
-    wxMenu* m_helpMenu;
-
-public:
-
-    frameInspectorMenu( long style = 0 );
-    ~frameInspectorMenu();
-
+	private:
+	
+	protected:
+		wxMenu* m_fileMenu;
+		wxMenu* m_submenuFileOpen;
+		wxMenu* m_submenuFileSave;
+		wxMenu* m_formatMenu;
+		wxMenu* m_menuFormatMask;
+		wxMenu* m_viewMenu;
+		wxMenu* m_submenuViewScaling;
+		wxMenu* m_crcMenu;
+		wxMenu* m_helpMenu;
+	
+	public:
+		
+		frameInspectorMenu( long style = 0 );
+		~frameInspectorMenu();
+	
 };
 
 ///////////////////////////////////////////////////////////////////////////////
 /// Class formatDialogBase
 ///////////////////////////////////////////////////////////////////////////////
-class formatDialogBase : public wxDialog
+class formatDialogBase : public wxDialog 
 {
-private:
-
-protected:
-    wxStaticText* m_staticText19;
-    wxChoice* m_fmtChoice;
-    wxStaticText* m_staticText201;
-    wxChoice* m_bitsChoice;
-    wxChoice* m_bitsEndian;
-    wxStdDialogButtonSizer* m_sdbSizer5;
-    wxButton* m_sdbSizer5OK;
-    wxButton* m_sdbSizer5Cancel;
-
-    // Virtual event handlers, overide them in your derived class
-    virtual void OnUpdateUI( wxUpdateUIEvent& event ) {
-        event.Skip();
-    }
-
-
-public:
-
-    formatDialogBase( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = wxT("YUV Format"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize, long style = wxDEFAULT_DIALOG_STYLE );
-    ~formatDialogBase();
-
+	private:
+	
+	protected:
+		wxStaticText* m_staticText19;
+		wxChoice* m_fmtChoice;
+		wxStaticText* m_staticText201;
+		wxChoice* m_bitsChoice;
+		wxChoice* m_bitsEndian;
+		wxStdDialogButtonSizer* m_sdbSizer5;
+		wxButton* m_sdbSizer5OK;
+		wxButton* m_sdbSizer5Cancel;
+		
+		// Virtual event handlers, overide them in your derived class
+		virtual void OnUpdateUI( wxUpdateUIEvent& event ) { event.Skip(); }
+		
+	
+	public:
+		
+		formatDialogBase( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = wxT("YUV Format"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize, long style = wxDEFAULT_DIALOG_STYLE ); 
+		~formatDialogBase();
+	
 };
 
 #endif //__DIALOGS_H__

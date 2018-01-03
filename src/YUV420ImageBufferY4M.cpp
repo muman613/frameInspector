@@ -26,10 +26,13 @@
  *
  */
 
-YUV420ImageBufferY4M::YUV420ImageBufferY4M(int x, int y, int bits, formatEndian endianness)
-:   ImageBuffer(DATA_YUV420, x, y, bits, endianness)
+YUV420ImageBufferY4M::YUV420ImageBufferY4M()
+:   ImageBuffer(DATA_YUV420, 0, 0)
 {
-	wxLogDebug("YUV420ImageBufferY4M::YUV420ImageBufferY4M(%d, %d, %d)", x, y, bits);
+	wxLogDebug("YUV420ImageBufferY4M::YUV420ImageBufferY4M()");
+
+    y4m_init_stream_info(&m_strInfo);
+    y4m_init_frame_info(&m_frmInfo);
 }
 
 /**
@@ -41,6 +44,9 @@ YUV420ImageBufferY4M::~YUV420ImageBufferY4M()
 	wxLogDebug("YUV420ImageBufferY4M::~YUV420ImageBufferY4M()");
 
 	m_file.Close();
+
+    y4m_fini_frame_info(&m_frmInfo);
+    y4m_fini_stream_info(&m_strInfo);
 
     free_buffer();
     m_yuv.free_buffer();
@@ -61,8 +67,21 @@ bool YUV420ImageBufferY4M::SetFilename(const wxString& filename)
 	if (m_file.Exists(filename.c_str()) && m_file.Open(filename.c_str())) {
 		wxLogDebug("-- file opened!");
 		m_imageFilename = filename;
-		result = true;
-        m_lastError = IB_ERROR_NO_ERROR;
+
+        if (y4m_read_stream_header(m_file.fd(), &m_strInfo) == Y4M_OK) {
+            m_width     = y4m_si_get_width(&m_strInfo);
+            m_height    = y4m_si_get_height(&m_strInfo);
+
+            m_yuv.alloc_buffer(m_width, m_height, m_bits, true, m_endianness);
+
+            generateIndex();
+
+            result      = true;
+            m_lastError = IB_ERROR_NO_ERROR;
+        } else {
+            m_file.Close();
+            m_lastError = IB_ERROR_SYSTEM;
+        }
 	} else {
 	    m_lastError = IB_ERROR_FILE_NOT_FOUND;
 	}
@@ -303,3 +322,28 @@ PIXEL* YUV420ImageBufferY4M::getPixel(int x, int y) {
 	return (PIXEL*)0L;
 }
 
+
+size_t	YUV420ImageBufferY4M::generateIndex() {
+    wxFileOffset    currOffset = m_file.Tell();
+    uint8_t*        yuv_data[3] = { nullptr, nullptr, nullptr };
+    size_t          fnum = 0;
+
+    wxLogDebug("YUV420ImageBufferY4M::generateIndex()");
+
+    m_frameOffsets.push_back(currOffset);
+    wxLogDebug("Frame %-3ld @ offset %ld", fnum++, currOffset);
+
+    yuv_data[0] = m_yuv.m_pY;
+    yuv_data[1] = m_yuv.m_pU;
+    yuv_data[2] = m_yuv.m_pV;
+
+    while (Y4M_OK == y4m_read_frame_data(m_file.fd(), &m_strInfo, &m_frmInfo, yuv_data)) {
+        currOffset = m_file.Tell();
+        m_frameOffsets.push_back(currOffset);
+        wxLogDebug("Frame %-3ld @ offset %ld", fnum++, currOffset);
+    }
+
+    wxLogDebug("-- found %ld frames!", m_frameOffsets.size());
+
+    return (size_t)m_frameOffsets.size();
+}

@@ -60,6 +60,9 @@ BEGIN_EVENT_TABLE(Frame, wxFrame)
     EVT_MENU(ID_FILE_OPEN_SPLIT,     Frame::OnFileOpenSplit)
     EVT_MENU(ID_FILE_OPEN_FILE,      Frame::OnFileOpenFile)
     EVT_MENU(ID_FILE_OPEN_DUMP,      Frame::OnFileOpenDump)
+#ifdef HAVE_LIBMJPEGTOOLS
+    EVT_MENU(ID_FILE_OPEN_Y4M,       Frame::OnFileOpenY4M)
+#endif
     EVT_MENU(ID_FILE_CLOSE,          Frame::OnFileClose)
     EVT_MENU(ID_FILE_REFRESH,        Frame::OnRefresh)
 
@@ -768,6 +771,28 @@ void Frame::OnFileOpenFile(wxCommandEvent& event) {
 
     return;
 }
+
+#ifdef HAVE_LIBMJPEGTOOLS
+void Frame::OnFileOpenY4M(wxCommandEvent& event) {
+    wxString        sFilePath;
+    wxFileDialog    dlg(this, "Open YUV4MPEG Buffer", wxEmptyString,
+                        wxEmptyString, _("Y4M Files (*.y4m)|*.y4m|All Files (*.*)|*.*"),
+                        wxFD_OPEN|wxFD_FILE_MUST_EXIST);
+
+    wxLogDebug("Frame::OnFileOpenY4M()");
+
+    if (dlg.ShowModal() == wxID_OK) {
+
+        sFilePath = dlg.GetPath();
+
+        if (m_imageControl->OpenYUVY4M(sFilePath)) {
+
+        }
+    }
+
+    return;
+}
+#endif
 
 /**
  *  Handle user request to open a 'dump' file...
