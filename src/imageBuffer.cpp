@@ -189,6 +189,7 @@ wxUint8 *yuvBuffer::DoConversionToRGB(dataType bufType, bool ccir601) {
         res = sws_scale(swsContext, srcSlice, srcStride, 0, rows, dst, dstStride);
         sws_freeContext( swsContext );
     } else {
+        wxLogDebug("ERROR: Unable to allocate SwsContext!");
         memset(imageData, 0x80, rows * cols * sizeof(PIXEL));
     }
 
@@ -385,6 +386,20 @@ ImageBuffer::ImageBuffer(dataType type, int width, int height,
     wxLogDebug("ImageBuffer::ImageBuffer(%s, %d, %d, %d, %s)",
                ImageBuffer::YUVTypeToString(type), width, height, bits,
                (m_endianness == endian_little) ? "le" : "be");
+}
+
+ImageBuffer::ImageBuffer(ImageBufferParms& parms)
+    :   m_bufType(parms.m_dataType),
+        m_width(parms.m_width),
+        m_height(parms.m_height),
+        m_bits(parms.m_bits),
+        m_endianness(parms.m_endian),
+        m_imageData(nullptr),
+        m_ccir601(false),
+        m_lastError(IB_ERROR_NO_ERROR),
+        m_pMask(nullptr)
+{
+    wxLogDebug("ImageBuffer::ImageBuffer(ImageBufferParms& parms)");
 }
 
 /**

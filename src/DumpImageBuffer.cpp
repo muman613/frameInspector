@@ -41,6 +41,12 @@ dumpImageBuffer::dumpImageBuffer(int width, int height)
     return;
 }
 
+dumpImageBuffer::dumpImageBuffer(ImageBufferParms& parms)
+:   ImageBuffer(parms)
+{
+    wxLogDebug("dumpImageBuffer::dumpImageBuffer(ImageBufferParms& parms)");
+}
+
 /**
  *
  */
@@ -390,4 +396,26 @@ bool dumpImageBuffer::QueryFrameSize(int& width, int& height) {
     width = m_width;
     height = m_height;
     return true;
+}
+
+void dumpImageBuffer::setPath(const wxString& path) {
+    wxLogDebug("dumpImageBuffer::setPath(%s)", (const char*)path.c_str());
+    m_imagePath = path;
+    GetFrameCount();
+}
+
+bool dumpImageBuffer::CanQueryFrameSize() const {
+    return true;
+}
+
+bool dumpImageBuffer::CanChecksum() const {
+    return true;
+}
+
+bool dumpImageBuffer::CanSave() const {
+    return true;
+}
+
+ImageBuffer* dumpImageBuffer::Create(ImageBufferParms& parms) {
+    return dynamic_cast<ImageBuffer*>(new dumpImageBuffer(parms));
 }

@@ -1056,6 +1056,8 @@ wxString yuvImageControl::GetIdentifier() {
             sMsg = wxString::Format(wxT("File : %s"), fname.GetFullName());
         } else if (m_bufType == YUV_FILE_DUMP) {
             sMsg = wxString::Format(wxT("Dump : %s"), m_imagePath);
+        } else if (m_bufType == YUV_FILE_Y4M) {
+            sMsg = wxString::Format(wxT("Y4MPEG : %s"), fname.GetFullName());
         }
     } else {
         sMsg = "N/A";

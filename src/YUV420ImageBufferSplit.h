@@ -42,6 +42,7 @@ public:
       */
     YUV420ImageBufferSplit(int width, int height, int bits = 8,
                            formatEndian endianness = endian_little);
+    YUV420ImageBufferSplit(ImageBufferParms& parms);
     virtual ~YUV420ImageBufferSplit();
 
     bool		Load(size_t frame);
@@ -87,6 +88,8 @@ public:
     ssize_t		GetFrameCount();
     wxString    GetFileBase(size_t frame);
     void        getImageVec();
+
+    static ImageBuffer* Create(ImageBufferParms& parms);
 
 protected:
 //		wxString                        m_imagePath;

@@ -416,7 +416,7 @@ wxString    getFrameFilename(wxString sPath,
                              size_t frame)
 {
     wxString    imageFilePath;
-    wxRegEx     frameRE("\\%d", wxRE_ADVANCED);
+    wxRegEx     frameRE("\\%[0-9]*d", wxRE_ADVANCED);
 
     if (frameRE.Matches(sFileSpec)) {
         imageFilePath = remove_trailing_backslashes(sPath) + "/" + wxString::Format(sFileSpec, (int)frame);

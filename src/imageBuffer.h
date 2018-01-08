@@ -22,6 +22,9 @@ struct yuvMask;
 
 #include "types.h"
 
+
+class ImageBuffer;
+
 /// Buffer encapsulates a YUV frame
 class yuvBuffer {
 public:
@@ -46,6 +49,44 @@ public:
     void            free_buffer();
 };
 
+/**
+ * Class used to pass parameters to the ImageBuffer class.
+ */
+
+class ImageBufferParms {
+public:
+    ImageBufferParms();
+    ImageBufferParms(dataType type, int width, int height,
+                     int bits = 8, formatEndian endian = endian_little)
+    {
+        m_dataType = type;
+        m_width    = width;
+        m_height   = height;
+        m_bits     = bits;
+        m_endian   = endian;
+    }
+
+    dataType        m_dataType          = DATA_UNKNOWN;
+    int             m_width             = 320;
+    int             m_height            = 240;
+    int             m_bits              = 8;
+    formatEndian    m_endian            = endian_little;
+
+    wxString        m_sFileName;
+    wxString        m_sSplitPath;
+    wxString        m_sFilePattern;
+
+    int             m_first             = 0;
+    int             m_last              = 0;
+};
+
+
+typedef ImageBuffer* (*IBCreateFunc)(ImageBufferParms& parms);
+
+
+template<typename T> ImageBuffer* Create(ImageBufferParms& parms) {
+    return dynamic_cast<ImageBuffer*>(new T(parms));
+}
 
 /// Class which encapsulates a buffer of pixels.
 class ImageBuffer {
@@ -63,12 +104,14 @@ public:
     enum eSaveType {
         SAVE_YUV_SPLIT,
         SAVE_YUV_COMP,
+        SAVE_YUV_YUV4MPEG
     };
 
     ImageBuffer();
     /// Initialize an ImageBuffer with type and size.
     ImageBuffer(dataType type, int width, int height, int bits = 8,
                 formatEndian endianness = endian_little);
+    ImageBuffer(ImageBufferParms& parms);
 
     virtual ~ImageBuffer(); // {}
 
@@ -126,7 +169,6 @@ public:
         return false;
     }
 
-    //virtual bool        GetChecksum(size_t frame, wxUint8* lumaSum, wxUint8* chromaSum);
     bool                GetChecksum(checksumAlgoBase* pAlgo, checksumEntry& entry);
 
     virtual bool        SaveYUV(wxString sFilename, eSaveType type);
@@ -186,7 +228,7 @@ protected:
     int					m_width;		//!< Width of buffer
     int					m_height;		//!< Height of buffer
     int         		m_bits;         //!< 8 or 10 bits per component
-    formatEndian m_endianness;
+    formatEndian 		m_endianness;
     UBYTE*				m_imageData;	//!< Pointer to RGB data
     bool				m_ccir601;      //!< Enable CCIR 601
     eError      		m_lastError;    //!< Last error code

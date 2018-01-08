@@ -30,6 +30,12 @@ YUV420ImageBufferSplit::YUV420ImageBufferSplit(int x, int y, int bits,
     return;
 }
 
+YUV420ImageBufferSplit::YUV420ImageBufferSplit(ImageBufferParms& parms)
+    : ImageBuffer(parms)
+{
+    wxLogDebug("YUV420ImageBufferSplit::YUVImageBuffer(ImageBufferParms& parms)");
+}
+
 /**
  *
  */
@@ -159,10 +165,9 @@ void YUV420ImageBufferSplit::getImageVec() {
  */
 
 ssize_t YUV420ImageBufferSplit::GetFrameCount() {
-//    size_t fc = 0;
-//
-//    utils::GetSplitBufferFrameCount(m_imagePath, m_prefix, fc);
-//
-//    return fc - 1;
     return m_fileVec.size() - 1;
+}
+
+ImageBuffer* YUV420ImageBufferSplit::Create(ImageBufferParms& parms) {
+    return dynamic_cast<ImageBuffer*>(new YUV420ImageBufferSplit(parms));
 }

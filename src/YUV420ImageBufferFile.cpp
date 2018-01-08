@@ -11,6 +11,7 @@
 #include <wx/wx.h>
 #include <wx/filename.h>
 #include <wx/file.h>
+#include <wx/dcmemory.h>
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -32,6 +33,12 @@ YUV420ImageBufferFile::YUV420ImageBufferFile(int x, int y, int bits, formatEndia
     :   ImageBuffer(DATA_YUV420, x, y, bits, endianness)
 {
     wxLogDebug("YUV420ImageBufferFile::YUV420ImageBufferFile(%d, %d, %d)", x, y, bits);
+}
+
+YUV420ImageBufferFile::YUV420ImageBufferFile(ImageBufferParms& parms)
+    : ImageBuffer(parms)
+{
+    wxLogDebug("YUV420ImageBufferFile::YUV420ImageBufferFile(ImageBufferParms& parms)");
 }
 
 /**
@@ -305,3 +312,7 @@ PIXEL* YUV420ImageBufferFile::getPixel(int x, int y) {
     return (PIXEL*)nullptr;
 }
 
+
+ImageBuffer* YUV420ImageBufferFile::Create(ImageBufferParms& parms) {
+    return dynamic_cast<ImageBuffer*>(new YUV420ImageBufferFile(parms));
+}

@@ -13,6 +13,7 @@ class YUV420ImageBufferFile : public ImageBuffer {
 public:
     YUV420ImageBufferFile(int width, int height, int bits = 8,
                           formatEndian endianness = endian_little);
+    YUV420ImageBufferFile(ImageBufferParms& param);
     virtual ~YUV420ImageBufferFile();
 
     bool		Load(size_t frame);
@@ -26,6 +27,8 @@ public:
         return true;
     }
     //bool        GetChecksum(size_t frame, wxUint8* lumaSum, wxUint8* chromaSum);
+
+    static ImageBuffer* Create(ImageBufferParms& parms);
 
 protected:
 

@@ -11,6 +11,7 @@ class dumpImageBuffer : public ImageBuffer {
 public:
     dumpImageBuffer();
     dumpImageBuffer(int width, int height);
+    dumpImageBuffer(ImageBufferParms& parms);
     virtual ~dumpImageBuffer();
 
     ssize_t		GetFrameCount();
@@ -18,25 +19,14 @@ public:
     bool		Load(size_t frame);
     PIXEL*		getPixel(int x, int y);
 
-    void		setPath(const wxString& path) {
-        wxLogDebug("dumpImageBuffer::setPath(%s)", (const char*)path.c_str());
-        m_imagePath = path;
-        GetFrameCount();
-    }
-
-    bool        CanQueryFrameSize() const {
-        return true;
-    }
-
-    bool        CanChecksum() const {
-        return true;
-    }
-
-    bool        CanSave() const {
-        return true;
-    }
+    void		setPath(const wxString& path);
+    bool        CanQueryFrameSize() const;
+    bool        CanChecksum() const;
+    bool        CanSave() const;
 
     bool        QueryFrameSize(int& width, int& height);
+
+    static ImageBuffer* Create(ImageBufferParms& parms);
 
 protected:
     bool DoYUVConversion(/*int rows, int cols, */ wxUint8* pY, wxUint8* pU, wxUint8* pV);
