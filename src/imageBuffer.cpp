@@ -19,6 +19,10 @@
 #ifdef HAVE_LIBGCRYPT
 #include <gcrypt.h>
 #endif
+#ifdef HAVE_LIBMJPEGTOOLS
+#include <yuv4mpeg.h>
+#endif
+
 #include "component_buffer.h"
 #include "imageBuffer.h"
 
@@ -451,7 +455,39 @@ bool ImageBuffer::SaveYUV(wxString sFilename, eSaveType type) {
             fp.Write(m_yuv.m_pU, m_yuv.m_chromaSize);
             fp.Close();
         }
+#ifdef HAVE_LIBMJPEGTOOLS
+    } else if (type == SAVE_YUV_YUV4MPEG) {
+        wxFile              oFP;
+        y4m_stream_info_t   strmInfo;
+        y4m_frame_info_t    frmInfo;
+        uint8_t*            yuv_data[3];
 
+        if (fp.Open(sFilename, wxFile::write)) {
+            y4m_init_stream_info(&strmInfo);
+
+            y4m_si_set_width(&strmInfo, m_width);
+            y4m_si_set_height(&strmInfo, m_height);
+            y4m_si_set_interlace(&strmInfo, Y4M_ILACE_NONE);
+            y4m_si_set_framerate(&strmInfo, y4m_fps_PAL);
+            y4m_si_set_chroma(&strmInfo, Y4M_CHROMA_420MPEG2);
+
+            if (y4m_write_stream_header(fp.fd(), &strmInfo) == Y4M_OK) {
+                y4m_init_frame_info(&frmInfo);
+
+                yuv_data[0] = m_yuv.m_pY;
+                yuv_data[1] = m_yuv.m_pU;
+                yuv_data[2] = m_yuv.m_pV;
+
+                y4m_write_frame(fp.fd(), &strmInfo, &frmInfo, yuv_data);
+
+                y4m_fini_frame_info(&frmInfo);
+            }
+            y4m_fini_stream_info(&strmInfo);
+
+            fp.Close();
+        }
+//        y4m_write_stream_header()
+#endif
     } else {
         wxLogDebug("ERROR: Invalid save type!");
     }

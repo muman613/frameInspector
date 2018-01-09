@@ -5474,7 +5474,7 @@
                     <event name="OnMenuSelection"></event>
                     <event name="OnUpdateUI"></event>
                 </object>
-                <object class="submenu" expanded="0">
+                <object class="submenu" expanded="1">
                     <property name="bitmap"></property>
                     <property name="label">Save</property>
                     <property name="name">m_submenuFileSave</property>
@@ -5518,6 +5518,21 @@
                         <property name="kind">wxITEM_NORMAL</property>
                         <property name="label">Save frame as YUV composite...</property>
                         <property name="name">m_submenuSaveComp</property>
+                        <property name="permission">none</property>
+                        <property name="shortcut"></property>
+                        <property name="unchecked_bitmap"></property>
+                        <event name="OnMenuSelection"></event>
+                        <event name="OnUpdateUI"></event>
+                    </object>
+                    <object class="wxMenuItem" expanded="1">
+                        <property name="bitmap"></property>
+                        <property name="checked">0</property>
+                        <property name="enabled">1</property>
+                        <property name="help"></property>
+                        <property name="id">ID_FILE_SAVE_YUV_YUV4MPEG</property>
+                        <property name="kind">wxITEM_NORMAL</property>
+                        <property name="label">Save Frame as YUV4MPEG...</property>
+                        <property name="name">m_submenuSaveYUV4M</property>
                         <property name="permission">none</property>
                         <property name="shortcut"></property>
                         <property name="unchecked_bitmap"></property>

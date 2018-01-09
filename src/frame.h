@@ -47,6 +47,9 @@ public:
     void        OnFileSaveAs(wxCommandEvent& event);
     void        OnFileSaveYUVSplit(wxCommandEvent& event);
     void        OnFileSaveYUVComp(wxCommandEvent& event);
+#ifdef HAVE_LIBMJPEGTOOLS
+    void        OnFileSaveY4M(wxCommandEvent& event);
+#endif
     void        OnFileOpenSplit(wxCommandEvent& event);
     void        OnFileOpenFile(wxCommandEvent& event);
     void        OnFileOpenDump(wxCommandEvent& event);

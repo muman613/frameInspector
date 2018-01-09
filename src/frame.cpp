@@ -69,7 +69,9 @@ BEGIN_EVENT_TABLE(Frame, wxFrame)
     EVT_MENU(ID_FILE_SAVE_IMAGE,     Frame::OnFileSaveAs)
     EVT_MENU(ID_FILE_SAVE_YUV_SPLIT, Frame::OnFileSaveYUVSplit)
     EVT_MENU(ID_FILE_SAVE_YUV_COMP,  Frame::OnFileSaveYUVComp)
-
+#ifdef HAVE_LIBMJPEGTOOLS
+    EVT_MENU(ID_FILE_SAVE_YUV_YUV4MPEG, Frame::OnFileSaveY4M)
+#endif
 #ifdef  ENABLE_CONVERT
     EVT_MENU(ID_FILE_CONV_TO_SPLIT,  Frame::OnConvertTo)
     EVT_MENU(ID_FILE_CONV_TO_COMPOSITE, Frame::OnConvertTo)
@@ -921,7 +923,24 @@ void Frame::OnFileSaveYUVComp(wxCommandEvent& event) {
 
     return;
 }
+#ifdef HAVE_LIBMJPEGTOOLS
+void Frame::OnFileSaveY4M(wxCommandEvent& event) {
+    wxString        sFilename;
 
+    wxLogDebug("Frame::OnFileSaveY4M()");
+
+    sFilename = ::wxFileSelector(wxT("File to save (YUV4MPEG)"), wxEmptyString, wxEmptyString,
+                                 wxEmptyString, wxT("YUV4MPEG Files (*.y4m)|*.y4m"),
+                                 wxFD_SAVE|wxFD_OVERWRITE_PROMPT);
+
+    if (!sFilename.IsEmpty()) {
+        wxLogDebug("-- saving YUV4MPEG file %s...",sFilename);
+        m_imageControl->SaveYUVData( sFilename, ImageBuffer::SAVE_YUV_YUV4MPEG );
+    }
+
+    return;
+}
+#endif
 /**
  *  Handle wxEVT_LOADIMAGE message.
  */
@@ -1028,6 +1047,7 @@ void Frame::OnUpdateUI(wxUpdateUIEvent& event) {
     case ID_FILE_SAVE_IMAGE:
     case ID_FILE_SAVE_YUV_SPLIT:
     case ID_FILE_SAVE_YUV_COMP:
+    case ID_FILE_SAVE_YUV_YUV4MPEG:
         event.Enable(m_imageControl->IsValid());
         break;
 

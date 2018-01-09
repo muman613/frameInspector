@@ -593,6 +593,10 @@ frameInspectorMenu::frameInspectorMenu( long style ) : wxMenuBar( style )
 	m_submenuSaveComp = new wxMenuItem( m_submenuFileSave, ID_FILE_SAVE_YUV_COMP, wxString( wxT("Save frame as YUV composite...") ) , wxEmptyString, wxITEM_NORMAL );
 	m_submenuFileSave->Append( m_submenuSaveComp );
 
+	wxMenuItem* m_submenuSaveYUV4M;
+	m_submenuSaveYUV4M = new wxMenuItem( m_submenuFileSave, ID_FILE_SAVE_YUV_YUV4MPEG, wxString( wxT("Save Frame as YUV4MPEG...") ) , wxEmptyString, wxITEM_NORMAL );
+	m_submenuFileSave->Append( m_submenuSaveYUV4M );
+
 	m_fileMenu->Append( m_submenuFileSaveItem );
 
 	m_fileMenu->AppendSeparator();
