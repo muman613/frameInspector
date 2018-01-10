@@ -6,7 +6,7 @@
     "configurations": [
 
         {
-            "name": "(gdb) Launch",
+            "name": "(gdb) Launch frameInspector",
             "type": "cppdbg",
             "request": "launch",
             "program": "${workspaceFolder}/src/frameInspector",

@@ -130,6 +130,7 @@ public:
 
 protected:
     bool                    GetImage();
+    bool                    DrawGrid(wxImage* pImage);
 
     bool                    allocate_image_buffer();
     void                    free_image_buffer();

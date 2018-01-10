@@ -10,10 +10,12 @@
     #include "config.h"
 #endif
 
+//#define OLD_GRID_CODE       1
+
 #include <wx/wx.h>
 #include <wx/config.h>
+#include <wx/graphics.h>
 #include <typeinfo>
-
 #include "yuvImageControl.h"
 #include "imageBuffer.h"
 #include "YUV420ImageBufferSplit.h"
@@ -164,6 +166,7 @@ wxSize yuvImageControl::GetImageSize() const {
 
 void yuvImageControl::enable_grid() {
     m_bEnableGrid = true;
+    GetImage();
     Refresh();
 }
 
@@ -203,6 +206,7 @@ size_t yuvImageControl::GetCurrentFrame() const {
 
 void yuvImageControl::disable_grid() {
     m_bEnableGrid = false;
+    GetImage();
     Refresh();
 }
 
@@ -222,6 +226,7 @@ void yuvImageControl::set_grid_dimensions(int hor, int ver, const wxColor& color
     m_gridH = hor;
     m_gridV = ver;
     m_gridColor = color;
+    GetImage();
     Refresh();
 }
 
@@ -376,32 +381,6 @@ void yuvImageControl::OnPaint(wxPaintEvent& event) {
         }
 
         dc.DrawBitmap( bmp, xoff, yoff );
-
-        if (m_bEnableGrid) {
-            int inc;
-
-            if (m_scale == 0.0) {
-                inc = m_gridH;
-            } else {
-                inc = (int)(m_scale * m_gridH);
-            }
-
-            dc.SetPen(m_gridColor);
-            for (int x = xoff ; x < (xoff + bmp.GetWidth()) ; x += inc) {
-                dc.DrawLine(x, yoff, x, yoff + bmp.GetHeight());
-//              wxLogDebug("x=%d", x);
-            }
-
-            if (m_scale == 0.0) {
-                inc = m_gridV;
-            } else {
-                inc = (int)(m_scale * m_gridV);
-            }
-
-            for (int y = yoff ; y < (yoff + bmp.GetHeight()) ; y += inc) {
-                dc.DrawLine(xoff, y, xoff + bmp.GetWidth(), y);
-            }
-        }
     } else {
         dc.SetPen(*wxBLACK_PEN);
         dc.DrawLine( 0, 0, size.GetWidth(), size.GetHeight());
@@ -454,6 +433,9 @@ bool yuvImageControl::GetImage() {
         m_pImage = new wxImage(m_imageSize.GetWidth(), m_imageSize.GetHeight());
         wxASSERT(m_pImage != nullptr);
         m_buffer->GetImage(m_pImage);
+        if (m_bEnableGrid == true) {
+            DrawGrid(m_pImage);
+        }
         set_image( m_pImage, m_scale );
         result = true;
     } else {
@@ -487,22 +469,22 @@ bool yuvImageControl::set_image(wxImage* pImage, long scaling) {
     wxLogDebug("client size = %d x %d", size.GetWidth(), size.GetHeight());
 
     /* make sure the image pointer is set */
-    if (pImage == 0L) {
+    if (pImage == nullptr) {
         wxLogDebug("ERROR: set_image called with NULL pointer!");
 
         delete m_pImage;
         delete m_pScaledImage;
 
-        m_pImage       = 0L;
-        m_pScaledImage = 0L;
+        m_pImage       = nullptr;
+        m_pScaledImage = nullptr;
 
         return false;
     }
 
     /* if image exists, delete it... */
-    if (m_pScaledImage) {
+    if (m_pScaledImage != nullptr) {
         delete m_pScaledImage;
-        m_pScaledImage = 0L;
+        m_pScaledImage = nullptr;
     }
 
     double	scaleVector[] = {
@@ -516,7 +498,7 @@ bool yuvImageControl::set_image(wxImage* pImage, long scaling) {
 
     if (scaleFactor == 0.0) {
         int image_w 	= pImage->GetWidth(),
-               image_h 	= pImage->GetHeight();
+            image_h 	= pImage->GetHeight();
         int window_w	= size.GetWidth();
         int window_h 	= size.GetHeight();
         int scale_w, scale_h;
@@ -534,7 +516,7 @@ bool yuvImageControl::set_image(wxImage* pImage, long scaling) {
         m_pScaledImage = new wxImage(pImage->Scale(scale_w, scale_h));
     } else {
         int image_w 	= (int)((double)pImage->GetWidth() * scaleFactor),
-               image_h 	= (int)((double)pImage->GetHeight() * scaleFactor);
+            image_h 	= (int)((double)pImage->GetHeight() * scaleFactor);
 
         m_pScaledImage = new wxImage(pImage->Scale(image_w, image_h));
     }
@@ -813,41 +795,9 @@ bool yuvImageControl::SaveBitmap(wxString sFilename) {
     bool bRes = false;
 
     wxLogDebug("yuvImageControl::SaveBitmap(%s)", (const char*)sFilename.c_str());
+    wxASSERT(m_pImage != nullptr);
 
-    if (m_bEnableGrid) {
-
-        wxImage     imgDest;
-        wxBitmap*   pBm = 0;
-        wxMemoryDC  pDc;
-        int         width, height;
-
-        width = m_pImage->GetWidth();
-        height = m_pImage->GetHeight();
-
-        pBm = new wxBitmap(*m_pImage);
-        pDc.SelectObject(*pBm);
-
-        pDc.SetPen(m_gridColor);
-
-        for (int x = 0 ; x < width; x += 16) {
-            pDc.DrawLine(x, 0, x, height);
-        }
-        for (int y = 0 ; y < height ; y += 16) {
-            pDc.DrawLine(0, y, width, y);
-        }
-
-        imgDest = pBm->ConvertToImage();
-
-        if (imgDest.SaveFile(sFilename)) {
-            bRes = true;
-        } else {
-            wxLogDebug("ERROR: Unable to save");
-        }
-
-        delete pBm;
-    } else {
-        bRes = m_pImage->SaveFile(sFilename);
-    }
+    bRes = m_pImage->SaveFile(sFilename);
 
     return bRes;
 }
@@ -1162,6 +1112,34 @@ bool yuvImageControl::getYUVMask(yuvMask& mask) {
     return true;
 }
 
+bool yuvImageControl::DrawGrid(wxImage* pImage) {
+    wxGraphicsContext*  pContext = nullptr;
+    wxFont font(wxFontInfo(24).FaceName("Helvetica").Italic().Bold());
+
+    wxLogDebug("yuvImageControl::DrawGrid(%p)", pImage);
+
+    wxASSERT( pImage != nullptr );
+
+    int w = pImage->GetWidth(),
+        h = pImage->GetHeight();
+
+    pContext = wxGraphicsContext::Create(*pImage);
+
+    pContext->SetPen(m_gridColor);
+//    pContext->SetFont(font, *wxBLACK);
+//    pContext->DrawText("Hello", 100, 100);
+
+    for (int y = 0 ; y < h ; y += m_gridV) {
+        pContext->StrokeLine(0, y, w, y);
+    }
+    for (int x = 0 ; x < w ; x += m_gridH) {
+        pContext->StrokeLine(x, 0, x, h);
+    }
+
+    delete pContext;
+
+    return false;
+}
 
 #if 0
 
