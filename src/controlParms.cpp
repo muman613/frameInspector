@@ -164,9 +164,9 @@ bool controlParms::SaveParmsToConfig(wxConfig* pConfig,
 
     wxLogDebug("controlParms::SaveParmsToConfig((%p, %s)", pConfig, sSection);
 
-    wxASSERT( pConfig != 0L );
+    wxASSERT( pConfig != nullptr );
 
-    if (pConfig == 0) {
+    if (pConfig == nullptr) {
         wxLogDebug("ERROR: Called SaveParmsToConfig with a NULL wxConfig!");
         return false;
     }

@@ -1,7 +1,7 @@
 /**
  * @file    yuvImageControl.cpp
  * @author  Michael A. Uman
- * @date    December 20, 2017
+ * @date    January 9, 2018
  *
  * @brief   Implementation of the yuvImageControl component.
  */
@@ -9,8 +9,6 @@
 #ifdef HAVE_CONFIG_H
     #include "config.h"
 #endif
-
-//#define OLD_GRID_CODE       1
 
 #include <wx/wx.h>
 #include <wx/config.h>
@@ -34,15 +32,15 @@ BEGIN_EVENT_TABLE( yuvImageControl, wxScrolledWindow )
 END_EVENT_TABLE()
 
 /**
- *
+ *  yuvImageControl constructor...
  */
 
 yuvImageControl::yuvImageControl(wxWindow* parent, wxWindowID id, const wxPoint& pos, const wxSize& size)
     :   wxScrolledWindow(parent, id, pos, size, wxSUNKEN_BORDER, _T("canvas")),
         m_bValid(false),
-        m_pImage(0L),
-        m_pScaledImage(0L),
-        m_buffer(0L),
+        m_pImage(nullptr),
+        m_pScaledImage(nullptr),
+        m_buffer(nullptr),
         m_bEnableGrid(false),
         m_gridColor(*wxBLUE),
         m_gridH(16),
@@ -66,22 +64,22 @@ yuvImageControl::yuvImageControl(wxWindow* parent, wxWindowID id, const wxPoint&
 }
 
 /**
- *
+ *  yuvImageControl destructor
  */
 
 yuvImageControl::~yuvImageControl()
 {
+    //dtor
     wxLogDebug("yuvImageControl::~yuvImageControl()");
-
     CloseImage();
 }
 
 bool yuvImageControl::IsValid() const {
 #ifdef  _DEBUG
     if (m_bValid) {
-        wxASSERT( m_pImage != 0 );
-        wxASSERT( m_pScaledImage != 0 );
-        wxASSERT( m_buffer != 0 );
+        wxASSERT( m_pImage != nullptr );
+        wxASSERT( m_pScaledImage != nullptr );
+        wxASSERT( m_buffer != nullptr );
     }
 #endif
     return m_bValid;
@@ -161,7 +159,7 @@ wxSize yuvImageControl::GetImageSize() const {
 }
 
 /**
- *
+ *  Enable display of the grid...
  */
 
 void yuvImageControl::enable_grid() {
@@ -171,7 +169,17 @@ void yuvImageControl::enable_grid() {
 }
 
 /**
- *
+ *  Disable display of the grid...
+ */
+
+void yuvImageControl::disable_grid() {
+    m_bEnableGrid = false;
+    GetImage();
+    Refresh();
+}
+
+/**
+ *  Get the grid settings (horizontal & vertical spacing and color)...
  */
 
 void yuvImageControl::get_grid_settings(int& hor, int& ver, wxColor& color, bool& state) {
@@ -186,7 +194,7 @@ void yuvImageControl::get_grid_settings(int& hor, int& ver, wxColor& color, bool
 }
 
 /**
- *
+ *  Get total count of images in the buffer.
  */
 
 size_t yuvImageControl::GetImageCount() const {
@@ -200,15 +208,6 @@ size_t yuvImageControl::GetImageCount() const {
 size_t yuvImageControl::GetCurrentFrame() const {
     return m_curFrame;
 }
-/**
- *
- */
-
-void yuvImageControl::disable_grid() {
-    m_bEnableGrid = false;
-    GetImage();
-    Refresh();
-}
 
 /**
  *
@@ -219,13 +218,14 @@ bool yuvImageControl::get_grid_state()  {
 }
 
 /**
- *  @brief Get the grid dimensions.
+ *  Set the grid dimensions
  */
 
 void yuvImageControl::set_grid_dimensions(int hor, int ver, const wxColor& color) {
-    m_gridH = hor;
-    m_gridV = ver;
+    m_gridH     = hor;
+    m_gridV     = ver;
     m_gridColor = color;
+
     GetImage();
     Refresh();
 }
@@ -245,7 +245,7 @@ bool yuvImageControl::allocate_image_buffer() {
             YUV420ImageBufferSplit*	newBuf = new YUV420ImageBufferSplit(m_imageSize.GetWidth(),
                     m_imageSize.GetHeight(), m_bits, m_endianness);
 
-            wxASSERT(newBuf != 0L);
+            wxASSERT(newBuf != nullptr);
 
             newBuf->setImageSpec(m_imageSpec);
             newBuf->getImageVec();
@@ -258,7 +258,7 @@ bool yuvImageControl::allocate_image_buffer() {
             YUV420ImageBufferFile* newBuf = new YUV420ImageBufferFile(m_imageSize.GetWidth(),
                     m_imageSize.GetHeight(), m_bits, m_endianness);
 
-            wxASSERT(newBuf != 0L);
+            wxASSERT(newBuf != nullptr);
 
             newBuf->SetFilename(m_imageFilename);
 
@@ -304,10 +304,6 @@ bool yuvImageControl::allocate_image_buffer() {
     wxLogDebug("m_buffer = 0x%p Type %s frameCount %ld",
                m_buffer, typeid(m_buffer).name(), m_lastFrame);
 
-//     (%s) framecount = %ld", m_buffer,
-//          (const char*)typeid(m_buffer).name(), m_lastFrame);
-
-
     if (m_buffer->lastError() != ImageBuffer::IB_ERROR_NO_ERROR) {
         wxLogDebug("ERROR: last error = %d", m_buffer->lastError());
         return false;
@@ -317,7 +313,7 @@ bool yuvImageControl::allocate_image_buffer() {
 }
 
 /**
- *
+ *  Release memory used by the image buffer...
  */
 
 void yuvImageControl::free_image_buffer() {
@@ -325,14 +321,14 @@ void yuvImageControl::free_image_buffer() {
 
     if (m_buffer) {
         delete m_buffer;
-        m_buffer = 0L;
+        m_buffer = nullptr;
     }
 
     return;
 }
 
 /**
- *
+ *  Handle resize event...
  */
 
 void yuvImageControl::OnSize(wxSizeEvent& event) {
@@ -350,7 +346,7 @@ void yuvImageControl::OnSize(wxSizeEvent& event) {
 }
 
 /**
- *
+ *  Handle paint event...
  */
 
 void yuvImageControl::OnPaint(wxPaintEvent& event) {
@@ -708,17 +704,17 @@ void yuvImageControl::CloseImage() {
     wxLogDebug("yuvImageControl::Close()");
 
     /* delete the image */
-    if (m_pImage) {
+    if (m_pImage != nullptr) {
         delete m_pImage;
-        m_pImage = 0L;
+        m_pImage = nullptr;
     }
-    if (m_pScaledImage) {
+    if (m_pScaledImage != nullptr) {
         delete m_pScaledImage;
-        m_pScaledImage = 0L;
+        m_pScaledImage = nullptr;
     }
-    if (m_buffer) {
+    if (m_buffer != nullptr) {
         delete m_buffer;
-        m_buffer = 0L;
+        m_buffer = nullptr;
     }
 
     m_yuvType   = DATA_UNKNOWN;
@@ -728,6 +724,7 @@ void yuvImageControl::CloseImage() {
     SetVirtualSize( -1, -1 );
     Refresh(true);
 
+    return;
 }
 
 /**
@@ -769,7 +766,7 @@ bool yuvImageControl::PrevFrame() {
 }
 
 /**
- *
+ *  Goto frame by number
  */
 
 bool yuvImageControl::GotoFrame(size_t frameNo) {
@@ -788,7 +785,7 @@ bool yuvImageControl::GotoFrame(size_t frameNo) {
 }
 
 /**
- *
+ *  Save the buffer to a Bitmap file (bmp/jpg/png/tiff)
  */
 
 bool yuvImageControl::SaveBitmap(wxString sFilename) {
@@ -803,7 +800,7 @@ bool yuvImageControl::SaveBitmap(wxString sFilename) {
 }
 
 /**
- *
+ *  Get the control state into a parameters object.
  */
 
 bool yuvImageControl::GetState(controlParms& parms) {
@@ -828,7 +825,7 @@ bool yuvImageControl::GetState(controlParms& parms) {
 }
 
 /**
- *
+ *  Set the control state from a parameters object.
  */
 
 bool yuvImageControl::SetState(controlParms& parms) {
@@ -858,7 +855,7 @@ bool yuvImageControl::SetState(controlParms& parms) {
 }
 
 /**
- *
+ *  Save the control state to the wxConfig object.
  */
 
 bool yuvImageControl::SaveState(wxConfig* pConfig, wxString name) {
@@ -867,9 +864,9 @@ bool yuvImageControl::SaveState(wxConfig* pConfig, wxString name) {
 
     wxLogDebug("yuvImageControl::SaveState(%p, %s)", pConfig, name);
 
-    wxASSERT( pConfig != 0L );
+    wxASSERT( pConfig != nullptr );
 
-    if (pConfig == 0) {
+    if (pConfig == nullptr) {
         wxLogDebug("ERROR: Called SaveState with a NULL wxConfig!");
         return false;
     }
@@ -914,7 +911,7 @@ bool yuvImageControl::SaveState(wxConfig* pConfig, wxString name) {
 }
 
 /**
- *
+ *  Load the control state from the wxConfig object.
  */
 
 bool yuvImageControl::LoadState(wxConfig* pConfig, wxString name) {
@@ -925,9 +922,9 @@ bool yuvImageControl::LoadState(wxConfig* pConfig, wxString name) {
     wxLogDebug("yuvImageControl::LoadState(%p, %s)",
                pConfig, (const char*)name.c_str());
 
-    wxASSERT( pConfig != 0L );
+    wxASSERT( pConfig != nullptr );
 
-    if (pConfig == 0) {
+    if (pConfig == nullptr) {
         wxLogDebug("ERROR: Called SaveState with a NULL wxConfig!");
         return false;
     }
@@ -991,7 +988,7 @@ bool yuvImageControl::LoadState(wxConfig* pConfig, wxString name) {
 }
 
 /**
- *
+ *  Get displayable name of the image control.
  */
 
 wxString yuvImageControl::GetIdentifier() {
@@ -1033,7 +1030,7 @@ bool yuvImageControl::CanSetSize() {
 }
 
 /**
- *
+ *  Save the image to a YUV buffer.
  */
 
 bool yuvImageControl::SaveYUVData(const wxString& sFilename, ImageBuffer::eSaveType type) {
@@ -1059,7 +1056,7 @@ bool yuvImageControl::GetChecksum(checksumAlgoBase* pAlgo, checksumEntry& entry)
     wxLogDebug("yuvImageControl::GetChecksum(0x%p, ...)", pAlgo);
 
     if (m_bValid) {
-        wxASSERT( m_buffer != 0L );
+        wxASSERT( m_buffer != nullptr );
         bRes = m_buffer->GetChecksum( pAlgo, entry );
     }
 
@@ -1081,7 +1078,7 @@ void yuvImageControl::SetYUVFormat(dataType type,
     m_bits          = bits;
     m_endianness    = endian;
 
-    if (m_buffer != 0L) {
+    if (m_buffer != nullptr) {
         m_buffer->type( m_yuvType );
         m_buffer->bits( m_bits );
         m_buffer->endian( m_endianness );
@@ -1095,7 +1092,7 @@ wxString yuvImageControl::GetYUVFormatString() {
 
     wxASSERT(m_buffer != nullptr);
 
-    if (m_buffer != 0L) {
+    if (m_buffer != nullptr) {
         sFormat = m_buffer->YUVTypeToString( m_yuvType );
     }
 
@@ -1112,9 +1109,13 @@ bool yuvImageControl::getYUVMask(yuvMask& mask) {
     return true;
 }
 
+/**
+ *  Draw the grid into the image..
+ */
+
 bool yuvImageControl::DrawGrid(wxImage* pImage) {
     wxGraphicsContext*  pContext = nullptr;
-    wxFont font(wxFontInfo(24).FaceName("Helvetica").Italic().Bold());
+//  wxFont font(wxFontInfo(24).FaceName("Helvetica").Italic().Bold());
 
     wxLogDebug("yuvImageControl::DrawGrid(%p)", pImage);
 
@@ -1124,14 +1125,15 @@ bool yuvImageControl::DrawGrid(wxImage* pImage) {
         h = pImage->GetHeight();
 
     pContext = wxGraphicsContext::Create(*pImage);
+    wxASSERT( pContext != nullptr );
 
     pContext->SetPen(m_gridColor);
-//    pContext->SetFont(font, *wxBLACK);
-//    pContext->DrawText("Hello", 100, 100);
 
+    // Draw horizontal lines
     for (int y = 0 ; y < h ; y += m_gridV) {
         pContext->StrokeLine(0, y, w, y);
     }
+    // Draw vertical lines
     for (int x = 0 ; x < w ; x += m_gridH) {
         pContext->StrokeLine(x, 0, x, h);
     }
@@ -1140,39 +1142,3 @@ bool yuvImageControl::DrawGrid(wxImage* pImage) {
 
     return false;
 }
-
-#if 0
-
-    if (m_bufType == YUV_FILE_SPLIT) {
-        YUV420ImageBufferSplit*	newBuf = new YUV420ImageBufferSplit(m_imageSize.GetWidth(),
-                m_imageSize.GetHeight(), m_bits, m_endianness);
-
-        wxASSERT(newBuf != 0L);
-
-//        newBuf->setPrefix(m_prefix);
-//        newBuf->setPath(m_imagePath);
-        newBuf->setImageSpec(m_imageSpec);
-        newBuf->getImageVec();
-
-        m_buffer = dynamic_cast<ImageBuffer*>(newBuf);
-    } else if (m_bufType == YUV_FILE_COMP) {
-        YUV420ImageBufferFile* newBuf = new YUV420ImageBufferFile(m_imageSize.GetWidth(),
-                m_imageSize.GetHeight(), m_bits, m_endianness);
-        wxASSERT(newBuf != 0L);
-
-        newBuf->SetFilename(m_imageFilename);
-
-        m_buffer = dynamic_cast<ImageBuffer*>(newBuf);
-    } else if (m_bufType == YUV_FILE_DUMP) {
-        dumpImageBuffer* newBuf = new dumpImageBuffer(m_imageSize.GetWidth(), m_imageSize.GetHeight());
-
-        wxASSERT(newBuf != 0L);
-
-        newBuf->setPath(m_imagePath);
-
-        m_buffer = dynamic_cast<ImageBuffer*>(newBuf);
-    } else {
-        wxLogDebug("ERROR: Buffer type not specified!");
-        return false;
-    }
-#endif

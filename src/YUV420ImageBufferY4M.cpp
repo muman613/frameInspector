@@ -141,9 +141,9 @@ bool YUV420ImageBufferY4M::Load(size_t frame)
 void YUV420ImageBufferY4M::GetImage(wxImage* pImage) {
 	wxLogDebug("YUV420ImageBufferY4M::GetImage(0x%p)", pImage);
 
-    wxASSERT(pImage != 0L);
+    wxASSERT(pImage != nullptr);
 
-    if (m_imageData != 0L) {
+    if (m_imageData != nullptr) {
         pImage->Destroy();
         pImage->Create(m_width, m_height);
         pImage->SetData(copy_data()); //m_imageData);
@@ -166,7 +166,7 @@ ssize_t YUV420ImageBufferY4M::GetFrameCount() {
  */
 
 PIXEL* YUV420ImageBufferY4M::getPixel(int x, int y) {
-	return (PIXEL*)0L;
+	return (PIXEL*)nullptr;
 }
 
 

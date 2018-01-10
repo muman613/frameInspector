@@ -55,9 +55,9 @@ dumpImageBuffer::~dumpImageBuffer() {
 //destructor
     wxLogDebug("dumpImageBuffer::~dumpImageBuffer()");
 
-    if (m_imageData) {
+    if (m_imageData != nullptr) {
         free(m_imageData);
-        m_imageData = 0L;
+        m_imageData = nullptr;
     }
 
     return;
@@ -107,9 +107,9 @@ ssize_t		dumpImageBuffer::GetFrameCount() {
 void dumpImageBuffer::GetImage(wxImage* pImage) {
     wxLogDebug("dumpImageBuffer::GetImage(0x%p)", pImage);
 
-    wxASSERT(pImage != 0L);
+    wxASSERT(pImage != nullptr);
 
-    if (m_imageData != 0L) {
+    if (m_imageData != nullptr) {
         pImage->Destroy();
         pImage->Create(m_width, m_height);
         pImage->SetData(copy_data()); //m_imageData);
@@ -125,10 +125,9 @@ void dumpImageBuffer::GetImage(wxImage* pImage) {
 bool dumpImageBuffer::Load(size_t frame) {
     bool        bRes = false;
     wxString    sFrameName;
-    wxUint8     *pLumaBuffer = 0L,*pChromaBuffer = 0L;
-//  wxUint32    lumaX = 0 , lumaY = 0;
+    wxUint8     *pLumaBuffer    = nullptr,
+                *pChromaBuffer  = nullptr;
     wxUint32    lumaW = 0, lumaH = 0;
-//  wxUint32    chromaX = 0, chromaY = 0;
     wxUint32    chromaW = 0, chromaH = 0;
     wxInt32     lumaTabSize = 0, chromaTabSize = 0;
     wxUint32    lumaTotalWidth = 0, chromaTotalWidth = 0;
@@ -159,7 +158,7 @@ bool dumpImageBuffer::Load(size_t frame) {
                     if (dumpInternals::read_box(&m_fp, nTag, nVersion, lSize)) {
 
                         if (nTag == PICI_MAGIC) {
-                            void*                                   pInfo = 0L;
+                            void*                                   pInfo = nullptr;
 
                             wxLogDebug("-- found picture info [%lld] vs [%lld] !", lSize, sizeof(dumpInternals::EMhwlibPictureInfoV1));
                             pInfo = (void*)malloc( lSize );
@@ -210,7 +209,8 @@ bool dumpImageBuffer::Load(size_t frame) {
                                 pLumaBuffer     = (wxUint8*)malloc( lumaTabSize );
                                 pChromaBuffer   = (wxUint8*)malloc( chromaTabSize );
 
-                                wxASSERT((pLumaBuffer != 0L) && (pChromaBuffer != 0L));
+                                wxASSERT((pLumaBuffer != nullptr) &&
+                                         (pChromaBuffer != nullptr));
 
                                 m_width  = picture_info->Picture.scaled_width;
                                 m_height = picture_info->Picture.scaled_height;
@@ -253,7 +253,8 @@ bool dumpImageBuffer::Load(size_t frame) {
                                 pLumaBuffer     = (wxUint8*)malloc( lumaTabSize );
                                 pChromaBuffer   = (wxUint8*)malloc( chromaTabSize );
 
-                                wxASSERT((pLumaBuffer != 0L) && (pChromaBuffer != 0L));
+                                wxASSERT((pLumaBuffer != nullptr) &&
+                                         (pChromaBuffer != nullptr));
 
                                 m_width  = picture_info->Picture.scaled_width;
                                 m_height = picture_info->Picture.scaled_height;
@@ -351,26 +352,26 @@ bool dumpImageBuffer::Load(size_t frame) {
                 fclose(fp);
 #endif
 
-                if (m_imageData) {
+                if (m_imageData != nullptr) {
                     free(m_imageData);
-                    m_imageData = 0L;
+                    m_imageData = nullptr;
                 }
                 m_imageData = m_yuv.DoConversionToRGB();
-                wxASSERT( m_imageData != 0L );
+                wxASSERT( m_imageData != nullptr );
                 bRes = true;
             } else {
                 wxLogDebug("ERROR: Invalid file!");
             }
 
             /* free buffers */
-            if (pLumaBuffer) {
+            if (pLumaBuffer != nullptr) {
                 free( pLumaBuffer );
-                pLumaBuffer = 0L;
+                pLumaBuffer = nullptr;
             }
 
-            if (pChromaBuffer) {
+            if (pChromaBuffer != nullptr) {
                 free( pChromaBuffer );
-                pChromaBuffer = 0L;
+                pChromaBuffer = nullptr;
             }
 
             m_fp.Close();
@@ -385,7 +386,7 @@ bool dumpImageBuffer::Load(size_t frame) {
 }
 
 PIXEL*		dumpImageBuffer::getPixel(int x, int y) {
-    return (PIXEL*)0L;
+    return (PIXEL*)nullptr;
 }
 
 /**

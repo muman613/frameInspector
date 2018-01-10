@@ -149,15 +149,13 @@ Frame::Frame()
         m_nFirst(0),
         m_nLast(1000),
         m_yuvFmt(DATA_YUV420),
-        m_statBar(0L),
+        m_statBar(nullptr),
         m_bAutoStep(false),
-        m_pChksumDlg(0L),
-        m_chksumAlgo(0L)
+        m_pChksumDlg(nullptr),
+        m_chksumAlgo(nullptr)
 {
-    wxToolBar*  pToolBar = 0L;
-//    wxMenuBar*  pMenuBar = 0L;
-    wxMenu*     pMenu    = 0L;
-//    wxMenu*     subMenu	 = 0L;
+    wxToolBar*  pToolBar = nullptr;
+    wxMenu*     pMenu    = nullptr;
 
     wxLogDebug("Frame::Frame()");
 
@@ -165,7 +163,7 @@ Frame::Frame()
 
     /* create tool bar */
     pToolBar = CreateToolBar( /* wxTB_DEFAULT_STYLE */ );
-    wxASSERT( pToolBar != 0L );
+    wxASSERT( pToolBar != nullptr );
 
 #if wxCHECK_VERSION(2,9,5)
     pToolBar->AddTool(ID_FILE_SAVE_IMAGE, wxT("Save Bitmap Image"),
@@ -220,7 +218,7 @@ Frame::Frame()
                                  wxSize(300,20),
                                  wxSL_HORIZONTAL|wxSL_AUTOTICKS);
 
-    wxASSERT( m_sliderCntrl != 0L );
+    wxASSERT( m_sliderCntrl != nullptr );
 
     m_sliderCntrl->SetToolTip( wxT("Frame Number") );
 
@@ -238,7 +236,7 @@ Frame::Frame()
 
     /* Create status bar */
     m_statBar = CreateStatusBar(3);
-    wxASSERT( m_statBar != 0L );
+    wxASSERT( m_statBar != nullptr );
 
 #if wxCHECK_VERSION(2,9,5)
     int sbStyles[3] = {
@@ -251,17 +249,17 @@ Frame::Frame()
 
     /* Create the checksum dialog */
     m_pChksumDlg = new ChecksumDialog(this);
-    wxASSERT(m_pChksumDlg != 0L);
+    wxASSERT(m_pChksumDlg != nullptr);
     m_pChksumDlg->Center();
 
-    wxBoxSizer*     pSizer = 0L;
+    wxBoxSizer*     pSizer = nullptr;
 
     pSizer = new wxBoxSizer( wxVERTICAL );
-    assert(pSizer != 0L);
+    wxASSERT(pSizer != nullptr);
 
     /* Add the image control to the frame */
     m_imageControl = new yuvImageControl(this, wxID_ANY);
-    wxASSERT( m_imageControl != 0L );
+    wxASSERT( m_imageControl != nullptr );
     pSizer->Add( m_imageControl, 1, wxEXPAND );
 
     m_imageControl->SetImageSize( m_imageSize );
@@ -302,9 +300,9 @@ Frame::Frame()
 Frame::~Frame() {
     wxLogDebug("Frame::~Frame()");
 
-    if (m_chksumAlgo != 0L) {
+    if (m_chksumAlgo != nullptr) {
         delete m_chksumAlgo;
-        m_chksumAlgo = 0L;
+        m_chksumAlgo = nullptr;
     }
 }
 
@@ -592,7 +590,7 @@ void Frame::SaveOptions() {
     wxLogDebug("Frame::SaveOptions()");
 
     conf = new wxConfig(wxT("frameInspector"));
-    wxASSERT( conf != 0L );
+    wxASSERT( conf != nullptr );
 
     sTmp = wxString::Format(wxT("%d,%d,%d,%d"),
                             screenPos.x, screenPos.y, screenPos.width, screenPos.height);
@@ -830,9 +828,9 @@ void Frame::OnFileClose(wxCommandEvent& event) {
     if (m_imageControl->IsValid()) {
         m_imageControl->CloseImage();
         m_pChksumDlg->Show(FALSE);
-        if (m_chksumAlgo != 0L) {
+        if (m_chksumAlgo != nullptr) {
             delete m_chksumAlgo;
-            m_chksumAlgo = 0L;
+            m_chksumAlgo = nullptr;
         }
         UpdateStatusBar();
         UpdateSlider();
@@ -1152,13 +1150,13 @@ void Frame::OnViewChecksum(wxCommandEvent& event) {
     wxLogDebug("eAlgo = %d", (int)eAlgo);
 
     if (eAlgo != CHECKSUM_UNDEFINED) {
-        if (m_chksumAlgo != 0L) {
+        if (m_chksumAlgo != nullptr) {
             delete m_chksumAlgo;
-            m_chksumAlgo = 0L;
+            m_chksumAlgo = nullptr;
         }
         m_chksumAlgo = m_chksumMgr.GetAlgoClass( eAlgo );
 
-        wxASSERT( m_chksumAlgo != 0L );
+        wxASSERT( m_chksumAlgo != nullptr );
 
         m_pChksumDlg->SetAlgoName( m_chksumAlgo->checksum_name() );
         m_pChksumDlg->Show(TRUE);
@@ -1167,9 +1165,9 @@ void Frame::OnViewChecksum(wxCommandEvent& event) {
     } else {
         m_pChksumDlg->Show(FALSE);
 
-        if (m_chksumAlgo != 0L) {
+        if (m_chksumAlgo != nullptr) {
             delete m_chksumAlgo;
-            m_chksumAlgo = 0L;
+            m_chksumAlgo = nullptr;
         }
     }
 
@@ -1442,10 +1440,10 @@ void Frame::OnConvertTo(wxCommandEvent& event) {
  */
 
 wxMenuBar* Frame::CreateMenuBar() {
-    wxMenuBar   *pMenuBar   = 0L;
+    wxMenuBar   *pMenuBar   = nullptr;
 
     pMenuBar = new frameInspectorMenu;
-    wxASSERT( pMenuBar != 0L );
+    wxASSERT( pMenuBar != nullptr );
 
     return pMenuBar;
 }
@@ -1491,7 +1489,7 @@ void Frame::OnFormatYUV(wxCommandEvent& event) {
 void Frame::updateFormatMask(wxUpdateUIEvent& event)
 {
 
-    if (m_imageControl != 0L) {
+    if (m_imageControl != nullptr) {
         yuvMask mask;
         int eventID = event.GetId();
         bool bChecked = false;
@@ -1526,9 +1524,9 @@ void Frame::OnYUVMaskChange(wxCommandEvent& event) {
     int         id = event.GetId();
     yuvMask     mask;
 
-    wxASSERT(m_imageControl != 0L);
+    wxASSERT(m_imageControl != nullptr);
 
-    if ((m_imageControl != 0L) && (m_imageControl->getYUVMask( mask ))) {
+    if ((m_imageControl != nullptr) && (m_imageControl->getYUVMask( mask ))) {
         switch (id) {
         case ID_FORMAT_MASK_Y:
             mask.bMaskY = !mask.bMaskY;
