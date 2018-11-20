@@ -53,3 +53,6 @@ frameInspector requires the following packages to be installed in order to build
 | libmjpegtools | Used to save/load yuv4mpeg format | sudo-apt get install libmjpegtools-dev | 
  
 
+## Screenshots
+![Screenshot #1](media/frameInspector%20V2.32%20Build%20Nov%2019%202018_002.png)
+
