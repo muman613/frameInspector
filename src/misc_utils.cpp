@@ -24,22 +24,22 @@
 namespace utils {
 
 static struct vidstd_entry vidStd[] = {
-    {   STD_CUSTOM, "Custom",    -1,   -1, },
-    {   STD_SQCIF,  "SQCIF",    128,   96, },
-    {   STD_QCIF,   "QCIF",     176,  144, },
-    {   STD_SCIF,   "SCIF",     256,  192, },
-    {   STD_SIF,    "SIF",      352,  240, },
-    {   STD_CIF,    "CIF",      352,  288, },
-    {   STD_VGA,    "VGA",      640,  480, },
-    {   STD_4SIF,   "4SIF",     704,  480, },
-    {   STD_4CIF,   "4CIF",     704,  576, },
-    {   STD_DVD_N,  "DVD NTSC", 720,  480, },
-    {   STD_DVD_P,  "DVD PAL",  720,  576, },
-    {   STD_SVGA,   "SVGA",     800,  600, },
-    {   STD_720p,   "720p",    1280,  720, },
-    {   STD_SXGA,   "SXGA",    1280, 1024, },
-    {   STD_1080p,  "1080p",   1920, 1080, },
-    {   STD_4k2k,   "4k2k",    3840, 2160, },
+    {   videoStd::STD_CUSTOM, "Custom",    -1,   -1, },
+    {   videoStd::STD_SQCIF,  "SQCIF",    128,   96, },
+    {   videoStd::STD_QCIF,   "QCIF",     176,  144, },
+    {   videoStd::STD_SCIF,   "SCIF",     256,  192, },
+    {   videoStd::STD_SIF,    "SIF",      352,  240, },
+    {   videoStd::STD_CIF,    "CIF",      352,  288, },
+    {   videoStd::STD_VGA,    "VGA",      640,  480, },
+    {   videoStd::STD_4SIF,   "4SIF",     704,  480, },
+    {   videoStd::STD_4CIF,   "4CIF",     704,  576, },
+    {   videoStd::STD_DVD_N,  "DVD NTSC", 720,  480, },
+    {   videoStd::STD_DVD_P,  "DVD PAL",  720,  576, },
+    {   videoStd::STD_SVGA,   "SVGA",     800,  600, },
+    {   videoStd::STD_720p,   "720p",    1280,  720, },
+    {   videoStd::STD_SXGA,   "SXGA",    1280, 1024, },
+    {   videoStd::STD_1080p,  "1080p",   1920, 1080, },
+    {   videoStd::STD_4k2k,   "4k2k",    3840, 2160, },
 };
 
 static size_t stdCount = sizeof(vidStd)/sizeof(vidstd_entry);
@@ -126,7 +126,7 @@ videoStd    GetStandardFromSize(const wxSize& size) {
  */
 
 videoStd    GetStandardFromSize(int width, int height) {
-    videoStd    standard = STD_CUSTOM;
+    videoStd    standard = videoStd::STD_CUSTOM;
 
     wxLogDebug("utils::GetStandardFromSize(%d, %d)", width, height);
 
@@ -150,7 +150,7 @@ wxSize GetSizeFromStandard(videoStd standard) {
     wxLogDebug("utils::GetSizeFromStandard(%d)", (int)standard);
 
 #ifdef  __WXDEBUG__
-    if (standard == STD_CUSTOM) {
+    if (standard == videoStd::STD_CUSTOM) {
         wxLogDebug("ERROR: Called GetSizeFromStandard with value of STD_CUSTOM!");
     }
 #endif
@@ -265,7 +265,7 @@ videoStd GetStandardFromName(wxString& name) {
             return vidStd[index].standard;
         }
     }
-    return STD_CUSTOM;
+    return videoStd::STD_CUSTOM;
 }
 
 /**
@@ -281,7 +281,7 @@ bool ParseFilePath(wxString& sPath, imageParms& parms) {
     wxLogDebug("ParseFilePath(%s, ...)", sPath);
 
     /* Initialize parms to sane values */
-    parms.standard   = utils::STD_CUSTOM;
+    parms.standard   = utils::videoStd::STD_CUSTOM;
     parms.width      = parms.height = 0;
     parms.depth      = -1;
     parms.endianness = endian_undefined;
@@ -309,7 +309,7 @@ bool ParseFilePath(wxString& sPath, imageParms& parms) {
 
         parms.standard = utils::GetStandardFromName( sMatched );
 
-        if (parms.standard != utils::STD_CUSTOM) {
+        if (parms.standard != utils::videoStd::STD_CUSTOM) {
             wxSize stdSize = utils::GetSizeFromStandard( parms.standard );
 
             parms.width  = stdSize.GetWidth();

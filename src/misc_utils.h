@@ -5,15 +5,13 @@
 #include <wx/colour.h>
 #include <vector>
 #include "types.h"
-//#include "imageBuffer.h"
-//#include "YUV420ImageBufferSplit.h"
 #include "imageSpec.h"
 
 namespace utils {
 
 using FRAME_FILEBASE_VEC    =   std::vector<wxString>;
 
-enum videoStd {
+enum class videoStd {
     STD_CUSTOM,
     STD_SQCIF,
     STD_QCIF,

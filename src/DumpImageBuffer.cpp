@@ -10,7 +10,8 @@
 #endif
 
 #include <wx/wx.h>
-#include <stdio.h>
+#include <cstdio>
+
 #ifdef  HAVE_LIBGCRYPT
 #include <gcrypt.h>
 #endif
@@ -27,8 +28,6 @@ dumpImageBuffer::dumpImageBuffer()
 {
 //constructor
     wxLogDebug("dumpImageBuffer::dumpImageBuffer()");
-
-    return;
 }
 
 dumpImageBuffer::dumpImageBuffer(int width, int height)
@@ -37,8 +36,6 @@ dumpImageBuffer::dumpImageBuffer(int width, int height)
 {
 //constructor
     wxLogDebug("dumpImageBuffer::dumpImageBuffer(%d, %d)", width, height);
-
-    return;
 }
 
 dumpImageBuffer::dumpImageBuffer(ImageBufferParms& parms)
@@ -59,8 +56,6 @@ dumpImageBuffer::~dumpImageBuffer() {
         free(m_imageData);
         m_imageData = nullptr;
     }
-
-    return;
 }
 
 /**
@@ -115,7 +110,6 @@ void dumpImageBuffer::GetImage(wxImage* pImage) {
         pImage->SetData(copy_data()); //m_imageData);
     }
 
-    return;
 }
 
 /**
@@ -161,7 +155,7 @@ bool dumpImageBuffer::Load(size_t frame) {
                             void*                                   pInfo = nullptr;
 
                             wxLogDebug("-- found picture info [%lld] vs [%lld] !", lSize, sizeof(dumpInternals::EMhwlibPictureInfoV1));
-                            pInfo = (void*)malloc( lSize );
+                            pInfo = malloc( lSize );
 
                             if (m_fp.Read(pInfo, lSize) != lSize) {
                                 wxLogDebug("ERROR: Unable to read picture info!");
