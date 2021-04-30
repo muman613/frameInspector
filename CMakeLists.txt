@@ -79,7 +79,6 @@ add_executable(frameInspector
         src/yuvImageControl.cpp
         src/yuvImageControl.h
         src/YUVSplitDialog.cpp
-        src/YUVSplitDialog.h
-        config.h)
+        src/YUVSplitDialog.h)
 
 target_link_libraries(${PROJECT_NAME} ${wxWidgets_LIBRARIES} ${POPT_LIBRARIES} ${SWSCALE_LIBRARIES} ${YUV4MPEG_LIBRARIES} ${GCRYPT_LIBRARIES})

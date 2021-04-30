@@ -46,12 +46,12 @@ A Code::Blocks project is also provided for those using that popular IDE.
 frameInspector requires the following packages to be installed in order to build and run.
 
 | Library   | Description   | Installation |
-| -- | -- | -- |
+| --------- | ------------- | ------------ |
 | wxWidgets 3.0 | GUI Toolkit | sudo apt-get install libwxgtk3.0-gtk3-dev |
 | libgcrypt | Used for hash functions | sudo apt-get install libgcrypt11-dev |
 | libswscale4 | Part of ffmpeg used for YUV conversion | sudo apt-get install libswscale-dev |
-| libmjpegtools | Used to save/load yuv4mpeg format | sudo-apt get install libmjpegtools-dev | 
- 
+| libmjpegtools | Used to save/load yuv4mpeg format | sudo apt-get install libmjpegtools-dev | 
+| libpopt | Used for commandline parsing | sudo apt-get install libpopt-dev |
 
 ## Screenshots
 ![Screenshot #1](media/frameInspector%20V2.32%20Build%20Nov%2019%202018_002.png)
